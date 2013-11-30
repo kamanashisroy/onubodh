@@ -21,3 +21,5 @@ cleancore:
 	$(CLEAN) -C libs/dryman_kmeans
 
 clean:cleancore cleanapps
+
+include tests/test.mk

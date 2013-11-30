@@ -1,18 +1,25 @@
 using aroop;
 using shotodol;
 
-public class shotodol.CVModule : Module {
-	CVCommand cmd;
+public class shotodol.CVModule : ModulePlugin {
+	FastEdgeCVCommand fe;
+	KmeansCVCommand km;
+	CentroidModelCVCommand cm;
 	public override int init() {
-		// TODO fillme
-		cmd = new CVCommand();
-		CommandServer.server.cmds.register(cmd);
+		fe = new FastEdgeCVCommand();
+		km = new KmeansCVCommand();
+		cm = new CentroidModelCVCommand();
+		CommandServer.server.cmds.register(fe);
+		CommandServer.server.cmds.register(km);
+		CommandServer.server.cmds.register(cm);
 		return 0;
 	}
 
 	public override int deinit() {
-		// TODO fillme
-		CommandServer.server.cmds.unregister(cmd);
+		CommandServer.server.cmds.unregister(fe);
+		CommandServer.server.cmds.unregister(km);
+		CommandServer.server.cmds.unregister(cm);
+		base.deinit();
 		return 0;
 	}
 

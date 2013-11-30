@@ -4,47 +4,58 @@ using shotodol;
 
 public class shotodol.KmeansCVCommand : M100Command {
 	etxt prfx;
+	enum Options {
+		INFILE = 1,
+		OUTFILE,
+		K_VAL,
+	}
+	public KmeansCVCommand() {
+		base();
+		etxt input = etxt.from_static("-i");
+		etxt input_help = etxt.from_static("Input ppm file");
+		etxt output = etxt.from_static("-o");
+		etxt output_help = etxt.from_static("Output ppm file");
+		addOption(&input, M100Command.OptionType.TXT, Options.INFILE, &input_help);
+		addOption(&output, M100Command.OptionType.TXT, Options.OUTFILE, &output_help); 
+		etxt k = etxt.from_static("-k");
+		etxt k_help = etxt.from_static("value of k");
+		addOption(&k, M100Command.OptionType.TXT, Options.K_VAL, &k_help);
+	}
+
 	public override etxt*get_prefix() {
-		prfx = etxt.from_static("cv");
+		prfx = etxt.from_static("cvkmeans");
 		return &prfx;
 	}
-	public int act_on_file(/*ArrayList<txt> tokens*/etxt*inp, etxt*infile, etxt*outfile, StandardIO io) {
-		etxt kval_str = etxt.EMPTY();
-		int kval = 30;
-		int ecode = 0;
-		LineAlign.next_token(inp, &kval_str); // fourth token
-		if(!kval_str.is_empty()) {
-			kval = kval_str.to_int();
-		}
-		if(outfile.is_empty()) {
-			outfile.destroy();
-			*outfile = etxt.from_static("output.ppm");
-		}
-		infile.zero_terminate();
-		outfile.zero_terminate();
-		etxt dlg = etxt.stack(64);
-		dlg.printf("<Computer Vision>kmeans cluster:%s -> %s\n", infile.to_string(), outfile.to_string());
-		io.say_static(dlg.to_string());
-		if(shotodol_dryman_kmeans.dryman_kmeans.cluster(infile.to_string(), outfile.to_string(), kval, &ecode) != 0) {
-			dlg.printf("<Computer Vision> Internal error while filtering %d\n", ecode);
-			io.say_static(dlg.to_string());
-		}
-		io.say_static("<Computer Vision>Done\n");
-		//infile.destroy();
-		//outfile.destroy();
-		return 0;
-	}
-	public override int desc(StandardIO io, M100Command.CommandDescType tp) {
-		etxt x = etxt.stack(32);
-		switch(tp) {
-			case M100Command.CommandDescType.COMMAND_DESC_TITLE:
-			x.printf("%s\n", get_prefix().to_string());
-			io.say_static(x.to_string());
-			break;
-			default:
-			io.say_static("SYNOPSIS\ncv kmeans -i[infile] -o[outfile]\nDESCRIPTION\ncv command enables you to add kmeans classifier to image files. Note that you do not need to specify the file extension. \nEXAMPLE\n\n\tcv kmeans -iinfile.pgm iooutfile.pgm\n");
-			break;
-		}
+	public override int act_on(etxt*cmdstr, OutputStream pad) {
+		greet(pad);
+		SearchableSet<txt> vals = SearchableSet<txt>();
+		parseOptions(cmdstr, &vals);
+		do {
+			container<txt>? mod;
+			if((mod = vals.search(Options.INFILE, match_all)) == null) {
+				break;
+			}
+			unowned txt infile = mod.get();
+			if((mod = vals.search(Options.OUTFILE, match_all)) == null) {
+				break;
+			}
+			unowned txt outfile = mod.get();
+			int kval = 30;
+			if((mod = vals.search(Options.K_VAL, match_all)) != null) {
+				kval = mod.get().to_int();
+			}
+			int ecode = 0;
+			etxt dlg = etxt.stack(128);
+			dlg.printf("<Computer Vision>kmeans cluster:%s -> %s\n", infile.to_string(), outfile.to_string());
+			pad.write(&dlg);
+			if(shotodol_dryman_kmeans.dryman_kmeans.cluster(infile.to_string(), outfile.to_string(), kval, &ecode) != 0) {
+				dlg.printf("<Computer Vision> Internal error while filtering %d\n", ecode);
+				pad.write(&dlg);
+			}
+			bye(pad, true);
+			return 0;
+		} while(false);
+		bye(pad, false);
 		return 0;
 	}
 }

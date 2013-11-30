@@ -19,7 +19,7 @@ public class shotodol.CentroidModel : Replicable {
 		}
 		return 0;
 	}
-	public int findEdges(int x, int y, StandardIO io) {
+	public int findEdges(int x, int y, OutputStream io) {
 		// check if the position is inside the image boundary 
 		if(x >= img.width || y >= img.height) {
 			return -1;
@@ -46,7 +46,8 @@ public class shotodol.CentroidModel : Replicable {
 			break;
 		}
 		if(!allset) {
-			io.say_static("<Centroid Model>Nothing on right side\n");
+			etxt dlg = etxt.from_static("<Centroid Model>Nothing on right side\n");
+			io.write(&dlg);
 			return -1;
 		}
 		for(allset = false,z=x;z>=0;z--) {
@@ -62,7 +63,8 @@ public class shotodol.CentroidModel : Replicable {
 			break;
 		}
 		if(!allset) {
-			io.say_static("<Centroid Model>Nothing on left side\n");
+			etxt dlg = etxt.from_static("<Centroid Model>Nothing on left side\n");
+			io.write(&dlg);
 			return -1;
 		}
 		for(allset = false,z=y;z<=img.height;z++) {
@@ -78,7 +80,8 @@ public class shotodol.CentroidModel : Replicable {
 			break;
 		}
 		if(!allset) {
-			io.say_static("<Centroid Model>Nothing on top side\n");
+			etxt dlg = etxt.from_static("<Centroid Model>Nothing on top side\n");
+			io.write(&dlg);
 			return -1;
 		}
 		for(allset = false,z=y;z>=0;z--) {
@@ -94,7 +97,8 @@ public class shotodol.CentroidModel : Replicable {
 			break;
 		}
 		if(!allset) {
-			io.say_static("<Centroid Model>Nothing on bottom side\n");
+			etxt dlg = etxt.from_static("<Centroid Model>Nothing on bottom side\n");
+			io.write(&dlg);
 			return -1;
 		}
 		netpbm_rect res = netpbm_rect();
