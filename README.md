@@ -1,4 +1,1 @@
-onubodh
-========
-
-Artificial intelligence library
+This is artificial intelligence library
