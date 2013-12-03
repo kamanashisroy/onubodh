@@ -5,9 +5,11 @@
 all:makecore makeapps makeshotodol
 
 makeapps:
+	$(BUILD) -C ankhi/imgtrix
 	$(BUILD) -C ankhi/cv
 
 cleanapps:
+	$(CLEAN) -C ankhi/imgtrix
 	$(CLEAN) -C ankhi/cv
 
 makecore:
