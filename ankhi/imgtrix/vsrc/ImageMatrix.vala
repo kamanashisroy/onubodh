@@ -14,4 +14,5 @@ public abstract class onubodh.ImageMatrix : Replicable {
 		size = mat_size;
 	}
 	public abstract int compile();
+	public abstract int getVal();
 }

@@ -3,22 +3,18 @@ using shotodol;
 using onubodh;
 
 public class onubodh.StructureString : Replicable {
-	ImageString img;
+	ImageManipulateAvg img;
 	public StructureString(netpbmg*src) {
-		img = new ImageString(src);
+		img = new ImageManipulateAvg(src);
 	}
 
 	public int compile() {
 		img.compile4();
+		img.mark(4);
 		return 0;
 	}
 
-	/*public void dump(OutputStream os) {
-		int i = 0;
-		etxt dlg = etxt.stack(16);
-		for(i = 0;i<length;i++) {
-			dlg.printf("%d,", buf[i]);
-			os.write(&dlg);
-		}
-	}*/
+	public void dump(OutputStream os) {
+		img.dump(os);
+	}
 }

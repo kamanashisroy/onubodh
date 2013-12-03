@@ -45,7 +45,7 @@ public class shotodol.StructureStringCommand : M100Command {
 			FileOutputStream fos = new FileOutputStream.from_file(outfile);
 			StructureString s = new StructureString(&img);
 			s.compile();
-			//s.dump(fos);
+			s.dump(fos);
 			return 0;
 		} while(false);
 		bye(pad, false);

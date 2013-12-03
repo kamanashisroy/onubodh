@@ -2,8 +2,8 @@ using aroop;
 using shotodol;
 using onubodh;
 
-public class onubodh.ImageMatrixString : ImageMatrix {
-	etxt points;
+public abstract class onubodh.ImageMatrixString : ImageMatrix {
+	protected etxt points;
 	public ImageMatrixString(netpbmg*src, int x, int y, uchar mat_size) {
 		base(src,x,y,mat_size);
 		points = etxt.EMPTY();
