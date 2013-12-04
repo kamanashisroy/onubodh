@@ -1,6 +1,6 @@
 using aroop;
 
-namespace shotodol {
+namespace onubodh {
 	[CCode (cname="struct netpbm_point", cheader_filename = "imageio.h")]
 	public struct netpbm_point {
 		[CCode (cname="x")]
@@ -33,8 +33,8 @@ namespace shotodol {
 		public netpbmg.subimage(netpbmg*src, netpbm_rect*rect);
 		[CCode (cname="netpbm_alloc_from_src")]
 		public netpbmg.alloc_like(netpbmg*src);
-		[CCode (cname="netpbm_set_filename")]
-		public int set_filename(string filename);
+		//[CCode (cname="netpbm_set_filename")]
+		//public int set_filename(string filename);
 		[CCode (cname="netpbm_open_and_read")]
 		public int open(int*ecode);
 		[CCode (cname="netpbm_write")]

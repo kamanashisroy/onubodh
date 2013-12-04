@@ -1,7 +1,8 @@
 using aroop;
 using shotodol;
+using onubodh;
 
-public class shotodol.CVModule : ModulePlugin {
+public class onubodh.CVModule : ModulePlugin {
 	FastEdgeCVCommand fe;
 	KmeansCVCommand km;
 	CentroidModelCVCommand cm;

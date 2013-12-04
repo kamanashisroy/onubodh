@@ -3,24 +3,24 @@
 namespace onubodh {
 	[CCode (cheader_filename = "shotodol_imgtrix.h")]
 	public class ImageManipulateAvg : onubodh.ImageMatrixManipulate {
-		public ImageManipulateAvg (shotodol.netpbmg* src);
-		public override onubodh.ImageMatrix createMatrix (shotodol.netpbmg* src, int x, int y, uchar mat_size);
+		public ImageManipulateAvg (onubodh.netpbmg* src);
+		public override onubodh.ImageMatrix createMatrix (onubodh.netpbmg* src, int x, int y, uchar mat_size);
 	}
 	[CCode (cheader_filename = "shotodol_imgtrix.h")]
 	public class ImageManipulateLineString : onubodh.ImageManipulateAvg {
-		public ImageManipulateLineString (shotodol.netpbmg* src);
+		public ImageManipulateLineString (onubodh.netpbmg* src);
 		public void dumpString (shotodol.OutputStream os);
 		public int parseLines ();
 	}
 	[CCode (cheader_filename = "shotodol_imgtrix.h")]
 	public abstract class ImageMatrix : aroop.Replicable {
-		protected shotodol.netpbmg* img;
+		protected onubodh.netpbmg* img;
 		protected int left;
 		protected uchar size;
 		protected int top;
-		public ImageMatrix (shotodol.netpbmg* src, int x, int y, uchar mat_size);
+		public ImageMatrix (onubodh.netpbmg* src, int x, int y, uchar mat_size);
 		public abstract int compile ();
-		public abstract void dumpImage (shotodol.netpbmg* @out);
+		public abstract void dumpImage (onubodh.netpbmg* @out);
 		public abstract int getVal ();
 		public int higher_order_x ();
 		public int higher_order_y ();
@@ -29,21 +29,21 @@ namespace onubodh {
 	public abstract class ImageMatrixManipulate : onubodh.StructureString {
 		protected int mat_height;
 		protected int mat_width;
-		public ImageMatrixManipulate (shotodol.netpbmg* src);
+		public ImageMatrixManipulate (onubodh.netpbmg* src);
 		public int compile4 ();
-		public abstract onubodh.ImageMatrix createMatrix (shotodol.netpbmg* src, int x, int y, uchar mat_size);
+		public abstract onubodh.ImageMatrix createMatrix (onubodh.netpbmg* src, int x, int y, uchar mat_size);
 	}
 	[CCode (cheader_filename = "shotodol_imgtrix.h")]
 	public abstract class ImageMatrixString : onubodh.ImageMatrix {
 		protected aroop.etxt points;
-		public ImageMatrixString (shotodol.netpbmg* src, int x, int y, uchar mat_size);
+		public ImageMatrixString (onubodh.netpbmg* src, int x, int y, uchar mat_size);
 		public override int compile ();
-		public override void dumpImage (shotodol.netpbmg* @out);
+		public override void dumpImage (onubodh.netpbmg* @out);
 	}
 	[CCode (cheader_filename = "shotodol_imgtrix.h")]
 	public class ImageMatrixStringAvg : onubodh.ImageMatrixString {
 		protected int avg;
-		public ImageMatrixStringAvg (shotodol.netpbmg* src, int x, int y, uchar mat_size);
+		public ImageMatrixStringAvg (onubodh.netpbmg* src, int x, int y, uchar mat_size);
 		public override int compile ();
 		public override int getVal ();
 	}
@@ -58,6 +58,6 @@ namespace onubodh {
 		public StructureString ();
 		public virtual int append (onubodh.ImageMatrix x);
 		public virtual void dump (shotodol.OutputStream os, int higher_order_width, int higher_order_height);
-		public virtual void dumpImage (shotodol.netpbmg* oimg);
+		public virtual void dumpImage (onubodh.netpbmg* oimg);
 	}
 }

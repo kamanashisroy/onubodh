@@ -64,6 +64,6 @@ int netpbm_subimage(struct netpbm_image*img, struct netpbm_image*src, struct net
 #define netpbm_init_img(x) netpbm_init_img_with_filename(x,NULL)
 #define netpbm_grayval(img,x,y,v) ({*(v) = (img)->pixels.gray[(x) + (y) * (img)->width];0;})
 #define netpbm_set_grayval(img,x,y,v) ({(img)->pixels.gray[(x) + (y) * (img)->width] = v;0;})
-#define netpbm_set_filename(x,fn) ({(x)->filename=fn;})
+//#define netpbm_set_filename(x,fn) ({(x)->filename=fn;})
 
 #endif

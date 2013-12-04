@@ -1,6 +1,11 @@
 
 all:
 	module -load ../ankhi/cv/plugin.so
+	module -load ../ankhi/convert/plugin.so
+
+converttest:
+	converttojpeg -i samples/bookshelf1.ppm -o .output.jpeg
+	
 
 test:
 	bookdetect -i .edge.pgm -o .output.pgm

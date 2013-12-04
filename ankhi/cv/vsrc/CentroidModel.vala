@@ -1,7 +1,8 @@
 using aroop;
 using shotodol;
+using onubodh;
 
-public class shotodol.CentroidModel : Replicable {
+public class onubodh.CentroidModel : Replicable {
 	etxt fn;
 	netpbmg img;
 	public CentroidModel(string filename) {

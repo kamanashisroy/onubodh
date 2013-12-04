@@ -22,9 +22,9 @@ public class onubodh.BookDetect : Replicable {
 	}
 	public void dumpImage(etxt*nm) {
 		netpbmg out_image = netpbmg.alloc_like(orig);
-		out_image.set_filename(nm.to_string());
+		//out_image.set_filename(nm.to_string());
 		circuit.dumpImage(&out_image);
-		out_image.write();
+		out_image.write(nm.to_string());
 		out_image.close();
 	}
 }
