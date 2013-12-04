@@ -7,8 +7,12 @@ namespace onubodh {
 		public int jpegimg();
 		[CCode (cname="jpeg_image_from_netpbm")]
 		public jpegimg.from_netpbm(netpbmg*img);
+		//[CCode (cname="jpeg_image_for_netpbm")]
+		//public jpegimg.for_netpbm(netpbmg*img);
 		[CCode (cname="jpeg_image_write")]
 		public int write(int quality, string?filename = null);
+		[CCode (cname="jpeg_image_read")]
+		public int read(string?filename = null);
 		[CCode (cname="jpeg_image_error_code")]
 		public unowned string getError();
 	}

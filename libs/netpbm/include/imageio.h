@@ -58,6 +58,7 @@ int netpbm_open_and_read(struct netpbm_image*img, int*ecode);
 int netpbm_write(struct netpbm_image*img, char*newfilename);
 int netpbm_destroy(struct netpbm_image*img);
 int netpbm_alloc_from_src(struct netpbm_image*dst, struct netpbm_image*src);
+int netpbm_alloc(struct netpbm_image*img);
 int netpbm_subimage(struct netpbm_image*img, struct netpbm_image*src, struct netpbm_rect*rect);
 
 #define netpbm_init_img_with_filename(x,fn) ({(x)->pixels.color=NULL,(x)->pixels.gray=NULL,(x)->filename=fn;})

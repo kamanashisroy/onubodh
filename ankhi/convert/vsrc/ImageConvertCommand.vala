@@ -18,8 +18,17 @@ public class onubodh.ImageConvertCommand : M100Command {
 	}
 
 	public override etxt*get_prefix() {
-		prfx = etxt.from_static("converttojpeg");
+		prfx = etxt.from_static("jpegconvert");
 		return &prfx;
+	}
+
+	bool is_jpeg_filename(etxt*fn) {
+		int len = fn.length();
+		return (fn.char_at(len-1) == 'g')
+			&& (fn.char_at(len-2) == 'e')
+			&& (fn.char_at(len-3) == 'p')
+			&& (fn.char_at(len-4) == 'j')
+			&& (fn.char_at(len-5) == '.');
 	}
 
 	public override int act_on(etxt*cmdstr, OutputStream pad) {
@@ -36,15 +45,26 @@ public class onubodh.ImageConvertCommand : M100Command {
 			if((mod = vals.search(Options.OUTFILE, match_all)) == null) {
 				break;
 			}
-			netpbmg img = netpbmg.for_file(infile.to_string());
-			if(img.open(&ecode) != 0) {
-				break;
-			}
 			unowned txt outfile = mod.get();
-			jpegimg oimg = jpegimg.from_netpbm(&img);
-			oimg.write(9, outfile.to_string());
-			bye(pad, true);
-			return 0;
+			if(is_jpeg_filename(infile)) {
+				netpbmg img = netpbmg.for_file(outfile.to_string());
+				jpegimg oimg = jpegimg.from_netpbm(&img);
+				oimg.read(infile.to_string());
+				img.write();
+				img.close();
+				bye(pad, true);
+				return 0;
+			} else if(is_jpeg_filename(outfile)) {
+				netpbmg img = netpbmg.for_file(infile.to_string());
+				if(img.open(&ecode) != 0) {
+					break;
+				}
+				jpegimg oimg = jpegimg.from_netpbm(&img);
+				oimg.write(9, outfile.to_string());
+				img.close();
+				bye(pad, true);
+				return 0;
+			}
 		} while(false);
 		bye(pad, false);
 		return 0;

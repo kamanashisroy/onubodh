@@ -22,6 +22,7 @@ struct jpeg_image {
 #define jpeg_image_init_img(x) aroop_memset2(x)
 #define jpeg_image_from_netpbm(x,y) ({aroop_memclean_raw2(x);(x)->raw=y;})
 int jpeg_image_write (struct jpeg_image*img, int quality, char * filename);
+int jpeg_image_read (struct jpeg_image*img, char * filename);
 char*jpeg_image_error(struct jpeg_image*img);
 
 #endif
