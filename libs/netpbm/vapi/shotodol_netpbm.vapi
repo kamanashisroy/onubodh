@@ -33,6 +33,8 @@ namespace shotodol {
 		public netpbmg.subimage(netpbmg*src, netpbm_rect*rect);
 		[CCode (cname="netpbm_alloc_from_src")]
 		public netpbmg.alloc_like(netpbmg*src);
+		[CCode (cname="netpbm_set_filename")]
+		public int set_filename(string filename);
 		[CCode (cname="netpbm_open_and_read")]
 		public int open(int*ecode);
 		[CCode (cname="netpbm_write")]
@@ -44,6 +46,8 @@ namespace shotodol {
 		[CCode (cname="height")]
 		int height;
 		[CCode (cname="netpbm_grayval")]
-		public int grayval(int x, int y, aroop_uword8*gval);
+		public int getGrayVal(int x, int y, aroop_uword8*gval);
+		[CCode (cname="netpbm_set_grayval")]
+		public int setGrayVal(int x, int y, aroop_uword8 gval);
 	}
 }

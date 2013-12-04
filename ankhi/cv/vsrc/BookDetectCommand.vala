@@ -2,13 +2,13 @@ using aroop;
 using shotodol;
 using onubodh;
 
-public class shotodol.StructureStringCommand : M100Command {
+public class shotodol.BookDetectCommand : M100Command {
 	etxt prfx;
 	enum Options {
 		INFILE = 1,
 		OUTFILE,
 	}
-	public StructureStringCommand() {
+	public BookDetectCommand() {
 		base();
 		etxt input = etxt.from_static("-i");
 		etxt input_help = etxt.from_static("Input file");
@@ -19,7 +19,7 @@ public class shotodol.StructureStringCommand : M100Command {
 	}
 
 	public override etxt*get_prefix() {
-		prfx = etxt.from_static("cvstrucstr");
+		prfx = etxt.from_static("bookdetect");
 		return &prfx;
 	}
 
@@ -42,10 +42,11 @@ public class shotodol.StructureStringCommand : M100Command {
 				break;
 			}
 			unowned txt outfile = mod.get();
-			FileOutputStream fos = new FileOutputStream.from_file(outfile);
-			StructureString s = new StructureString(&img);
+			//FileOutputStream fos = new FileOutputStream.from_file(outfile);
+			BookDetect s = new BookDetect(&img);
 			s.compile();
-			s.dump(fos);
+			//s.dump(fos);
+			s.dumpImage(outfile);
 			return 0;
 		} while(false);
 		bye(pad, false);

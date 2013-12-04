@@ -34,7 +34,7 @@ public class shotodol.CentroidModel : Replicable {
 		aroop_uword8 gval = 0;
 		// go right of the point, 
 		for(allset = false,z=x;z<=img.width;z++) {
-			if(img.grayval(z,y,&gval) != 0) {
+			if(img.getGrayVal(z,y,&gval) != 0) {
 				break;
 			}
 			if(gval == 0) {
@@ -51,7 +51,7 @@ public class shotodol.CentroidModel : Replicable {
 			return -1;
 		}
 		for(allset = false,z=x;z>=0;z--) {
-			if(img.grayval(z,y,&gval) != 0) {
+			if(img.getGrayVal(z,y,&gval) != 0) {
 				break;
 			}
 			if(gval == 0) {
@@ -68,7 +68,7 @@ public class shotodol.CentroidModel : Replicable {
 			return -1;
 		}
 		for(allset = false,z=y;z<=img.height;z++) {
-			if(img.grayval(x,z,&gval) != 0) {
+			if(img.getGrayVal(x,z,&gval) != 0) {
 				break;
 			}
 			if(gval == 0) {
@@ -85,7 +85,7 @@ public class shotodol.CentroidModel : Replicable {
 			return -1;
 		}
 		for(allset = false,z=y;z>=0;z--) {
-			if(img.grayval(x,z,&gval) != 0) {
+			if(img.getGrayVal(x,z,&gval) != 0) {
 				break;
 			}
 			if(gval == 0) {

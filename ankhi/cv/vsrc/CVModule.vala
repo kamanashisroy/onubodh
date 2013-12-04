@@ -5,12 +5,12 @@ public class shotodol.CVModule : ModulePlugin {
 	FastEdgeCVCommand fe;
 	KmeansCVCommand km;
 	CentroidModelCVCommand cm;
-	StructureStringCommand ss;
+	BookDetectCommand ss;
 	public override int init() {
 		fe = new FastEdgeCVCommand();
 		km = new KmeansCVCommand();
 		cm = new CentroidModelCVCommand();
-		ss = new StructureStringCommand();
+		ss = new BookDetectCommand();
 		CommandServer.server.cmds.register(fe);
 		CommandServer.server.cmds.register(km);
 		CommandServer.server.cmds.register(cm);

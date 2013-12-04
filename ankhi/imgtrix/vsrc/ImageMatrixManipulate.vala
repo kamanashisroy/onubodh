@@ -2,18 +2,17 @@ using aroop;
 using shotodol;
 using onubodh;
 
-public abstract class onubodh.ImageMatrixManipulate : Replicable {
-	ArrayList<ImageMatrix> strings;
+public abstract class onubodh.ImageMatrixManipulate : StructureString {
 	netpbmg*img;
-	int mat_width;
-	int mat_height;
+	protected int mat_width;
+	protected int mat_height;
 	enum MatrixSize {
 		MATRIX_4 = 4,
 		MATRIX_SHIFT_4 = 2,
 	}
 	public ImageMatrixManipulate(netpbmg*src) {
+		base();
 		img = src;
-		strings = ArrayList<ImageMatrix>();
 	}
 	public int compile4() {
 		mat_width = img.width;
@@ -27,11 +26,15 @@ public abstract class onubodh.ImageMatrixManipulate : Replicable {
 			for(x=0;x<mat_width;x+=MatrixSize.MATRIX_4,i++) {
 				ImageMatrix mat = createMatrix(img, x<<MatrixSize.MATRIX_SHIFT_4, y<<MatrixSize.MATRIX_SHIFT_4, MatrixSize.MATRIX_4);
 				mat.compile();
-				strings[i] = mat;
+				//strings[i] = mat;
+				if(mat.getVal() != 0) {
+					strings.add(mat);
+				}
 			}
 		}
 		return 0;
 	}
+#if false
 	public int mark(int val) {
 		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
 		strings.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
@@ -42,7 +45,7 @@ public abstract class onubodh.ImageMatrixManipulate : Replicable {
 			}
 		}
 		return 0;
-	}		
+	}	
 	public int dump(OutputStream os) {
 		int x,y;
 		int i;
@@ -59,5 +62,6 @@ public abstract class onubodh.ImageMatrixManipulate : Replicable {
 		}
 		return 0;
 	}
+#endif
 	public abstract ImageMatrix createMatrix(netpbmg*src, int x, int y, uchar mat_size);
 }

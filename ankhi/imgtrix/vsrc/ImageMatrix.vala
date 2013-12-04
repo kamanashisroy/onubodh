@@ -13,6 +13,13 @@ public abstract class onubodh.ImageMatrix : Replicable {
 		left = x;
 		size = mat_size;
 	}
+	public int higher_order_x() {
+		return left/size;
+	}
+	public int higher_order_y() {
+		return top/size;
+	}
 	public abstract int compile();
 	public abstract int getVal();
+	public abstract void dumpImage(netpbmg*out);
 }

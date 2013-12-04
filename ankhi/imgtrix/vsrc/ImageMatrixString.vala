@@ -16,12 +16,19 @@ public abstract class onubodh.ImageMatrixString : ImageMatrix {
 		for(y=0,cumx=0;(y<size) && ((y+top) < img.height) ;y++,cumx+=size) {
 			for(x=0;(x<size) && ((x+left) < img.width);x++) {
 				gval = 0;
-				img.grayval(x+left,y+top,&gval);
+				img.getGrayVal(x+left,y+top,&gval);
 				if(gval != 0) {
 					points.concat_char(cumx+(uchar)x);
 				}
 			}
 		}
 		return 0;
+	}
+	public override void dumpImage(netpbmg*out) {
+		int i = 0;
+		for(i = 0; i < points.length(); i++) {
+			uchar pos = points.char_at(i);
+			img.setGrayVal((pos%size)+left,(pos/size)+top,100);
+		}
 	}
 }

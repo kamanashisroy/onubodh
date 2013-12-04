@@ -3,7 +3,7 @@ all:
 	module -load ../ankhi/cv/plugin.so
 
 test:
-	cvstrucstr -i .edge.pgm -o .strucstr.txt
+	bookdetect -i .edge.pgm -o .output.pgm
 
 cvkmeanstest:
 	cvkmeans -i samples/bookshelf1.ppm -o .kmeans.ppm -k 30
