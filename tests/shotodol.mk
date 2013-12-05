@@ -2,8 +2,13 @@
 all:
 	module -load ../ankhi/cv/plugin.so
 	module -load ../ankhi/convert/plugin.so
+	module -load ../ankhi/scale/plugin.so
 
-test:
+scale:
+	scale -i samples/bookshelf1.ppm -o .output.down.ppm -down 2
+	scale -i .output.down.ppm -o .output.up.ppm -up 2
+
+jpegconvert:
 	jpegconvert -i samples/bookshelf1.ppm -o .output.jpeg
 	jpegconvert -i .output.jpeg -o .output.back.ppm
 

@@ -65,6 +65,15 @@ int netpbm_subimage(struct netpbm_image*img, struct netpbm_image*src, struct net
 #define netpbm_init_img(x) netpbm_init_img_with_filename(x,NULL)
 #define netpbm_grayval(img,x,y,v) ({*(v) = (img)->pixels.gray[(x) + (y) * (img)->width];0;})
 #define netpbm_set_grayval(img,x,y,v) ({(img)->pixels.gray[(x) + (y) * (img)->width] = v;0;})
+#define netpbm_getpixel(img,x,y,v) ({*(v) = (img)->pixels.color[(x) + (y) * (img)->width];0;})
+#define netpbm_setpixel(img,x,y,v) ({(img)->pixels.color[(x) + (y) * (img)->width] = *(v);0;})
 //#define netpbm_set_filename(x,fn) ({(x)->filename=fn;})
+#define netpbm_alloc_full(x,w, h, t) ({(x)->width = w;(x)->height = h;(x)->type = t;netpbm_alloc(x);})
+#define netpbm_cpy_or_destroy(x,nouse,y,nouse2) ({\
+	if((x) && (y)){ \
+		memcpy(x,y,sizeof(*(x))); \
+	} else { \
+		netpbm_destroy(x); \
+	};0;})
 
 #endif
