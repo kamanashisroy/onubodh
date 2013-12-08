@@ -1,4 +1,1 @@
-
-PROJECT_LIB_PATH=$(PROJECT_HOME)/libs/
-INCLUDES+=-I$(PROJECT_LIB_PATH)/netpbm/include
 INCLUDES+=-Iinclude

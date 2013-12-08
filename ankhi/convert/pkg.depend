@@ -1,3 +1,6 @@
 libs/iostream
 core/commands
 core/base
+-PROJECT_HOME
+libs/netpbm
+libs/jpeg

@@ -1,3 +1,8 @@
 libs/iostream
 core/commands
 core/base
+-PROJECT_HOME
+libs/fastedge
+libs/netpbm
+libs/dryman_kmeans
+ankhi/imgtrix

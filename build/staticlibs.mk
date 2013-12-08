@@ -7,3 +7,4 @@ OBJECTS+=$(PROJECT_OBJDIR)/dryman_kmeans.o
 OBJECTS+=$(PROJECT_OBJDIR)/ImageManipulateAvg.o
 LIBS+=-lm
 include $(PROJECT_HOME)/libs/jpeg/staticlibs.mk
+#include $(PROJECT_HOME)/libs/png/staticlibs.mk

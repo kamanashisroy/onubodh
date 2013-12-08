@@ -6,12 +6,14 @@ all:makecore makeankhi makeshotodol
 
 makeankhi:
 	$(BUILD) -C ankhi/scale
+	$(BUILD) -C ankhi/imgdiff
 	$(BUILD) -C ankhi/convert
 	$(BUILD) -C ankhi/imgtrix
 	$(BUILD) -C ankhi/cv
 
 cleanankhi:
 	$(CLEAN) -C ankhi/scale
+	$(CLEAN) -C ankhi/imgdiff
 	$(CLEAN) -C ankhi/convert
 	$(CLEAN) -C ankhi/imgtrix
 	$(CLEAN) -C ankhi/cv
