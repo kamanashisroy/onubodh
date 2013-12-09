@@ -21,12 +21,14 @@ cleanankhi:
 makecore:
 	$(BUILD) -C libs/fastedge
 	$(BUILD) -C libs/netpbm
+	$(BUILD) -C libs/rawimg
 	$(BUILD) -C libs/dryman_kmeans
 	$(BUILD) -C libs/jpeg
 
 cleancore:
 	$(CLEAN) -C libs/fastedge
 	$(CLEAN) -C libs/netpbm
+	$(CLEAN) -C libs/rawimg
 	$(CLEAN) -C libs/dryman_kmeans
 	$(CLEAN) -C libs/jpeg
 
