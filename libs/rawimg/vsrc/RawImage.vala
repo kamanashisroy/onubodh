@@ -14,12 +14,9 @@ public class onubodh.RawImage : Replicable {
 		PPM = 6,
 		INVALID = 512,
 	}
-	public int gWidth {get{return this.width;}}
-	public int gHeight {get{return this.height;}}
-	public int gType {get{return this.type;}}
-	int width;
-	int height;
-	RawImageType type;
+	public int width{public get;private set;}
+	public int height{public get;private set;}
+	public RawImageType type{public get;private set;}
 	mem rawData;
 	public RawImage(int aWidth, int aHeight, RawImageType aType) {
 		width = aWidth;
