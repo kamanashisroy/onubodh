@@ -24,11 +24,11 @@ public abstract class onubodh.ImageMatrixString : ImageMatrix {
 		}
 		return 0;
 	}
-	public override void dumpImage(netpbmg*out) {
+	public override void dumpImage(netpbmg*oImg) {
 		int i = 0;
 		for(i = 0; i < points.length(); i++) {
 			uchar pos = points.char_at(i);
-			img.setGrayVal((pos%size)+left,(pos/size)+top,100);
+			oImg.setGrayVal((pos%size)+left,(pos/size)+top,100);
 		}
 	}
 }
