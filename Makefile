@@ -9,6 +9,7 @@ makeankhi:
 	$(BUILD) -C ankhi/imgdiff
 	$(BUILD) -C ankhi/convert
 	$(BUILD) -C ankhi/imgtrix
+	$(BUILD) -C ankhi/imgstruct
 	$(BUILD) -C ankhi/cv
 
 cleanankhi:
@@ -16,6 +17,7 @@ cleanankhi:
 	$(CLEAN) -C ankhi/imgdiff
 	$(CLEAN) -C ankhi/convert
 	$(CLEAN) -C ankhi/imgtrix
+	$(CLEAN) -C ankhi/imgstruct
 	$(CLEAN) -C ankhi/cv
 
 makecore:

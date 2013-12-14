@@ -28,7 +28,11 @@ public abstract class onubodh.ImageMatrixString : ImageMatrix {
 		int i = 0;
 		for(i = 0; i < points.length(); i++) {
 			uchar pos = points.char_at(i);
-			oImg.setGrayVal((pos%size)+left,(pos/size)+top,100);
+			int x = (pos%size)+left;
+			int y = (pos/size)+top;
+			aroop_uword8 val = 0;
+			img.getGrayVal(x,y,&val);
+			oImg.setGrayVal(x,y,val);
 		}
 	}
 }

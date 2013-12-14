@@ -2,9 +2,9 @@ using aroop;
 using shotodol;
 using onubodh;
 
-public abstract class onubodh.StructureString : Replicable {
+public abstract class onubodh.StringStructure : Replicable {
 	protected Set<ImageMatrix> strings;
-	public StructureString() {
+	public StringStructure() {
 		strings = Set<ImageMatrix>();
 	}
 

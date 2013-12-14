@@ -2,7 +2,7 @@ using aroop;
 using shotodol;
 using onubodh;
 
-public abstract class onubodh.ImageMatrixManipulate : StructureString {
+public abstract class onubodh.MatrixStringStructure4 : StringStructure {
 	netpbmg*img;
 	protected int mat_width;
 	protected int mat_height;
@@ -10,7 +10,7 @@ public abstract class onubodh.ImageMatrixManipulate : StructureString {
 		MATRIX_4 = 4,
 		MATRIX_SHIFT_4 = 2,
 	}
-	public ImageMatrixManipulate(netpbmg*src) {
+	public MatrixStringStructure4(netpbmg*src) {
 		base();
 		img = src;
 	}
@@ -27,7 +27,7 @@ public abstract class onubodh.ImageMatrixManipulate : StructureString {
 				ImageMatrix mat = createMatrix(img, x<<MatrixSize.MATRIX_SHIFT_4, y<<MatrixSize.MATRIX_SHIFT_4, MatrixSize.MATRIX_4);
 				mat.compile();
 				//strings[i] = mat;
-				if(mat.getVal() != 0) {
+				if(mat.getVal() > 0) {
 					strings.add(mat);
 				}
 			}

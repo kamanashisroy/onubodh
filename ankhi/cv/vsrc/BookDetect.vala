@@ -3,10 +3,10 @@ using shotodol;
 using onubodh;
 
 public class onubodh.BookDetect : Replicable {
-	ImageManipulateLineString circuit;
+	LineString circuit;
 	netpbmg*orig;
 	public BookDetect(netpbmg*src) {
-		circuit = new ImageManipulateLineString(src);
+		circuit = new LineString(src);
 		orig = src;
 	}
 
