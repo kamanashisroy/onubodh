@@ -59,6 +59,8 @@ namespace onubodh {
 		public int write(string?filename = null);
 		[CCode (cname="netpbm_destroy")]
 		public int close();
+		[CCode (cname="maxval")]
+		int maxval;
 		[CCode (cname="width")]
 		int width;
 		[CCode (cname="height")]

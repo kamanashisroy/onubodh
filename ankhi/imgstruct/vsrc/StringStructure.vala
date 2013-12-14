@@ -50,6 +50,7 @@ public abstract class onubodh.StringStructure : Replicable {
 	public virtual void dumpImage(netpbmg*oimg) {
 		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
 		strings.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
+		print("String length:%d(matrices)\n", strings.count_unsafe());
 		while(it.next()) {
 			container<ImageMatrix> can = it.get();
 			ImageMatrix mat = can.get();

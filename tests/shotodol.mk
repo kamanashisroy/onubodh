@@ -4,6 +4,9 @@ all:
 	module -load ../ankhi/convert/plugin.so
 	module -load ../ankhi/scale/plugin.so
 	module -load ../ankhi/imgdiff/plugin.so
+	make -t bookdetecttest
+	q
+	q
 
 hi:
 	scale -i samples/bookshelf1.ppm -o .output.down.ppm -down 2
@@ -22,7 +25,10 @@ jpegconvert:
 	jpegconvert -i .output.jpeg -o .output.back.ppm
 
 bookdetecttest:
-	bookdetect -i .edge.pgm -o .output.pgm
+	bookdetect -i books_edge2.pgm -o output.pgm
+	#bookdetect -i samples/rect16_16.pgm -o output.pgm
+
+#bookdetect -i samples/rect18_14.pgm -o output.pgm
 
 cvkmeanstest:
 	cvkmeans -i samples/bookshelf1.ppm -o .kmeans.ppm -k 30

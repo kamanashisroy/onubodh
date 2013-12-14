@@ -12,14 +12,9 @@ public class onubodh.BookDetect : Replicable {
 
 	public int compile() {
 		circuit.compile4();
-		//circuit.mark(4);
-		circuit.parseLines();
 		return 0;
 	}
 
-	public void dump(OutputStream os) {
-		circuit.dumpString(os);
-	}
 	public void dumpImage(etxt*nm) {
 		netpbmg out_image = netpbmg.alloc_like(orig);
 		//out_image.set_filename(nm.to_string());
