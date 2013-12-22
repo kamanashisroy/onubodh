@@ -4,7 +4,8 @@ all:
 	module -load ../ankhi/convert/plugin.so
 	module -load ../ankhi/scale/plugin.so
 	module -load ../ankhi/imgdiff/plugin.so
-	make -t bookdetecttest
+	#make -t bookdetecttest_big
+	make -t bookdetecttest_twice
 	q
 	q
 
@@ -24,11 +25,17 @@ jpegconvert:
 	jpegconvert -i samples/bookshelf1.ppm -o .output.jpeg
 	jpegconvert -i .output.jpeg -o .output.back.ppm
 
-bookdetecttest:
-	bookdetect -i books_edge2.pgm -o output.pgm
-	#bookdetect -i samples/rect16_16.pgm -o output.pgm
+bookdetecttest_twice:
+	bookdetect -i output.pgm -o output_twice.pgm
 
-#bookdetect -i samples/rect18_14.pgm -o output.pgm
+bookdetecttest_big:
+	bookdetect -i books_edge2.pgm -o output.pgm
+
+bookdetecttest_mini:
+	bookdetect -i samples/rect16_16.pgm -o output.pgm
+
+bookdetecttest_small:
+	bookdetect -i 13_gimp_edge_detect.pgm -o output.pgm
 
 cvkmeanstest:
 	cvkmeans -i samples/bookshelf1.ppm -o .kmeans.ppm -k 30

@@ -28,6 +28,7 @@ public abstract class onubodh.StringStructure4 : StringStructure {
 				}
 			}
 		}
+		print("Total interesting matrices:%d\n", strings.count_unsafe());
 		return 0;
 	}
 #if false

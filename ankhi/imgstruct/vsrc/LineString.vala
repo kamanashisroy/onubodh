@@ -7,6 +7,6 @@ public class onubodh.LineString : StringStructure4 {
 		base(src);
 	}
 	public override ImageMatrix createMatrix(netpbmg*src, int x, int y, uchar mat_size) {
-		return new ImageMatrixStringNearLinear(src, x, y, mat_size);
+		return new ImageMatrixStringNearLinearMultiple(src, x, y, mat_size);
 	}
 }
