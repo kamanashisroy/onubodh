@@ -3,15 +3,15 @@ using shotodol;
 using onubodh;
 
 public class onubodh.BookDetect : Replicable {
-	LineString circuit;
+	ManyLineStrings circuit;
 	netpbmg*orig;
 	public BookDetect(netpbmg*src) {
-		circuit = new LineString(src);
+		circuit = new ManyLineStrings(src);
 		orig = src;
 	}
 
 	public int compile() {
-		circuit.compile4();
+		circuit.compile();
 		return 0;
 	}
 

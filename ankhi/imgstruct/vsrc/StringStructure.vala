@@ -2,14 +2,18 @@ using aroop;
 using shotodol;
 using onubodh;
 
-public abstract class onubodh.StringStructure : Replicable {
-	protected Set<ImageMatrix> strings;
+public class onubodh.StringStructure : Replicable {
+	protected ArrayList<ImageMatrix> strings;
 	public StringStructure() {
-		strings = Set<ImageMatrix>();
+		strings = ArrayList<ImageMatrix>();
+	}
+	
+	~StringStructure() {
+		strings.destroy();
 	}
 
-	public virtual int append(ImageMatrix x) {
-		strings.add(x);
+	public virtual int append(int xy, ImageMatrix x) {
+		strings.set(xy, x);
 		return 0;
 	}
 
@@ -50,7 +54,7 @@ public abstract class onubodh.StringStructure : Replicable {
 	public virtual void dumpImage(netpbmg*oimg) {
 		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
 		strings.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
-		print("String length:%d(matrices)\n", strings.count_unsafe());
+		//print("String length:%d(matrices)\n", strings.count_unsafe());
 		while(it.next()) {
 			container<ImageMatrix> can = it.get();
 			ImageMatrix mat = can.get();

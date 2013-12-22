@@ -4,8 +4,10 @@ using onubodh;
 
 public abstract class onubodh.StringStructure4 : StringStructure {
 	netpbmg*img;
-	protected int mat_width;
-	protected int mat_height;
+	protected int img_width;
+	protected int img_height;
+	protected int columns;
+	protected int rows;
 	enum MatrixSize {
 		MATRIX_4 = 4,
 		MATRIX_SHIFT_4 = 2,
@@ -14,17 +16,23 @@ public abstract class onubodh.StringStructure4 : StringStructure {
 		base();
 		img = src;
 	}
+	
 	public int compile4() {
-		mat_width = img.width;
-		mat_height = img.height;
+		img_width = img.width;
+		img_height = img.height;
+		columns = (img_width >> MatrixSize.MATRIX_SHIFT_4);
+		columns += (((columns << MatrixSize.MATRIX_SHIFT_4) < img_width)?1:0);
+		rows = (img_height >> MatrixSize.MATRIX_SHIFT_4);
+		rows += (((rows << MatrixSize.MATRIX_SHIFT_4) < img_height)?1:0);
+		
 		int x,y;
-		print("matrix height:%d, matrix width:%d\n", mat_height, mat_width);
-		for(y=0;y<mat_height;y+=MatrixSize.MATRIX_4) {
-			for(x=0;x<mat_width;x+=MatrixSize.MATRIX_4) {
+		print("rows:%d, columns:%d\n", rows, columns);
+		for(y=0;y<img_height;y+=MatrixSize.MATRIX_4) {
+			for(x=0;x<img_width;x+=MatrixSize.MATRIX_4) {
 				ImageMatrix mat = createMatrix(img, x, y, MatrixSize.MATRIX_4);
 				mat.compile();
 				if(mat.getVal() > 0) {
-					strings.add(mat);
+					append(mat.higher_order_x()+mat.higher_order_y()*columns, mat);
 				}
 			}
 		}
@@ -47,8 +55,8 @@ public abstract class onubodh.StringStructure4 : StringStructure {
 		int x,y;
 		int i;
 		etxt val = etxt.stack(32);
-		for(y=0,i=0;y<mat_height;y+=MatrixSize.MATRIX_4) {
-			for(x=0;x<mat_width;x+=MatrixSize.MATRIX_4,i++) {
+		for(y=0,i=0;y<img_height;y+=MatrixSize.MATRIX_4) {
+			for(x=0;x<img_width;x+=MatrixSize.MATRIX_4,i++) {
 				val.printf("%d,", strings[i].getVal());
 				val.zero_terminate();
 				os.write(&val);

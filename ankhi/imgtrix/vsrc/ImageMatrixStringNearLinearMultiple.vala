@@ -38,13 +38,15 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 			etxt linearPoints = etxt.stack(points.length()+1-i);
 			uchar a = points.char_at(i);
 			uchar c = a;
+			bool append_a = true;
 			int j;
 			for(j=i+1; j < points.length();j++) {
 				uchar b = points.char_at(j);
-				if(ImageMatrixStringNearLinear.diffIsInteresting(a, b, &linearPoints) 
-					|| (a!=c && ImageMatrixStringNearLinear.diffIsInteresting(c, b, &linearPoints))) {
+				if(ImageMatrixStringNearLinear.diffIsInteresting(a, b, &linearPoints, append_a) 
+					|| (a!=c && ImageMatrixStringNearLinear.diffIsInteresting(c, b, &linearPoints, false))) {
 					a = c;
 					c = b;
+					append_a = false;
 				}
 			}
 			if(linearPoints.length() > 0) {
