@@ -3,7 +3,7 @@ using shotodol;
 using onubodh;
 
 public abstract class onubodh.StringStructureImpl : StringStructure {
-	netpbmg*img;
+	protected netpbmg*img;
 	protected int img_width;
 	protected int img_height;
 	protected int columns;
@@ -15,6 +15,10 @@ public abstract class onubodh.StringStructureImpl : StringStructure {
 		img = src;
 		radius = 1<<yourShift;
 		shift = yourShift;
+	}
+	
+	public int getShift() {
+		return shift;
 	}
 	
 	public override int compile() {
@@ -29,7 +33,7 @@ public abstract class onubodh.StringStructureImpl : StringStructure {
 		print("rows:%d, columns:%d\n", rows, columns);
 		for(y=0;y<img_height;y+=radius) {
 			for(x=0;x<img_width;x+=radius) {
-				ImageMatrix mat = createMatrix(img, x, y, (uchar)radius);
+				ImageMatrix mat = createMatrix(img, x, y, (uchar)shift);
 				mat.compile();
 				if(mat.getVal() > 0) {
 					setMatrixAt(mat.higher_order_x()+mat.higher_order_y()*columns, mat);

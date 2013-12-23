@@ -7,19 +7,24 @@ public abstract class onubodh.ImageMatrix : Replicable {
 	public int top{public get;private set;}
 	public int left{public get;private set;}
 	protected uchar size;
+	protected uchar shift;
 	int flag;
-	public void buildMain(netpbmg*src, int x, int y, uchar mat_size) {
+	public void buildMain(netpbmg*src, int x, int y, uchar radiusShift) {
 		img = src;
 		top = y;
 		left = x;
-		size = mat_size;
+		size = 1<<radiusShift;
+		shift = radiusShift;
 	}
+	public abstract void copyFrom(ImageMatrix other);
 	public int higher_order_x() {
-		return left/size;
+		return left>>shift;
 	}
 	public int higher_order_y() {
-		return top/size;
+		return top>>shift;
 	}
+	public abstract int heal();
+	public abstract int fill();
 	public abstract int compile();
 	public abstract int getVal();
 	public abstract void dumpImage(netpbmg*out, aroop_uword8 gval);

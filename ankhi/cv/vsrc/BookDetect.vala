@@ -16,11 +16,18 @@ public class onubodh.BookDetect : Replicable {
 	}
 
 	public int compile() {
-		circuit.compile();
+		return circuit.compile();
+	}
+	
+	public int heal() {
+		print("Healing ..\n");
+		circuit.heal();
+		circuit.fill();
 		return 0;
 	}
 
 	public void dumpImage(etxt*nm) {
+		print("Dumping ..\n");
 		netpbmg out_image = netpbmg.alloc_like(orig);
 		//out_image.set_filename(nm.to_string());
 		circuit.dumpImage(&out_image, 240);

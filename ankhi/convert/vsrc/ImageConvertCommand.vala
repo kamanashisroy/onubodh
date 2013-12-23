@@ -24,11 +24,15 @@ public class onubodh.ImageConvertCommand : M100Command {
 
 	bool is_jpeg_filename(etxt*fn) {
 		int len = fn.length();
-		return (fn.char_at(len-1) == 'g')
+		return ((fn.char_at(len-1) == 'g')
 			&& (fn.char_at(len-2) == 'e')
 			&& (fn.char_at(len-3) == 'p')
 			&& (fn.char_at(len-4) == 'j')
-			&& (fn.char_at(len-5) == '.');
+			&& (fn.char_at(len-5) == '.'))
+			|| ((fn.char_at(len-1) == 'g')
+			&& (fn.char_at(len-2) == 'p')
+			&& (fn.char_at(len-3) == 'j')
+			&& (fn.char_at(len-4) == '.'));
 	}
 
 	bool is_ppm_filename(etxt*fn) {
@@ -82,6 +86,9 @@ public class onubodh.ImageConvertCommand : M100Command {
 				return 0;
 			} else if(is_pgm_filename(outfile) && is_ppm_filename(infile)) {
 				netpbmg iimg = netpbmg.for_file(infile.to_string());
+				if(iimg.open(&ecode) != 0) {
+					break;
+				}
 				netpbmg oimg = netpbmg.alloc_full(iimg.width, iimg.height, netpbm_type.PGM);
 				oimg.maxval = 255;
 				int x,y;

@@ -8,9 +8,8 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 	int lineCount;
 #endif
 	txt? longestLine;
-		
-	public void buildNearLinearMultiple(netpbmg*src, int x, int y, uchar mat_size, aroop_uword8 minGrayVal) {
-		buildString(src,x,y,mat_size, minGrayVal);
+	public void buildNearLinearMultiple(netpbmg*src, int x, int y, uchar radiusShift, aroop_uword8 minGrayVal) {
+		buildString(src,x,y,radiusShift, minGrayVal);
 #if REMEMBER_ALL_LINES
 		lines = ArrayList<txt>();
 		lineCount = 0;
@@ -23,6 +22,36 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 		lines.destroy();
 #endif
 		longestLine = null;
+	}
+		
+	public override int heal() {
+		int i;
+		etxt linearPoints = etxt.stack(size+1);
+		uchar oldval = 0;
+		int bval = (~(size-1));
+		for(i = 0; i < points.length(); i++) {
+			uchar a = points.char_at(i);
+			linearPoints.concat_char(a);
+			int missing = 0;
+			do {
+				int diff = oldval - a;
+				if(diff < 0) break;
+				missing = (diff & bval);
+				if(missing == 0) {
+					break;
+				}
+				oldval += size; // add point
+				linearPoints.concat_char(oldval);
+			} while(true);
+			if(missing == 0) {
+				continue;
+			}
+		}
+		points.destroy();
+		if(linearPoints.length() > 0) {
+			points = etxt.dup_etxt(&linearPoints);
+		}
+		return 0;
 	}
 
 	public override int compile() {

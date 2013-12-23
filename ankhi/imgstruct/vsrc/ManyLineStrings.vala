@@ -55,7 +55,7 @@ public class onubodh.ManyLineStrings : LineString {
 				continue;
 			}*/
 			
-			// try to build a martix of line starting from a ..
+			// try to build a line of matrices starting from a ..
 			StringStructure newLine = new StringStructure();
 			int col = a.higher_order_x();
 			int row = a.higher_order_y();
@@ -94,6 +94,28 @@ public class onubodh.ManyLineStrings : LineString {
 		print("Total lines:%d\n", lines.count_unsafe());
 		return 0;
 	}
+	
+	public override int heal() {
+		Iterator<container<StringStructure>> it = Iterator<container<StringStructure>>.EMPTY();
+		lines.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
+		while(it.next()) {
+			container<StringStructure> can = it.get();
+			can.get().heal();
+		}
+		it.destroy();
+		return 0;
+	}
+	
+	public override void fill() {
+		Iterator<container<StringStructure>> it = Iterator<container<StringStructure>>.EMPTY();
+		lines.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
+		while(it.next()) {
+			container<StringStructure> can = it.get();
+			can.get().fill();
+		}
+		it.destroy();
+	}
+
 	
 	public override void dumpImage(netpbmg*oimg, aroop_uword8 gval) {
 		Iterator<container<StringStructure>> it = Iterator<container<StringStructure>>.EMPTY();

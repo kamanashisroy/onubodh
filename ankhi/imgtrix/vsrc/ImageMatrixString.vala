@@ -5,13 +5,26 @@ using onubodh;
 public abstract class onubodh.ImageMatrixString : ImageMatrix {
 	protected etxt points;
 	aroop_uword8 requiredGrayVal = 0;
-	
-	public void buildString(netpbmg*src, int x, int y, uchar mat_size, aroop_uword8 minGrayVal) {
-		buildMain(src,x,y,mat_size);
+	bool filled;
+	public void buildString(netpbmg*src, int x, int y, uchar radiusShift, aroop_uword8 minGrayVal) {
+		core.assert((1<<(radiusShift+1)) < 255);
+		buildMain(src,x,y,radiusShift);
 		points = etxt.EMPTY();
 		requiredGrayVal = minGrayVal;
 		//print("matrix : %d,%d - %d\n", x, y, mat_size);
+		filled = false;
 	}
+	
+	public override void copyFrom(ImageMatrix other) {
+		points.destroy();
+		points = etxt.same_same(&((ImageMatrixString)other).points);
+	}
+	
+	public override int fill() {
+		filled = true;
+		return 0;
+	}
+	
 	public override int compile() {
 		int y;
 		uchar cumx = 0;
@@ -40,21 +53,29 @@ public abstract class onubodh.ImageMatrixString : ImageMatrix {
 		print("],[");
 		for(i = 0; i < points.length(); i++) {
 			uchar pos = points.char_at(i);
-			int r = pos%size;
+			int r = pos&(size-1);
 			int x = left+r;
-			int y = ((pos-r)/size)+top;
-			print("(%d,%d)", x, y);
+			int y = (pos>>shift)+top;
 		}
 		print("]\n");
 	}
 	
 	public override void dumpImage(netpbmg*oImg, aroop_uword8 gval) {
 		int i = 0;
-		for(i = 0; i < points.length(); i++) {
+		if(filled) {
+			int y;
+			int maxy = top+size;
+			for(y = top; y < maxy; y++) {
+				int x;
+				for(x=0; x < size; x++) {
+					oImg.setGrayVal(x+left,y,gval);
+				}
+			}
+		} else for(i = 0; i < points.length(); i++) {
 			uchar pos = points.char_at(i);
-			int r = pos%size;
+			int r = pos&(size-1);
 			int x = left+r;
-			int y = ((pos-r)/size)+top;
+			int y = (pos>>shift)+top;
 			//aroop_uword8 val = 0;
 			//img.getGrayVal(x,y,&val);
 			//print("dumping : %d,%d\n", x+left, y+top);
