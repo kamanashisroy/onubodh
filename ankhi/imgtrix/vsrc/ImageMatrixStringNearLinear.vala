@@ -3,14 +3,17 @@ using shotodol;
 using onubodh;
 
 public class onubodh.ImageMatrixStringNearLinear : ImageMatrixString {
-	public ImageMatrixStringNearLinear(netpbmg*src, int x, int y, uchar mat_size) {
-		base(src,x,y,mat_size);
+	public void buildNearLinear(netpbmg*src, int x, int y, uchar mat_size, aroop_uword8 minGrayVal) {
+		buildString(src, x, y, mat_size, minGrayVal);
 	}
 
-	public static bool diffIsInteresting(uchar a, uchar b, etxt*data, bool append_a) {
+	public static bool diffIsInteresting(uchar a, uchar b, etxt*data, bool append_a, int msize) {
 		int diff = b - a;
+		int range = msize;
+		int range2 = msize<<1;
+		int range3 = msize*3;
 		//print("diff(%d,%d)=%d\n", a, b, diff);
-		if((diff >= 4 && diff <= 5) || (diff >= 7 && diff <= 9) || (diff >= 11 && diff <= 13)) {
+		if((diff >= range && diff <= (range+1)) || (diff >= range2 && diff <= (range2+1)) || (diff >= range3 && diff <= (range3+1))) {
 			if(append_a) {
 				data.concat_char(a);
 			}
@@ -34,8 +37,8 @@ public class onubodh.ImageMatrixStringNearLinear : ImageMatrixString {
 			bool append_a = true;
 			for(j=i+1; j < points.length();j++) {
 				uchar b = points.char_at(j);
-				if(diffIsInteresting(a, b, &linearPoints, append_a) 
-					|| (a!=c && diffIsInteresting(c, b, &linearPoints, false))) {
+				if(diffIsInteresting(a, b, &linearPoints, append_a, size) 
+					|| (a!=c && diffIsInteresting(c, b, &linearPoints, false, size))) {
 					a = c;
 					c = b;
 					append_a = false;

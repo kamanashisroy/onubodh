@@ -3,7 +3,8 @@ using shotodol;
 using onubodh;
 
 public class onubodh.StringStructure : Replicable {
-	protected ArrayList<ImageMatrix> strings;
+	ArrayList<ImageMatrix> strings;
+	int continuity;
 	public StringStructure() {
 		strings = ArrayList<ImageMatrix>();
 	}
@@ -11,9 +12,30 @@ public class onubodh.StringStructure : Replicable {
 	~StringStructure() {
 		strings.destroy();
 	}
+	
+	public void setContinuity(int cont) {
+		continuity = cont;
+	}
+	
+	public int getLength() {
+		return strings.count_unsafe();
+	}
 
-	public virtual int append(int xy, ImageMatrix x) {
+	public virtual int setMatrixAt(int xy, ImageMatrix x) {
 		strings.set(xy, x);
+		return 0;
+	}
+	
+	public virtual ImageMatrix getMatrixAt(int xy) {
+		return strings.get(xy);
+	}
+	
+	public void getIterator(Iterator<container<ImageMatrix>>*it, int if_set, int if_not_set) {
+		strings.iterator_hacked(it, if_set, if_not_set, 0);
+	}
+	
+	public virtual int compile() {
+		core.assert("Unimplemented" == null);
 		return 0;
 	}
 
@@ -51,14 +73,14 @@ public class onubodh.StringStructure : Replicable {
 		}
 	}
 
-	public virtual void dumpImage(netpbmg*oimg) {
+	public virtual void dumpImage(netpbmg*oimg, aroop_uword8 grayVal) {
 		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
 		strings.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
 		//print("String length:%d(matrices)\n", strings.count_unsafe());
 		while(it.next()) {
 			container<ImageMatrix> can = it.get();
 			ImageMatrix mat = can.get();
-			mat.dumpImage(oimg);
+			mat.dumpImage(oimg, grayVal);
 		}
 		it.destroy();
 	}

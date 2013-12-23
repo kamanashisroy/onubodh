@@ -8,9 +8,9 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 	int lineCount;
 #endif
 	txt? longestLine;
-	
-	public ImageMatrixStringNearLinearMultiple(netpbmg*src, int x, int y, uchar mat_size) {
-		base(src,x,y,mat_size);
+		
+	public void buildNearLinearMultiple(netpbmg*src, int x, int y, uchar mat_size, aroop_uword8 minGrayVal) {
+		buildString(src,x,y,mat_size, minGrayVal);
 #if REMEMBER_ALL_LINES
 		lines = ArrayList<txt>();
 		lineCount = 0;
@@ -42,8 +42,8 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 			int j;
 			for(j=i+1; j < points.length();j++) {
 				uchar b = points.char_at(j);
-				if(ImageMatrixStringNearLinear.diffIsInteresting(a, b, &linearPoints, append_a) 
-					|| (a!=c && ImageMatrixStringNearLinear.diffIsInteresting(c, b, &linearPoints, false))) {
+				if(ImageMatrixStringNearLinear.diffIsInteresting(a, b, &linearPoints, append_a, size) 
+					|| (a!=c && ImageMatrixStringNearLinear.diffIsInteresting(c, b, &linearPoints, false, size))) {
 					a = c;
 					c = b;
 					append_a = false;

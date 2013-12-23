@@ -29,14 +29,16 @@ jpegconvert:
 bookdetecttest_twice:
 	bookdetect -i output.pgm -o output_twice.pgm
 
-bookdetecttest_big:
-	bookdetect -i books_edge2.pgm -o output.pgm
-
 bookdetecttest_mini:
 	bookdetect -i samples/rect16_16.pgm -o output.pgm
 
+bookdetecttest_big:
+	bookdetect -cracklen 2 -continuity 5 -mingrayval 30 -i books_edge2.pgm -o output.pgm
+	bookdetect -cracklen 4 -continuity 9 -mingrayval 30 -i books_edge2.pgm -o output_continuous.pgm
+
 bookdetecttest_small:
-	bookdetect -i edC03537_gimp_edge_detected.pgm -o output.pgm
+	bookdetect -cracklen 2 -continuity 5 -mingrayval 30 -i edC03537_gimp_edge_detected.pgm -o output_small.pgm
+	bookdetect -cracklen 4 -continuity 9 -mingrayval 30 -i edC03537_gimp_edge_detected.pgm -o output_small_continuous.pgm
 
 cvkmeanstest:
 	cvkmeans -i samples/bookshelf1.ppm -o .kmeans.ppm -k 30

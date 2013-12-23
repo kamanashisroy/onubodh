@@ -4,9 +4,20 @@ using onubodh;
 
 public class onubodh.ManyLineStrings : LineString {
 	Set<StringStructure> lines;
-	public ManyLineStrings(netpbmg*src) {
-		base(src);
+	int maxCrackLength;
+	int requiredContinuity;
+	int requiredLength;
+	public ManyLineStrings(netpbmg*src
+		, int myMaxCrackLength
+		, int myRequiredContinuity
+		, int myRequiredLength
+		, aroop_uword8 minGrayVal
+		, int radius_shift) {
+		base(src, minGrayVal, radius_shift);
 		lines = Set<StringStructure>();
+		maxCrackLength = myMaxCrackLength;
+		requiredContinuity = myRequiredContinuity;
+		requiredLength = myRequiredLength;
 	}
 	
 	~ManyLineStrings() {
@@ -15,7 +26,7 @@ public class onubodh.ManyLineStrings : LineString {
 	
 	void unmarkAll(int flag) {
 		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
-		strings.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
+		getIterator(&it, Replica_flags.ALL, 0);
 		while(it.next()) {
 			container<ImageMatrix> can = it.get();
 			can.unmark(flag);
@@ -23,48 +34,59 @@ public class onubodh.ManyLineStrings : LineString {
 		it.destroy();
 	}
 	
-	public int compile() {
-		compileLine();
-		if(strings.count_unsafe() <= 1) {
+	public override int compile() {
+		base.compile();
+		if(getLength() <= 1) {
 			return 0;
 		}
-		print("Total matrices we are investigating next:%d\n", strings.count_unsafe());
+		print("Total matrices we are investigating next:%d\n", getLength());
 		int usedMark = 1<<6;
 		unmarkAll(usedMark);
-		
+
+		// for all the matrices..
 		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
-		strings.iterator_hacked(&it, Replica_flags.ALL, usedMark, 0);
+		getIterator(&it, Replica_flags.ALL, usedMark);
+		
 		while(it.next()) {
 			container<ImageMatrix> can = it.get();
 			ImageMatrix a = can.get();
-			can.mark(usedMark);
-			if(a.testFlag(usedMark)) {
+			//can.mark(usedMark);
+			/*if(can.testFlag(usedMark)) {
 				continue;
-			}
+			}*/
 			
+			// try to build a martix of line starting from a ..
 			StringStructure newLine = new StringStructure();
 			int col = a.higher_order_x();
 			int row = a.higher_order_y();
+			int xval = row*columns;
 			int gap = 0;
+			int cont = 0;
 			
-			for(;row < rows && gap < 4;row++) {
-				ImageMatrix?b = strings.get(col*columns+row);
+			for(;row < rows && gap <= maxCrackLength;(xval+=columns),row++) {
+				int xy = col+xval;
+				ImageMatrix?b = getMatrixAt(xy);
 				if(b == null && col != (columns-1)) {
-					b = strings.get(col+1+row*columns);
+					xy++;
+					b = getMatrixAt(xy+1);
 				}
 				if(b == null && col != 0) {
-					b = strings.get(col-1+row*columns);
+					xy--;xy--;
+					b = getMatrixAt(xy-1);
 				}
-				if(b != null) {
-					b.flagIt(usedMark);
-					newLine.append(b.higher_order_x()+b.higher_order_y()*columns, b);
-					col = b.higher_order_x();
-					gap = 0;
-				} else {
+				if(b == null) {
 					gap++;
+					cont--;
+					continue;
 				}
+				//b.flagIt(usedMark);
+				newLine.setMatrixAt(xy, b);
+				col = b.higher_order_x();
+				gap = 0;
+				cont++;
 			}
-			if(newLine.strings.count_unsafe() > 0) {
+			if(newLine.getLength() > requiredLength && cont > requiredContinuity) {
+				newLine.setContinuity(cont);
 				lines.add(newLine);
 			}
 		}
@@ -73,15 +95,14 @@ public class onubodh.ManyLineStrings : LineString {
 		return 0;
 	}
 	
-	public override void dumpImage(netpbmg*oimg) {
+	public override void dumpImage(netpbmg*oimg, aroop_uword8 gval) {
 		Iterator<container<StringStructure>> it = Iterator<container<StringStructure>>.EMPTY();
 		lines.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
+		bool high = true;
 		while(it.next()) {
 			container<StringStructure> can = it.get();
-			StringStructure ln = can.get();
-			if(ln.strings.count_unsafe() > 4) {
-				ln.dumpImage(oimg);
-			}
+			can.get().dumpImage(oimg, high?gval:(gval>>1));
+			high = !high;
 		}
 		it.destroy();
 	}
