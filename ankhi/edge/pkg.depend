@@ -4,3 +4,4 @@ core/base
 -ONUBODH_HOME
 libs/fastedge
 libs/netpbm
+libs/opencv

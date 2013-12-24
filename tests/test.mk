@@ -5,3 +5,6 @@
 testcv:
 	$(SHOTODOL)
 
+canny:
+	python ../cannyopencv.py
+

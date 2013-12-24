@@ -5,6 +5,7 @@ OBJECTS+=$(PROJECT_OBJDIR)/fast-edge.o
 OBJECTS+=$(PROJECT_OBJDIR)/shotodol_fastedge.o
 OBJECTS+=$(PROJECT_OBJDIR)/dryman_kmeans.o
 LIBS+=-lm
+#LIBS+=-lopencv_core -lopencv_imgproc
 include $(PROJECT_HOME)/libs/jpeg/staticlibs.mk
 include $(PROJECT_HOME)/ankhi/imgtrix/staticlibs.mk
 include $(PROJECT_HOME)/ankhi/imgstruct/staticlibs.mk

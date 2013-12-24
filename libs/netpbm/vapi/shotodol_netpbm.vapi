@@ -69,6 +69,8 @@ namespace onubodh {
 		netpbm_type type;
 		//[CCode (cname="pixels.color")]
 		//netpbm_rgb color_pixels[];
+		[CCode (cname="pixels.gray")]
+		mem grayData;
 		[CCode (cname="netpbm_getpixel")]
 		public int getPixel(int x, int y, netpbm_rgb*color);
 		[CCode (cname="netpbm_setpixel")]

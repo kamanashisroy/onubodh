@@ -24,6 +24,7 @@ cleanankhi:
 
 makecore:
 	$(BUILD) -C libs/fastedge
+	$(BUILD) -C libs/opencv
 	$(BUILD) -C libs/netpbm
 	$(BUILD) -C libs/rawimg
 	$(BUILD) -C libs/dryman_kmeans
@@ -31,6 +32,7 @@ makecore:
 
 cleancore:
 	$(CLEAN) -C libs/fastedge
+	$(CLEAN) -C libs/opencv
 	$(CLEAN) -C libs/netpbm
 	$(CLEAN) -C libs/rawimg
 	$(CLEAN) -C libs/dryman_kmeans
