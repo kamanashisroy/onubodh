@@ -2,7 +2,7 @@ using aroop;
 using shotodol;
 using onubodh;
 
-public abstract class onubodh.StringStructureImpl : StringStructure {
+public class onubodh.StringStructureImpl : StringStructure {
 	protected netpbmg*img;
 	protected int img_width;
 	protected int img_height;
@@ -25,9 +25,9 @@ public abstract class onubodh.StringStructureImpl : StringStructure {
 		img_width = img.width;
 		img_height = img.height;
 		columns = (img_width >> shift);
-		columns += (((columns << shift) < img_width)?1:0);
+		columns += ((img_width & (( 1<< shift)-1)) == 0?0:1);
 		rows = (img_height >> shift);
-		rows += (((rows << shift) < img_height)?1:0);
+		rows += ((img_height & (( 1<< shift)-1)) == 0?0:1);
 		
 		int x,y;
 		print("rows:%d, columns:%d\n", rows, columns);
@@ -36,13 +36,75 @@ public abstract class onubodh.StringStructureImpl : StringStructure {
 				ImageMatrix mat = createMatrix(img, x, y, (uchar)shift);
 				mat.compile();
 				if(mat.getVal() > 0) {
-					setMatrixAt(mat.higher_order_x()+mat.higher_order_y()*columns, mat);
+					appendMatrix(mat);
 				}
 			}
 		}
 		print("Total interesting matrices:%d\n", getLength());
 		return 0;
 	}
+	
+	public override bool overlaps(StringStructure other) {
+		bool olaps = false;
+		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
+		getIterator(&it, Replica_flags.ALL, 0);
+		//print("String length:%d(matrices)\n", strings.count_unsafe());
+		while(it.next()) {
+			container<ImageMatrix> can = it.get();
+			ImageMatrix x = can.get();
+			if(other.getMatrixAt(x.higherOrderXY) != null) {
+				olaps = true;
+				//print("Overlaps ......\n");
+				break;
+			}
+		}
+		it.destroy();
+		return olaps;
+	}
+	
+	public override bool neibor(StringStructure other) {
+		bool nbr = false;
+		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
+		getIterator(&it, Replica_flags.ALL, 0);
+		//print("String length:%d(matrices)\n", strings.count_unsafe());
+		while(it.next()) {
+			container<ImageMatrix> can = it.get();
+			ImageMatrix x = can.get();
+			int xy = x.higherOrderXY;
+			//print("checking neibor around %d, %d\n", x.higherOrderX, x.higherOrderY);
+			core.assert(x == getMatrixAt(xy));
+			if(other.getMatrixAt(xy) != null
+				|| other.getMatrixAt(xy+1) != null
+				|| other.getMatrixAt(xy-1) != null) {
+				nbr = true;
+				//print("Neibor ......\n");
+				break;
+			}
+			xy += columns;
+			if(other.getMatrixAt(xy) != null
+				|| other.getMatrixAt(xy+1) != null
+				|| other.getMatrixAt(xy-1) != null) {
+				nbr = true;
+				print("Neibor ......\n");
+				break;
+			}
+		}
+		it.destroy();
+		return nbr;
+	}
+	
+	public override void merge(StringStructure other) {
+		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
+		other.getIterator(&it, Replica_flags.ALL, 0);
+		while(it.next()) {
+			container<ImageMatrix> can = it.get();
+			ImageMatrix x = can.get();
+			//print("Merging ......\n");
+			appendMatrix(x);
+		}
+		it.destroy();
+	}
+	
 #if false
 	public int mark(int val) {
 		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
@@ -72,5 +134,7 @@ public abstract class onubodh.StringStructureImpl : StringStructure {
 		return 0;
 	}
 #endif
-	public abstract ImageMatrix createMatrix(netpbmg*src, int x, int y, uchar mat_size);
+	public virtual ImageMatrix? createMatrix(netpbmg*src, int x, int y, uchar mat_size) {
+		return null;
+	}
 }

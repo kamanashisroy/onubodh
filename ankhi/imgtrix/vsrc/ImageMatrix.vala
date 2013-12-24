@@ -9,20 +9,23 @@ public abstract class onubodh.ImageMatrix : Replicable {
 	protected uchar size;
 	protected uchar shift;
 	int flag;
+	public int higherOrderX{public get;private set;}
+	public int higherOrderY{public get;private set;}
+	public int higherOrderXY{public get;private set;}
 	public void buildMain(netpbmg*src, int x, int y, uchar radiusShift) {
 		img = src;
 		top = y;
 		left = x;
 		size = 1<<radiusShift;
 		shift = radiusShift;
+		flag = 0;
+		higherOrderX = left>>shift;
+		higherOrderY = top>>shift;
+		int columns = (src.width >> shift);
+		columns += ((src.width & (( 1<< shift)-1)) == 0?0:1);
+		higherOrderXY = higherOrderX + higherOrderY*columns;
 	}
 	public abstract void copyFrom(ImageMatrix other);
-	public int higher_order_x() {
-		return left>>shift;
-	}
-	public int higher_order_y() {
-		return top>>shift;
-	}
 	public abstract int heal();
 	public abstract int fill();
 	public abstract int compile();

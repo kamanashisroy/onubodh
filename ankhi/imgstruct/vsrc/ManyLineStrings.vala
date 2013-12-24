@@ -3,7 +3,7 @@ using shotodol;
 using onubodh;
 
 public class onubodh.ManyLineStrings : LineString {
-	Set<StringStructure> lines;
+	Set<StringStructureImpl> lines;
 	int maxCrackLength;
 	int requiredContinuity;
 	int requiredLength;
@@ -14,7 +14,7 @@ public class onubodh.ManyLineStrings : LineString {
 		, aroop_uword8 minGrayVal
 		, int radius_shift) {
 		base(src, minGrayVal, radius_shift);
-		lines = Set<StringStructure>();
+		lines = Set<StringStructureImpl>();
 		maxCrackLength = myMaxCrackLength;
 		requiredContinuity = myRequiredContinuity;
 		requiredLength = myRequiredLength;
@@ -56,9 +56,9 @@ public class onubodh.ManyLineStrings : LineString {
 			}*/
 			
 			// try to build a line of matrices starting from a ..
-			StringStructure newLine = new StringStructure();
-			int col = a.higher_order_x();
-			int row = a.higher_order_y();
+			StringStructureImpl newLine = new StringStructureImpl(img, getShift());
+			int col = a.higherOrderX;
+			int row = a.higherOrderY;
 			int xval = row*columns;
 			int gap = 0;
 			int cont = 0;
@@ -80,52 +80,104 @@ public class onubodh.ManyLineStrings : LineString {
 					continue;
 				}
 				//b.flagIt(usedMark);
-				newLine.setMatrixAt(xy, b);
-				col = b.higher_order_x();
+				newLine.appendMatrix(b);
+				col = b.higherOrderX;
 				gap = 0;
 				cont++;
 			}
+			cont += gap;
 			if(newLine.getLength() > requiredLength && cont > requiredContinuity) {
 				newLine.setContinuity(cont);
 				lines.add(newLine);
 			}
 		}
+		
 		it.destroy();
 		print("Total lines:%d\n", lines.count_unsafe());
 		return 0;
 	}
 	
+	const int PRUNE = 1<<6;
 	public override int heal() {
-		Iterator<container<StringStructure>> it = Iterator<container<StringStructure>>.EMPTY();
+		Iterator<container<StringStructureImpl>> it = Iterator<container<StringStructureImpl>>.EMPTY();
 		lines.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
 		while(it.next()) {
-			container<StringStructure> can = it.get();
-			can.get().heal();
+			container<StringStructureImpl> can = it.get();
+			StringStructureImpl strct =  can.get();
+			if(strct.testFlag(PRUNE)) {
+				continue;
+			}
+			strct.heal();
 		}
 		it.destroy();
 		return 0;
 	}
 	
 	public override void fill() {
-		Iterator<container<StringStructure>> it = Iterator<container<StringStructure>>.EMPTY();
+		Iterator<container<StringStructureImpl>> it = Iterator<container<StringStructureImpl>>.EMPTY();
 		lines.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
 		while(it.next()) {
-			container<StringStructure> can = it.get();
-			can.get().fill();
+			container<StringStructureImpl> can = it.get();
+			StringStructureImpl strct =  can.get();
+			if(strct.testFlag(PRUNE)) {
+				continue;
+			}
+			strct.fill();
 		}
 		it.destroy();
+	}
+	
+	public void mergeOverlapingLines() {
+		Iterator<container<StringStructureImpl>> it = Iterator<container<StringStructureImpl>>.EMPTY();
+		lines.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
+		int totalLines = 0;
+		while(it.next()) {
+			container<StringStructureImpl> can = it.get();
+			StringStructureImpl x = can.get();
+			if(x.testFlag(PRUNE)) {
+				continue;
+			}
+			totalLines++;
+			Iterator<container<StringStructureImpl>> ity = Iterator<container<StringStructureImpl>>.EMPTY();
+			lines.iterator_hacked(&ity, Replica_flags.ALL, 0, 0);
+			while(ity.next()) {
+				container<StringStructureImpl> cany = ity.get();
+				StringStructureImpl y = cany.get();
+				if(x == y) {
+					continue;
+				}
+				if(y.testFlag(PRUNE)) {
+					continue;
+				}
+				if(!x.overlaps(y) && !x.neibor(y)) {
+					continue;
+				}
+				x.merge(y);
+				y.flagIt(PRUNE);
+			}
+			ity.destroy();
+		}
+		it.destroy();
+		print("Merged to %d lines\n", totalLines);
 	}
 
 	
 	public override void dumpImage(netpbmg*oimg, aroop_uword8 gval) {
-		Iterator<container<StringStructure>> it = Iterator<container<StringStructure>>.EMPTY();
+		Iterator<container<StringStructureImpl>> it = Iterator<container<StringStructureImpl>>.EMPTY();
 		lines.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
 		bool high = true;
+		int totalLines = 0;
 		while(it.next()) {
-			container<StringStructure> can = it.get();
-			can.get().dumpImage(oimg, high?gval:(gval>>1));
+			container<StringStructureImpl> can = it.get();
+			StringStructureImpl strct = can.get();
+			if(strct.testFlag(PRUNE)) {
+				continue;
+			}
+			totalLines++;
+			strct.dumpImage(oimg, high?gval:(gval>>1));
 			high = !high;
 		}
 		it.destroy();
+		print("Dumped %d lines\n", totalLines);
 	}
 }

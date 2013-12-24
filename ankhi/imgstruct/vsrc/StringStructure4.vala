@@ -32,7 +32,7 @@ public abstract class onubodh.StringStructure4 : StringStructure {
 				ImageMatrix mat = createMatrix(img, x, y, MatrixSize.MATRIX_4);
 				mat.compile();
 				if(mat.getVal() > 0) {
-					setMatrixAt(mat.higher_order_x()+mat.higher_order_y()*columns, mat);
+					appendMatrix(mat);
 				}
 			}
 		}

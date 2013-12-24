@@ -27,8 +27,8 @@ public class onubodh.LineString : StringStructureImpl {
 			ImageMatrix a = can.get();
 			
 			// try to build a line of matrices starting from a ..
-			int col = a.higher_order_x();
-			int row = a.higher_order_y();
+			int col = a.higherOrderX;
+			int row = a.higherOrderY;
 			int xval = row*columns;
 			
 			for(;row < rows;(xval+=columns),row++) {
@@ -45,17 +45,18 @@ public class onubodh.LineString : StringStructureImpl {
 				if(b == null) {
 					b = createMatrix(img, col<<shift, row<<shift, (uchar)shift);
 					b.copyFrom(a);
-					setMatrixAt(xy+1, b);
+					core.assert((xy+1) == b.higherOrderXY);
+					appendMatrix(b);
 					continue;
 				}
-				col = b.higher_order_x();
+				col = b.higherOrderX;
 			}
 		}
 
 		base.heal();
 		return 0;
 	}
-	public override ImageMatrix createMatrix(netpbmg*src, int x, int y, uchar mat_size) {
+	public override ImageMatrix? createMatrix(netpbmg*src, int x, int y, uchar mat_size) {
 		//return new ImageMatrixStringNearLinearMultiple(src, x, y, mat_size, requiredGrayVal);
 		ImageMatrixStringNearLinearMultiple a = memory.alloc_full(64);
 		a.buildNearLinearMultiple(src, x, y, mat_size, requiredGrayVal);

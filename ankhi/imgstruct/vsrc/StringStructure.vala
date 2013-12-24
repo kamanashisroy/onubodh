@@ -2,11 +2,12 @@ using aroop;
 using shotodol;
 using onubodh;
 
-public class onubodh.StringStructure : Replicable {
+public abstract class onubodh.StringStructure : Replicable {
 	ArrayList<ImageMatrix> strings;
 	int continuity;
 	public StringStructure() {
 		strings = ArrayList<ImageMatrix>();
+		flag = 0;
 	}
 	
 	~StringStructure() {
@@ -21,8 +22,8 @@ public class onubodh.StringStructure : Replicable {
 		return strings.count_unsafe();
 	}
 
-	public virtual int setMatrixAt(int xy, ImageMatrix x) {
-		strings.set(xy, x);
+	public virtual int appendMatrix(ImageMatrix x) {
+		strings.set(x.higherOrderXY, x);
 		return 0;
 	}
 	
@@ -50,6 +51,12 @@ public class onubodh.StringStructure : Replicable {
 		it.destroy();
 		return 0;
 	}
+	
+	public abstract bool overlaps(StringStructure other);
+	
+	public abstract bool neibor(StringStructure other);
+	
+	public abstract void merge(StringStructure other);
 
 	public virtual void dump(OutputStream os, int higher_order_width, int higher_order_height) {
 		int x,y;
@@ -61,8 +68,8 @@ public class onubodh.StringStructure : Replicable {
 		while(it.next()) {
 			container<ImageMatrix> can = it.get();
 			ImageMatrix mat = can.get();
-			int higher_order_x = mat.higher_order_x();
-			int higher_order_y = mat.higher_order_y();
+			int higher_order_x = mat.higherOrderX;
+			int higher_order_y = mat.higherOrderY;
 			for(;y<higher_order_y;y++,x=0) {
 				for(;x<higher_order_width;x++) {
 					val.printf(",");
@@ -106,5 +113,16 @@ public class onubodh.StringStructure : Replicable {
 			mat.dumpImage(oimg, grayVal);
 		}
 		it.destroy();
+	}
+	
+	int flag;
+	public bool testFlag(int myFlag) {
+		return (flag & myFlag) != 0;
+	}
+	public void flagIt(int myFlag) {
+		flag |= myFlag;
+	}
+	public void unflagIt(int myFlag) {
+		flag &= ~myFlag;
 	}
 }
