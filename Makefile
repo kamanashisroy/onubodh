@@ -11,6 +11,7 @@ makeankhi:
 	$(BUILD) -C ankhi/imgtrix
 	$(BUILD) -C ankhi/imgstruct
 	$(BUILD) -C ankhi/cv
+	$(BUILD) -C ankhi/edge
 
 cleanankhi:
 	$(CLEAN) -C ankhi/scale
@@ -19,6 +20,7 @@ cleanankhi:
 	$(CLEAN) -C ankhi/imgtrix
 	$(CLEAN) -C ankhi/imgstruct
 	$(CLEAN) -C ankhi/cv
+	$(CLEAN) -C ankhi/edge
 
 makecore:
 	$(BUILD) -C libs/fastedge

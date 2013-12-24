@@ -2,13 +2,13 @@ using aroop;
 using shotodol;
 
 
-public class shotodol.FastEdgeCVCommand : M100Command {
+public class shotodol.FastEdgeCommand : M100Command {
 	etxt prfx;
 	enum Options {
 		INFILE = 1,
 		OUTFILE,
 	}
-	public FastEdgeCVCommand() {
+	public FastEdgeCommand() {
 		base();
 		etxt input = etxt.from_static("-i");
 		etxt input_help = etxt.from_static("Input pgm file");
@@ -19,7 +19,7 @@ public class shotodol.FastEdgeCVCommand : M100Command {
 	}
 
 	public override etxt*get_prefix() {
-		prfx = etxt.from_static("cvfastedge");
+		prfx = etxt.from_static("edgefast");
 		return &prfx;
 	}
 
@@ -39,10 +39,10 @@ public class shotodol.FastEdgeCVCommand : M100Command {
 			unowned txt outfile = mod.get(); // should be pgm file
 			int ecode = 0;
 			etxt dlg = etxt.stack(128);
-			dlg.printf("<Computer Vision>edge filter:%s -> %s\n", infile.to_string(), outfile.to_string());
+			dlg.printf("<Edge detect>edge filter:%s -> %s\n", infile.to_string(), outfile.to_string());
 			pad.write(&dlg);
 			if(shotodol_fastedge.fastedge_filter.filter(infile.to_string(), outfile.to_string(), &ecode) != 0) {
-				dlg.printf("<Computer Vision> Internal error while filtering %d\n", ecode);
+				dlg.printf("<Edge detect> Internal error while filtering %d\n", ecode);
 				pad.write(&dlg);
 			}
 			bye(pad, true);

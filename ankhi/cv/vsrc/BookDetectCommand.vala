@@ -70,7 +70,7 @@ public class shotodol.BookDetectCommand : M100Command {
 			if((mod = vals.search(Options.CONTINUITY, match_all)) != null) {
 				lineContinuity = mod.get().to_int();
 			}
-			int minGrayVal = 40;
+			int minGrayVal = 10;
 			if((mod = vals.search(Options.MIN_GRAY_VAL, match_all)) != null) {
 				minGrayVal = mod.get().to_int();
 			}
