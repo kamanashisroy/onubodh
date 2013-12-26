@@ -7,7 +7,7 @@ error onubodh.WordTransformError {
 }
 
 public class onubodh.WordTransform : Replicable {
-	txt? unknown_words;
+	txt?unkonwnWords;
 	etxt keywords[128];
 	int keycount;
 	public WordTransform() {
@@ -35,7 +35,7 @@ public class onubodh.WordTransform : Replicable {
 		return 0;
 	}
 	int transform(etxt*src,etxt*trans) {
-		unknown_words = new txt.given_length(inp.length()*2);
+		unknown_words = new txt.given_length(src.length()*2);
 		etxt inp = etxt.stack_from_etxt(src);
 		etxt next = etxt.EMPTY();
 		while(true) {

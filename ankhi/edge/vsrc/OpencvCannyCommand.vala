@@ -47,9 +47,13 @@ public class shotodol.OpencvCannyCommand : M100Command {
 				return -1;
 			}
 			netpbmg oimg = netpbmg.alloc_like(&iimg);
+#if false
 			shotodol_opencv.ArrayImage iAimg = shotodol_opencv.ArrayImage.from(iimg.width, iimg.height, iimg.grayData);
 			shotodol_opencv.ArrayImage oAimg = shotodol_opencv.ArrayImage.from(oimg.width, oimg.height, oimg.grayData);
 			shotodol_opencv.EdgeDetect.canny(&iAimg, &oAimg, 100, 200);
+#else
+			core.assert("Opencv is not working" == null);
+#endif
 			oimg.write(outfile.to_string());
 			bye(pad, true);
 			return 0;
