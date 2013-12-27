@@ -23,6 +23,22 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 #endif
 		longestLine = null;
 	}
+	
+	
+	public bool checkLinear(uchar a, uchar b, etxt*data, bool append_a, int*disc) {
+		int diff = b - a;
+		int mod = diff & (size - 1);
+		if(diff >= size && (mod == 1 || mod == 0 || mod == (size-1))) {
+			if(append_a) {
+				data.concat_char(a);
+			}
+			//print("diff(%d,%d)=%d\n", a, b, diff);
+			data.concat_char(b);
+			(*disc)=(diff >> shift);
+			return true;
+		}
+		return false;
+	}
 		
 	public override int heal() {
 		int i;
@@ -65,17 +81,21 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 		int i;
 		for(i = 0; i < points.length(); i++) {
 			etxt linearPoints = etxt.stack(points.length()+1-i);
+			int cont = 0;
 			uchar a = points.char_at(i);
 			uchar c = a;
 			bool append_a = true;
 			int j;
 			for(j=i+1; j < points.length();j++) {
 				uchar b = points.char_at(j);
-				if(ImageMatrixStringNearLinear.diffIsInteresting(a, b, &linearPoints, append_a, size) 
-					|| (a!=c && ImageMatrixStringNearLinear.diffIsInteresting(c, b, &linearPoints, false, size))) {
+				int disc = 0;
+				if(checkLinear(a, b, &linearPoints, append_a, &disc) 
+					|| (a!=c && checkLinear(c, b, &linearPoints, false, &disc))) {
 					a = c;
 					c = b;
 					append_a = false;
+					cont -= disc;
+					cont += 2;
 				}
 			}
 			if(linearPoints.length() > 0) {
@@ -83,10 +103,9 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 #if REMEMBER_ALL_LINES
 				lines.set(lineCount++, newLine);
 #endif
-				if(longestLine == null) {
+				if(longestLine == null || longestLine.length() < newLine.length()) {
 					longestLine = newLine;
-				} else if(longestLine.length() < newLine.length()) {
-					longestLine = newLine;
+					continuity = cont;
 				}
 			}
 		}

@@ -12,6 +12,7 @@ public abstract class onubodh.ImageMatrix : Replicable {
 	public int higherOrderX{public get;private set;}
 	public int higherOrderY{public get;private set;}
 	public int higherOrderXY{public get;private set;}
+	public int continuity{public get;protected set;}
 	public void buildMain(netpbmg*src, int x, int y, uchar radiusShift) {
 		img = src;
 		top = y;
@@ -24,6 +25,7 @@ public abstract class onubodh.ImageMatrix : Replicable {
 		int columns = (src.width >> shift);
 		columns += ((src.width & (( 1<< shift)-1)) == 0?0:1);
 		higherOrderXY = higherOrderX + higherOrderY*columns;
+		continuity = 0;
 	}
 	public abstract void copyFrom(ImageMatrix other);
 	public abstract int heal();

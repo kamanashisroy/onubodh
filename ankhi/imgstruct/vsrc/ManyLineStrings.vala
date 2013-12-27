@@ -39,14 +39,14 @@ public class onubodh.ManyLineStrings : LineString {
 		if(getLength() <= 1) {
 			return 0;
 		}
-		print("Total matrices we are investigating next:%d\n", getLength());
+		print("Total matrices interesting matrices:%d\n", getLength());
 		int usedMark = 1<<6;
 		unmarkAll(usedMark);
 
 		// for all the matrices..
 		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
 		getIterator(&it, Replica_flags.ALL, usedMark);
-		
+		int mshift = getShift();
 		while(it.next()) {
 			container<ImageMatrix> can = it.get();
 			ImageMatrix a = can.get();
@@ -56,12 +56,12 @@ public class onubodh.ManyLineStrings : LineString {
 			}*/
 			
 			// try to build a line of matrices starting from a ..
-			StringStructureImpl newLine = new StringStructureImpl(img, getShift());
+			StringStructureImpl newLine = new StringStructureImpl(img, mshift);
 			int col = a.higherOrderX;
 			int row = a.higherOrderY;
 			int xval = row*columns;
 			int gap = 0;
-			int cont = 0;
+			int cont = 0;//100;
 			
 			for(;row < rows && gap <= maxCrackLength;(xval+=columns),row++) {
 				int xy = col+xval;
@@ -75,17 +75,18 @@ public class onubodh.ManyLineStrings : LineString {
 					b = getMatrixAt(xy-1);
 				}
 				if(b == null) {
-					gap++;
-					cont--;
+					gap+=(1<<mshift);
 					continue;
 				}
+				cont+=b.continuity;
+				cont-=gap;
+				print("(%d)", b.continuity);
 				//b.flagIt(usedMark);
 				newLine.appendMatrix(b);
 				col = b.higherOrderX;
 				gap = 0;
-				cont++;
 			}
-			cont += gap;
+			print("Cracks:%d, Continuity:%d\n", gap, cont);
 			if(newLine.getLength() > requiredLength && cont > requiredContinuity) {
 				newLine.setContinuity(cont);
 				lines.add(newLine);
