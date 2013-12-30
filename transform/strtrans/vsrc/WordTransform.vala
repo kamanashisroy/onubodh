@@ -2,7 +2,7 @@ using aroop;
 using shotodol;
 using onubodh;
 
-public onubodh.WordTransformError {
+public errordomain onubodh.WordTransformError {
 	MAXIMUM_KEY_LIMIT_EXCEEDED,
 }
 

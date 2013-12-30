@@ -21,6 +21,7 @@ cleanankhi:
 	$(CLEAN) -C ankhi/imgstruct
 	$(CLEAN) -C ankhi/cv
 	$(CLEAN) -C ankhi/edge
+	$(CLEAN) -C lang/token
 
 makecore:
 	$(BUILD) -C libs/fastedge
@@ -29,6 +30,7 @@ makecore:
 	$(BUILD) -C libs/rawimg
 	$(BUILD) -C libs/dryman_kmeans
 	$(BUILD) -C libs/jpeg
+	$(BUILD) -C transform/strtrans
 
 cleancore:
 	$(CLEAN) -C libs/fastedge
