@@ -1,2 +1,6 @@
+libs/iostream
+core/commands
+core/base
+OS_PLATFORM/platform_extra
 -ONUBODH_HOME
 transform/strtrans

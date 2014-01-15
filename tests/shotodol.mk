@@ -4,9 +4,11 @@ all:
 	module -load ../ankhi/convert/plugin.so
 	module -load ../ankhi/scale/plugin.so
 	module -load ../ankhi/imgdiff/plugin.so
+	module -load ../lang/token/plugin.so
 	#make -t bookdetecttest_mini
 	#make -t bookdetecttest_big
-	make -t bookdetecttest_small
+	#make -t bookdetecttest_small
+	xtransform -i ./xml/input.xml
 	q
 	q
 

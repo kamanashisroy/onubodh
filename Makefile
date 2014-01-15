@@ -12,6 +12,7 @@ makeankhi:
 	$(BUILD) -C ankhi/imgstruct
 	$(BUILD) -C ankhi/cv
 	$(BUILD) -C ankhi/edge
+	$(BUILD) -C lang/token
 
 cleanankhi:
 	$(CLEAN) -C ankhi/scale
@@ -39,6 +40,7 @@ cleancore:
 	$(CLEAN) -C libs/rawimg
 	$(CLEAN) -C libs/dryman_kmeans
 	$(CLEAN) -C libs/jpeg
+	$(CLEAN) -C transform/strtrans
 
 clean:cleancore cleanankhi
 
