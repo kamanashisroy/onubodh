@@ -20,6 +20,7 @@ public class onubodh.WordTransform : Replicable {
 	ArrayList<txt>nonTransKeyWords;
 	SearchableFactory<TransKeyWord> keyWords;
 	etxt*keyWordArrayMap[32];
+	etxt delim;
 	int keyCount;
 	int wordCount;
 	enum wordTypes {
@@ -31,15 +32,18 @@ public class onubodh.WordTransform : Replicable {
 		keyWords = SearchableFactory<TransKeyWord>.for_type();
 		keyCount = 0;
 		wordCount = 0;
+		delim = etxt.EMPTY();
 	}
 	~WordTransform() {
 		nonTransKeyWords.destroy();
 		keyWords.destroy();
+		delim.destroy();
 	}
 
 	public int setTransKeyWordString(etxt*keys) throws WordTransformError {
 		etxt inp = etxt.stack_from_etxt(keys);
 		keyCount = 0;
+		delim.buffer(128);
 		while(true) {
 			etxt next = etxt.EMPTY();
 			print("Looling for token in [%s]\n", inp.to_string());
@@ -59,6 +63,10 @@ public class onubodh.WordTransform : Replicable {
 			kw.index = (uchar)keyCount;
 			print("+ Hashing key,len : [%s,%d]\n", kw.word.to_string(), len);
 			kw.pin();
+			if(kw.word.length() == 1) {
+				delim.concat_char(kw.word.char_at(0));
+				print("+  Delimiters : [%s]\n", delim.to_string());
+			}
 		}
 		print("We are done with keys\n");
 		// TODO create map
@@ -89,7 +97,7 @@ public class onubodh.WordTransform : Replicable {
 		etxt inp = etxt.stack_from_etxt(src);
 		etxt next = etxt.EMPTY();
 		while(true) {
-			LineAlign.next_token(&inp, &next);
+			LineAlign.next_token_delimitered(&inp, &next, &delim);
 			if(next.is_empty()) {
 				break;
 			}

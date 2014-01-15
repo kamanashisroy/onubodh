@@ -41,14 +41,14 @@ public class onubodh.XMLTransformCommand : M100Command {
 				print("Failed to open file:[%s]\n", infile.to_string());
 				break;
 			}
-				print("Building transform\n");
-				WordTransform trans = new WordTransform();
-				print("Allocating memory\n");
-				etxt keyWords = etxt.from_static("< / > arg val mango ");
-				etxt chunk = etxt.stack(512);
-				etxt extract = etxt.stack(512);
-				print("Feeding keywords\n");
-				trans.setTransKeyWordString(&keyWords);
+			print("Building transform\n");
+			WordTransform trans = new WordTransform();
+			print("Allocating memory\n");
+			etxt keyWords = etxt.from_static("< / >");
+			etxt chunk = etxt.stack(512);
+			etxt extract = etxt.stack(512);
+			print("Feeding keywords\n");
+			trans.setTransKeyWordString(&keyWords);
 				try {
 					do {
 						if(is.read(&chunk) == 0) {
