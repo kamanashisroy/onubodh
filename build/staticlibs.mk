@@ -10,4 +10,5 @@ include $(PROJECT_HOME)/libs/jpeg/staticlibs.mk
 include $(PROJECT_HOME)/ankhi/imgtrix/staticlibs.mk
 include $(PROJECT_HOME)/ankhi/imgstruct/staticlibs.mk
 include $(PROJECT_HOME)/transform/strtrans/staticlibs.mk
+include $(PROJECT_HOME)/libs/xmlparser/staticlibs.mk
 #include $(PROJECT_HOME)/libs/png/staticlibs.mk

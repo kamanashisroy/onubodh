@@ -42,23 +42,29 @@ public class onubodh.XMLTransformCommand : M100Command {
 				break;
 			}
 			print("Building transform\n");
-			WordTransform trans = new WordTransform();
+			XMLParser parser = new XMLParser();
 			print("Allocating memory\n");
-			etxt keyWords = etxt.from_static("< / >");
 			etxt chunk = etxt.stack(512);
 			etxt extract = etxt.stack(512);
 			print("Feeding keywords\n");
-			trans.setTransKeyWordString(&keyWords);
-				try {
-					do {
-						if(is.read(&chunk) == 0) {
-							break;
-						} 
-						trans.transform(&chunk, &extract);
-						print("Output:%d\n", extract.length());
-					} while(true);
-				} catch(IOStreamError.InputStreamError e) {
-				}
+			try {
+				do {
+					if(is.read(&chunk) == 0) {
+						break;
+					} 
+					parser.transform(&chunk, &extract);
+					print("Extracted length:%d\n", extract.length());
+					XMLIterator xit = XMLIterator.for_extract(&extract);
+					parser.nextElem(&xit);
+					print("tag:%s\n", xit.nextTag.to_string());
+					XMLIterator inner = XMLIterator();
+					parser.peelCapsule(&inner, &xit);
+					parser.nextElem(&inner);
+					print("inner text:%s\n", inner.content.to_string());
+				} while(true);
+			} catch(IOStreamError.InputStreamError e) {
+				break;
+			}
 			bye(pad, true);
 			return 0;
 		} while(false);

@@ -32,6 +32,7 @@ makecore:
 	$(BUILD) -C libs/dryman_kmeans
 	$(BUILD) -C libs/jpeg
 	$(BUILD) -C transform/strtrans
+	$(BUILD) -C libs/xmlparser
 
 cleancore:
 	$(CLEAN) -C libs/fastedge
@@ -41,6 +42,7 @@ cleancore:
 	$(CLEAN) -C libs/dryman_kmeans
 	$(CLEAN) -C libs/jpeg
 	$(CLEAN) -C transform/strtrans
+	$(CLEAN) -C libs/xmlparser
 
 clean:cleancore cleanankhi
 
