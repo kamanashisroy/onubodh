@@ -7,37 +7,70 @@ public errordomain onubodh.WordTransformError {
 }
 
 
-#if false
-public class onubodh.WordMap : HashTable {
-	hashable_ext ext;
-	int index;
-	etxt extract;
-	etxt source;
+public struct onubodh.WordMap {
+	public etxt extract;
+	public etxt source;
+	public etxt map;
+	internal int wordIndex;
+	internal ArrayList<txt>nonTransKeyWords;
+	public WordMap() {
+		nonTransKeyWords = ArrayList<txt>();
+		extract = etxt.EMPTY();
+		source = etxt.EMPTY();
+		map = etxt.EMPTY();
+		wordIndex = 0;
+	}
+
+	public int getNonKeyWord(int windex, etxt*wd) {
+		*wd = etxt.same_same(nonTransKeyWords.get(windex));
+		return 0;
+	}
+	
+	public void getSourceReference(int from, int to, etxt*srcref) {
+		int shift = 0;
+		int len = 0;
+		int i = 0;
+		for(i=0; i<from;i++) {
+			shift+=map.char_at(i);
+		}
+		for(i=from; i<to;i++) {
+			len+=map.char_at(i);
+		}
+		*srcref = etxt.same_same(&source);
+		srcref.shift(shift);
+		srcref.trim_to_length(len);
+	}
+
+	public void addChar(uchar c, int shift) {
+		extract.concat_char(c);
+		map.concat_char((uchar)shift);
+	}
+
+	public void destroy() {
+		source.destroy();
+		map.destroy();
+		extract.destroy();
+		nonTransKeyWords.destroy();
+	}
 }
-#endif
 
 public class onubodh.WordTransform : Replicable {
-	ArrayList<txt>nonTransKeyWords;
 	SearchableFactory<TransKeyWord> keyWords;
 	etxt*keyWordArrayMap[32];
 	etxt delim;
 	int keyCount;
-	int wordIndex;
 	enum wordTypes {
 		NON_KEY_WORD = 255,
 		MAX_KEY_INDEX_VALUE = 32,
 	}
 	public WordTransform() {
 		//memclean_raw();
-		nonTransKeyWords = ArrayList<txt>();
 		keyWords = SearchableFactory<TransKeyWord>.for_type();
 		keyCount = 0;
-		wordIndex = 0;
 		delim = etxt.EMPTY();
 		delim.buffer(32);
 	}
 	~WordTransform() {
-		nonTransKeyWords.destroy();
 		keyWords.destroy();
 		delim.destroy();
 	}
@@ -87,12 +120,7 @@ public class onubodh.WordTransform : Replicable {
 		return 0;
 	}
 
-	public int getNonKeyWord(int windex, etxt*wd) {
-		*wd = etxt.same_same(nonTransKeyWords.get(windex));
-		return 0;
-	}
-	
-	uchar getCharValue(etxt*token) {
+	uchar getCharValue(WordMap*m, etxt*token) {
 		aroop_hash h = token.get_hash();
 		//print("hash:%ld\n", h);
 		TransKeyWord?kw = keyWords.search(h, (x) => {/*print("Examining %s\n", ((TransKeyWord)x).word.to_string());*/return ((TransKeyWord)x).word.equals(token)?0:1;});
@@ -102,25 +130,27 @@ public class onubodh.WordTransform : Replicable {
 		} else {
 			txt uWord = new txt.memcopy_etxt(token);
 			//print("+ w : [%s]\n", uWord.to_string());
-			nonTransKeyWords.set(wordIndex, uWord);
+			m.nonTransKeyWords.set(m.wordIndex, uWord);
 		}
 		return wordTypes.NON_KEY_WORD; 
 	}
 	
-	public int transform(etxt*src,etxt*trans) {
-		etxt inp = etxt.stack_from_etxt(src);
+	public int transform(WordMap*m) {
+		etxt inp = etxt.same_same(&m.source);
 		etxt next = etxt.EMPTY();
-		wordIndex = 0;
 		while(true) {
+			int shift = inp.length();
 			LineAlign.next_token_delimitered(&inp, &next, &delim);
+			shift = shift - inp.length() ;
 			if(next.is_empty()) {
 				break;
 			}
-			trans.concat_char(getCharValue(&next));
-			wordIndex++;
+			m.addChar(getCharValue(m, &next), shift);
+			m.wordIndex++;
 		}
 		return 0;
 	}
+	
 }
 
 

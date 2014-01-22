@@ -23,6 +23,17 @@ public class onubodh.XMLTransformCommand : M100Command {
 		return &prfx;
 	}
 
+	void traverseCB(XMLIterator*xit) {
+		print(".. node :\n");
+		if(xit.nextIsText) {
+			etxt tcontent = etxt.stack(256);
+			xit.m.getSourceReference(xit.basePos + xit.shift, xit.basePos + xit.shift + xit.content.length(), &tcontent);
+			print("pos:%d,clen:%d,text content:%s\n", xit.pos, xit.content.length(), tcontent.to_string());
+		} else {
+			print("pos:%d,clen:%d,tag:%s\n", xit.pos, xit.content.length(), xit.nextTag.to_string());
+		}
+	}
+
 	public override int act_on(etxt*cmdstr, OutputStream pad) {
 		greet(pad);
 		SearchableSet<txt> vals = SearchableSet<txt>();
@@ -43,28 +54,24 @@ public class onubodh.XMLTransformCommand : M100Command {
 			}
 			print("Building transform\n");
 			XMLParser parser = new XMLParser();
-			print("Allocating memory\n");
-			etxt chunk = etxt.stack(512);
-			etxt extract = etxt.stack(512);
+			WordMap map = WordMap();
+			map.extract = etxt.stack(128);
+			map.source = etxt.stack(128);
+			map.map = etxt.stack(128);
 			print("Feeding keywords\n");
 			try {
 				do {
-					if(is.read(&chunk) == 0) {
+					if(is.read(&map.source) == 0) {
 						break;
 					} 
-					parser.transform(&chunk, &extract);
-					print("Extracted length:%d\n", extract.length());
-					XMLIterator xit = XMLIterator.for_extract(&extract);
-					parser.nextElem(&xit);
-					print("tag:%s\n", xit.nextTag.to_string());
-					XMLIterator inner = XMLIterator();
-					parser.peelCapsule(&inner, &xit);
-					parser.nextElem(&inner);
-					print("inner text:%s\n", inner.content.to_string());
+					parser.transform(&map);
+					print("Extracted length:%d\n", map.extract.length());
+					parser.traversePreorder(&map, 100, traverseCB);
 				} while(true);
 			} catch(IOStreamError.InputStreamError e) {
 				break;
 			}
+			parser = null;
 			bye(pad, true);
 			return 0;
 		} while(false);
