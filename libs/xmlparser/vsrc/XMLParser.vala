@@ -9,6 +9,8 @@ public struct onubodh.XMLIterator {
 	public int basePos;
 	public int pos;
 	public int shift;
+	public int attrShift;
+	public int attrEnd;
 	public bool nextIsText;
 	public XMLIterator(WordMap*aM) {
 		extract = etxt.EMPTY();
@@ -19,6 +21,7 @@ public struct onubodh.XMLIterator {
 		basePos = 0;
 		nextIsText = false;
 		m = aM;
+		attrShift = 0;
 	}
 	public XMLIterator.same_same(XMLIterator*other) {
 		extract = etxt.same_same(&other.extract);
@@ -29,6 +32,7 @@ public struct onubodh.XMLIterator {
 		basePos = other.basePos;
 		shift = other.shift;
 		m = other.m;
+		attrShift = other.attrShift;
 	}
 	public XMLIterator.for_extract(etxt*aExtract) {
 		extract = etxt.same_same(aExtract);
@@ -38,6 +42,16 @@ public struct onubodh.XMLIterator {
 		nextIsText = false;
 		basePos = 0;
 		shift = 0;
+		attrShift = 0;
+	}
+	public bool nextAttr(etxt*attrKey, etxt*attrVal) {
+		if((attrEnd - attrShift) < 3/* || attrs.char_at(attrShift+1) != ATTRIBUTE_ASSIGN*/) {
+			return false;
+		}
+		m.getSourceReference(basePos + shift + attrShift, basePos + shift + attrShift + 1, attrKey);
+		m.getSourceReference(basePos + shift + attrShift + 2, basePos + shift + attrShift + 3, attrVal);
+		attrShift+=3;
+		return true;
 	}
 }
 
@@ -47,6 +61,7 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 	int ANGLE_BRACE_OPEN;
 	int ANGLE_BRACE_CLOSE;
 	int INDICATE_TAG_END;
+	int ATTRIBUTE_ASSIGN;
 	public XMLParser() {
 		etxt start = etxt.from_static("<");
 		ANGLE_BRACE_OPEN = addKeyWord(&start);
@@ -54,12 +69,16 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 		ANGLE_BRACE_CLOSE = addKeyWord(&end);
 		etxt indicateEnd = etxt.from_static("/");
 		INDICATE_TAG_END = addKeyWord(&indicateEnd);
+		etxt attrAssign = etxt.from_static("=");
+		ATTRIBUTE_ASSIGN = addKeyWord(&attrAssign);
 	}
 	
 	public int nextElem(XMLIterator*it) {
 		core.assert(it != null && nextElem != null);
 		it.content.destroy();
 		it.nextTag.destroy();
+		it.attrShift = 0;
+		it.attrEnd = 0;
 		if(it.extract.is_empty() || it.pos >= it.extract.length()) {
 			return 0;
 		}
@@ -98,6 +117,9 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 		it.nextTag.destroy();
 		it.nextIsText = false;
 		int depth = 0;
+		bool attrGrabbed = false;
+		it.attrShift = 0;
+		it.attrEnd = 0;
 		// TODO we should use sandbox.indexof(char) function.
 		for (i = it.pos;i<len; i++) {
 			if(it.extract.char_at(i) == ANGLE_BRACE_OPEN) {
@@ -123,6 +145,12 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 				it.m.getNonKeyWord(it.basePos + i-1, &currentTag);
 				print("end tag:%s:depth:%d\n", currentTag.to_string(), depth);
 #endif
+				if(!attrGrabbed) {
+					core.assert(depth == 1);
+					attrGrabbed = true;
+					it.attrShift = angleBraceStart+2;
+					it.attrEnd = i;
+				}
 				if(i != 0 && it.extract.char_at(i-1) == INDICATE_TAG_END) {
 					depth--;
 				}
@@ -195,12 +223,10 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 				break;
 			}
 			cb(&xit);
-			if(!xit.nextIsText) {
-				if((depth-1) != 0) {
-					XMLIterator pl = XMLIterator(m);
-					peelCapsule(&pl, &xit);
-					if(!pl.extract.is_empty())traversePreorder(m, depth-1, cb, &pl.extract, pl.basePos);
-				}
+			if(!xit.nextIsText && (depth-1) != 0) {
+				XMLIterator pl = XMLIterator(m);
+				peelCapsule(&pl, &xit);
+				if(!pl.extract.is_empty())traversePreorder(m, depth-1, cb, &pl.extract, pl.basePos);
 			}
 		} while(true);
 	}

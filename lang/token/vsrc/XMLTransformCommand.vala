@@ -28,9 +28,19 @@ public class onubodh.XMLTransformCommand : M100Command {
 		if(xit.nextIsText) {
 			etxt tcontent = etxt.stack(256);
 			xit.m.getSourceReference(xit.basePos + xit.shift, xit.basePos + xit.shift + xit.content.length(), &tcontent);
-			print("pos:%d,clen:%d,text content:%s\n", xit.pos, xit.content.length(), tcontent.to_string());
+			print("Text\t\t- pos:%d,clen:%d,text content:%s\n", xit.pos, xit.content.length(), tcontent.to_string());
 		} else {
 			print("pos:%d,clen:%d,tag:%s\n", xit.pos, xit.content.length(), xit.nextTag.to_string());
+			etxt tcontent = etxt.stack(256);
+			xit.m.getSourceReference(xit.basePos + xit.shift, xit.basePos + xit.shift + xit.content.length(), &tcontent);
+			print("Content\t\t- pos:%d,clen:%d,content:%s\n", xit.pos, xit.content.length(), tcontent.to_string());
+			//xit.m.getSourceReference(xit.basePos + xit.shift, xit.basePos + xit.shift + xit.attrs.length(), &tcontent);
+			//print("Attrs\t\t- pos:%d,clen:%d,attr content:%s\n", xit.pos, xit.attrs.length(), tcontent.to_string());
+			etxt attrKey = etxt.EMPTY();
+			etxt attrVal = etxt.EMPTY();
+			while(xit.nextAttr(&attrKey, &attrVal)) {
+				print("key:[%s],val:[%s]\n", attrKey.to_string(), attrVal.to_string());
+			}
 		}
 	}
 
