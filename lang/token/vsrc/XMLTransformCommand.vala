@@ -77,6 +77,9 @@ public class onubodh.XMLTransformCommand : M100Command {
 					parser.transform(&map);
 					print("Extracted length:%d\n", map.extract.length());
 					parser.traversePreorder(&map, 100, traverseCB);
+					XMLIterator rxit = XMLIterator(&map);
+					rxit.extract = etxt.same_same(&map.extract);
+					parser.traversePreorder2(&rxit, 100, traverseCB);
 				} while(true);
 			} catch(IOStreamError.InputStreamError e) {
 				break;

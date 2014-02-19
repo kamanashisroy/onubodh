@@ -12,6 +12,7 @@ public struct onubodh.XMLIterator {
 	public int attrShift;
 	public int attrEnd;
 	public bool nextIsText;
+	protected XMLIterator*inner;
 	public XMLIterator(WordMap*aM) {
 		extract = etxt.EMPTY();
 		nextTag = etxt.EMPTY();
@@ -22,6 +23,7 @@ public struct onubodh.XMLIterator {
 		nextIsText = false;
 		m = aM;
 		attrShift = 0;
+		inner = null;
 	}
 	public XMLIterator.same_same(XMLIterator*other) {
 		extract = etxt.same_same(&other.extract);
@@ -33,6 +35,7 @@ public struct onubodh.XMLIterator {
 		shift = other.shift;
 		m = other.m;
 		attrShift = other.attrShift;
+		inner = null;
 	}
 	public XMLIterator.for_extract(etxt*aExtract) {
 		extract = etxt.same_same(aExtract);
@@ -43,6 +46,7 @@ public struct onubodh.XMLIterator {
 		basePos = 0;
 		shift = 0;
 		attrShift = 0;
+		inner = null;
 	}
 	public bool nextAttr(etxt*attrKey, etxt*attrVal) {
 		if((attrEnd - attrShift) < 3/* || attrs.char_at(attrShift+1) != ATTRIBUTE_ASSIGN*/) {
@@ -205,10 +209,15 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 		dst.basePos = src.basePos + src.shift + nextCapsule + 1;
 		dst.shift = 0;
 		dst.pos = 0;
+		src.inner = dst;
 		//print("Peeled\n");
 	}
 
 	public void traversePreorder2(XMLIterator*xit, int depth, XMLTraverser cb) {
+		if(xit.inner != null) {
+			traversePreorder2(xit.inner, depth, cb);
+			return;
+		}
 		do {
 			print("-- depth:%d\n", depth);
 			nextElem(xit);
@@ -225,6 +234,7 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 				if(!pl.extract.is_empty())traversePreorder2(&pl, depth-1, cb);
 			}
 		} while(true);
+		xit.inner = null;
 	}
 
 	public void traversePreorder(WordMap*m, int depth, XMLTraverser cb, etxt*content = null, int basePos = 0) {
