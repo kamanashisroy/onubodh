@@ -208,6 +208,25 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 		//print("Peeled\n");
 	}
 
+	public void traversePreorder2(XMLIterator*xit, int depth, XMLTraverser cb) {
+		do {
+			print("-- depth:%d\n", depth);
+			nextElem(xit);
+			if(xit.content.is_empty() && xit.nextTag.is_empty()) {
+				break;
+			}
+			cb(xit);
+			if(xit.content.is_empty() && xit.nextTag.is_empty()) {
+				break;
+			}
+			if(!xit.nextIsText && (depth-1) != 0) {
+				XMLIterator pl = XMLIterator(xit.m);
+				peelCapsule(&pl, xit);
+				if(!pl.extract.is_empty())traversePreorder2(&pl, depth-1, cb);
+			}
+		} while(true);
+	}
+
 	public void traversePreorder(WordMap*m, int depth, XMLTraverser cb, etxt*content = null, int basePos = 0) {
 		XMLIterator xit = XMLIterator(m);
 		if(content != null) {
@@ -217,7 +236,7 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 		}
 		xit.basePos = basePos;
 		do {
-			//print("-- depth:%d\n", depth);
+			print("-- depth:%d\n", depth);
 			nextElem(&xit);
 			if(xit.content.is_empty() && xit.nextTag.is_empty()) {
 				break;
