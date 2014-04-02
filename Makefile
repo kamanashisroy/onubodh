@@ -46,4 +46,3 @@ cleancore:
 
 clean:cleancore cleanankhi
 
-include tests/test.mk

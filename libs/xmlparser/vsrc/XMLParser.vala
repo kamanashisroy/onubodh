@@ -59,7 +59,9 @@ public struct onubodh.XMLIterator {
 	}
 #if XMLPARSER_DEBUG
 	public void dump(etxt*prefix) {
-		print("%s [basePos:%d,shift:%d,pos:%d]\n", prefix.to_string(), basePos, shift, pos);
+		etxt talk = etxt.stack(128);
+		talk.printf("%s [basePos:%d,shift:%d,pos:%d,clen:%d]\n", prefix.to_string(), basePos, shift, pos, content.length());
+		shotodol.Watchdog.watchit(0, shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
 	}
 #endif
 }
@@ -88,7 +90,12 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 		it.nextTag.destroy();
 		it.attrShift = 0;
 		it.attrEnd = 0;
-		if(it.extract.is_empty() || it.pos >= it.extract.length()) {
+#if XMLPARSER_DEBUG
+		etxt talk = etxt.stack(128);
+		talk.printf("nextElem() len:%d,pos:%d\n", it.extract.length(), it.pos);
+		shotodol.Watchdog.watchit(0, shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
+#endif
+		if(it.extract.is_empty() || (it.pos >= it.extract.length())) {
 			return 0;
 		}
 		if(it.extract.char_at(it.pos) == ANGLE_BRACE_OPEN) {
@@ -179,12 +186,12 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 		return 0;
 	}
 
-	public void peelCapsule(XMLIterator*dst, XMLIterator*src) {
+	public int peelCapsule(XMLIterator*dst, XMLIterator*src) {
 		// sanity check
 		int len = src.content.length();
 		if(src.content.char_at(0) != ANGLE_BRACE_OPEN || src.content.char_at(len-1) != ANGLE_BRACE_CLOSE) {
 			//print("Could not peel capsule\n");
-			return;
+			return -1;
 		}
 		int i;
 		int nextCapsule = 0;
@@ -196,7 +203,7 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 		}
 		if(nextCapsule == len - 1) { // There is no internal capsule
 			//print("Could not peel capsule2\n");
-			return;
+			return -1;
 		}
 		int nextCapsuleEnd = 0;
 		for (i = len-1;i >= 0; i--) {
@@ -207,7 +214,7 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 		}
 		if(nextCapsuleEnd <= nextCapsule) { // There is no internal capsule
 			//print("Could not peel capsule3\n");
-			return;
+			return -1;
 		}
 		dst.extract = etxt.same_same(&src.content);
 		dst.extract.trim_to_length(nextCapsuleEnd);
@@ -217,6 +224,7 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 		dst.pos = 0;
 		src.inner = dst;
 		//print("Peeled\n");
+		return 0;
 	}
 
 	public void traverseDeep(XMLIterator*xit, int depth, XMLTraverser cb) {
@@ -225,13 +233,13 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 		talkative.printf("~)/[~~Peeling %s", xit.nextTag.to_string());xit.dump(&talkative);
 #endif
 		XMLIterator pl = XMLIterator(xit.m);
-		peelCapsule(&pl, xit);
-		if(!pl.extract.is_empty())traversePreorder2(&pl, depth, cb);
-		xit.inner = null;
+		if(peelCapsule(&pl, xit) == 0) {
+			if(!pl.extract.is_empty())traversePreorder2(&pl, depth, cb);
+			xit.inner = null;
 #if XMLPARSER_DEBUG
-		talkative.printf("--Next after %s", xit.nextTag.to_string());xit.dump(&talkative);
+			talkative.printf("--Next after %s", xit.nextTag.to_string());xit.dump(&talkative);
 #endif
-		nextElem(xit);
+		}
 	}
 
 	public void traversePreorder2(XMLIterator*xit, int depth, XMLTraverser cb) {
@@ -252,6 +260,7 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 		} else {
 			if(!xit.nextIsText) {
 				traverseDeep(xit, depth, cb);
+				return;
 			}
 		}
 		do {
@@ -274,16 +283,11 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 #endif
 				return;
 			}
-			if(!xit.nextIsText && (depth-1) != 0) {
-				traverseDeep(xit, depth-1, cb);
-			} else {
 #if XMLPARSER_DEBUG
-				talkative.printf("--Next");xit.dump(&talkative);
+			talkative.printf("--Next");xit.dump(&talkative);
 #endif
-				nextElem(xit);
-			}
+			nextElem(xit);
 		} while(true);
-		//print("-- No more no more no more\n");
 	}
 
 	public void traversePreorder(WordMap*m, int depth, XMLTraverser cb, etxt*content = null, int basePos = 0) {

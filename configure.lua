@@ -56,6 +56,10 @@ if yes_no_to_bool(configLines["LINUX_BLUETOOTH"]) then
 	configLines["CFLAGS+"] = configLines["CFLAGS+"] .. " -DLINUX_BLUETOOTH"
 end
 configLines["CFLAGS+"] = configLines["CFLAGS+"] .. " -DPLUGIN_ROOT=\\\"$(PROJECT_HOME)/\\\""
+configLines["VALAFLAGS+"] = ""
+if yes_no_to_bool(prompt_yes_no("enable XML parser debug ?(y/n) > ")) then
+	configLines["VALAFLAGS+"] = " -D XMLPARSER_DEBUG"
+end
 
 local conf = assert(io.open("./.config.mk", "w"))
 for x in pairs(configLines) do
