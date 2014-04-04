@@ -22,10 +22,6 @@ scale:
 	scale -i samples/bookshelf1.ppm -o .output.down.ppm -down 2
 	scale -i .output.down.ppm -o .output.up.ppm -up 2
 
-jpegconvert:
-	jpegconvert -i samples/bookshelf1.ppm -o .output.jpeg
-	jpegconvert -i .output.jpeg -o .output.back.ppm
-
 bookdetecttest_twice:
 	bookdetect -i output.pgm -o output_twice.pgm
 
