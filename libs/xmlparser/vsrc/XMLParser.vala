@@ -61,7 +61,7 @@ public struct onubodh.XMLIterator {
 	public void dump(etxt*prefix) {
 		etxt talk = etxt.stack(128);
 		talk.printf("%s [basePos:%d,shift:%d,pos:%d,clen:%d]\n", prefix.to_string(), basePos, shift, pos, content.length());
-		shotodol.Watchdog.watchit(0, shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
+		shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
 	}
 #endif
 }
@@ -93,7 +93,7 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 #if XMLPARSER_DEBUG
 		etxt talk = etxt.stack(128);
 		talk.printf("nextElem() len:%d,pos:%d\n", it.extract.length(), it.pos);
-		shotodol.Watchdog.watchit(0, shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
+		shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
 #endif
 		if(it.extract.is_empty() || (it.pos >= it.extract.length())) {
 			return 0;
