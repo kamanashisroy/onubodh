@@ -1,0 +1,16 @@
+libs/fastedge
+libs/opencv
+libs/netpbm
+libs/rawimg
+libs/dryman_kmeans
+libs/jpeg
+transform/strtrans
+libs/xmlparser
+ankhi/scale
+ankhi/imgdiff
+ankhi/convert
+ankhi/imgtrix
+ankhi/imgstruct
+ankhi/cv
+ankhi/edge
+lang/token

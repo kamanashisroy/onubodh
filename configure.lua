@@ -45,8 +45,8 @@ configLines["PROJECT_HOME"] = prompt("Project path " .. phome .. " > " , phome)
 configLines["ONUBODH_HOME"] = configLines["PROJECT_HOME"]
 local ahome = string.gsub(configLines["PROJECT_HOME"],"onubodh$","aroop")
 configLines["VALA_HOME"] = prompt("Aroop path " .. ahome .. " > ", ahome)
-local ahome = string.gsub(configLines["PROJECT_HOME"],"onubodh$","shotodol")
-configLines["SHOTODOL_HOME"] = prompt("Shotodol path " .. ahome .. " > ", ahome)
+local shotohome = string.gsub(configLines["PROJECT_HOME"],"onubodh$","shotodol")
+configLines["SHOTODOL_HOME"] = prompt("Shotodol path " .. shotohome .. " > ", shotohome)
 configLines["LINUX_BLUETOOTH"] = prompt_yes_no("enable bluetooth ?(y/n) > ")
 configLines["CFLAGS+"] = ""
 if yes_no_to_bool(prompt_yes_no("enable debug (ggdb3) ?(y/n) > ")) then
@@ -61,7 +61,7 @@ if yes_no_to_bool(prompt_yes_no("enable XML parser debug ?(y/n) > ")) then
 	configLines["VALAFLAGS+"] = " -D XMLPARSER_DEBUG"
 end
 
-local conf = assert(io.open("./.config.mk", "w"))
+local conf = assert(io.open("build/.config.mk", "w"))
 for x in pairs(configLines) do
 	local op = configOps[x]
 	if op == nil then
@@ -70,4 +70,7 @@ for x in pairs(configLines) do
 	conf:write(x .. op .. configLines[x] .. "\n")
 end
 assert(conf:close())
+
+local shotodol = dofile(configLines["SHOTODOL_HOME"] .. "/build/shotodol.lua")
+shotodol.genmake(configLines["PROJECT_HOME"])
 

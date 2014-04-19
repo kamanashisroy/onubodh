@@ -1,8 +1,8 @@
 
--include .config.mk
--include $(SHOTODOL_HOME)/plugin.mk
+-include build/.config.mk
+-include $(SHOTODOL_HOME)/Makefile.in
 
-all:makecore makeankhi makeshotodol
+all:makeplugins shotodol
 
 makeankhi:
 	$(BUILD) -C ankhi/scale
