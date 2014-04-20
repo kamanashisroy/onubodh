@@ -2,6 +2,10 @@ using aroop;
 using shotodol;
 using onubodh;
 
+/**
+ * \addtogroup imgstruct
+ * @{
+ */
 public class onubodh.StringStructureImpl : StringStructure {
 	protected netpbmg*img;
 	protected int img_width;
@@ -138,3 +142,4 @@ public class onubodh.StringStructureImpl : StringStructure {
 		return null;
 	}
 }
+/** @} */

@@ -2,6 +2,10 @@ using aroop;
 using shotodol;
 using onubodh;
 
+/**
+ * \addtogroup strtrans
+ * @{
+ */
 public class onubodh.TransKeyWord : Searchable {
 	public uchar index;
 	public etxt word;
@@ -11,3 +15,4 @@ public class onubodh.TransKeyWord : Searchable {
 		set_hash(h);
 	}
 }
+/** @} */

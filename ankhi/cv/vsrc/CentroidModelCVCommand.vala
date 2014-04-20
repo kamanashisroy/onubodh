@@ -3,6 +3,10 @@ using shotodol;
 using onubodh;
 
 
+/**
+ * \addtogroup bookdetect
+ * @{
+ */
 public class onubodh.CentroidModelCVCommand : M100Command {
 	etxt prfx;
 	enum Options {
@@ -73,3 +77,4 @@ public class onubodh.CentroidModelCVCommand : M100Command {
 	}
 }
 
+/** @} */

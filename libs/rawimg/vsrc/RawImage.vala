@@ -2,6 +2,16 @@ using aroop;
 using shotodol;
 using onubodh;
 
+/**
+ * \defgroup lib Onubodh Library
+ */
+/**
+ * \ingroup lib
+ * \defgroup rawimg Raw(Netpbm) Image
+ * \addtogroup rawimg 
+ * @{
+ */
+
 public struct RGB8Pixel {
 	public aroop_uword8 r;
 	public aroop_uword8 g;
@@ -52,3 +62,4 @@ public class onubodh.RawImage : Replicable {
 		return 0;
 	}
 }
+/** @} */

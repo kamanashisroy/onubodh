@@ -2,6 +2,10 @@ using aroop;
 using shotodol;
 using onubodh;
 
+/**
+ * \addtogroup imgstruct
+ * @{
+ */
 public abstract class onubodh.StringStructure4 : StringStructure {
 	netpbmg*img;
 	protected int img_width;
@@ -70,3 +74,4 @@ public abstract class onubodh.StringStructure4 : StringStructure {
 #endif
 	public abstract ImageMatrix createMatrix(netpbmg*src, int x, int y, uchar mat_size);
 }
+/** @} */

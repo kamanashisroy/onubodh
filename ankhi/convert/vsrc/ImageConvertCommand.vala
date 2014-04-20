@@ -1,6 +1,15 @@
 using aroop;
 using shotodol;
 
+/**
+ * \ingroup ankhi
+ * \defgroup imgconvert Image Converter
+ */
+
+/**
+ * \addtogroup imgconvert
+ * @{
+ */
 public class onubodh.ImageConvertCommand : M100Command {
 	etxt prfx;
 	enum Options {
@@ -111,3 +120,4 @@ public class onubodh.ImageConvertCommand : M100Command {
 		return 0;
 	}
 }
+/** @} */

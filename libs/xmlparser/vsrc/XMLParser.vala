@@ -1,6 +1,12 @@
 using aroop;
 using onubodh;
 
+/**
+ * \ingroup lib
+ * \defgroup xmlparser XML Parser
+ * \addtogroup xmlparser
+ * @{
+ */
 public struct onubodh.XMLIterator {
 	public WordMap*m;
 	public etxt extract;
@@ -314,3 +320,4 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 		} while(true);
 	}
 }
+/** @} */

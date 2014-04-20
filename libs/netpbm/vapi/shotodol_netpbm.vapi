@@ -1,5 +1,11 @@
 using aroop;
 
+/**
+ * \ingroup lib
+ * \defgroup netpbm Netpbm library
+ * \addtogroup netpbm
+ * @{
+ */
 namespace onubodh {
 	[CCode (cname="struct netpbm_point", cheader_filename = "imageio.h")]
 	public struct netpbm_point {
@@ -81,3 +87,4 @@ namespace onubodh {
 		public int setGrayVal(int x, int y, aroop_uword8 gval);
 	}
 }
+/** @} */

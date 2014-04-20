@@ -2,6 +2,10 @@ using aroop;
 using shotodol;
 using onubodh;
 
+/**
+ * \addtogroup imgstruct
+ * @{
+ */
 public abstract class onubodh.StringStructure : Replicable {
 	ArrayList<ImageMatrix> strings;
 	int continuity;
@@ -126,3 +130,4 @@ public abstract class onubodh.StringStructure : Replicable {
 		flag &= ~myFlag;
 	}
 }
+/** @} */

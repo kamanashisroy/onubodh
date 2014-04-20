@@ -2,6 +2,15 @@ using aroop;
 using shotodol;
 using onubodh;
 
+/**
+ * \ingroup ankhi
+ * \defgroup imgtrix Image Matrix
+ */
+
+/**
+ * \addtogroup imgtrix
+ * @{
+ */
 public abstract class onubodh.ImageMatrix : Replicable {
 	protected netpbmg*img;
 	public int top{public get;private set;}
@@ -43,3 +52,4 @@ public abstract class onubodh.ImageMatrix : Replicable {
 		flag &= ~myFlag;
 	}
 }
+/** @} */

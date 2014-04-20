@@ -1,6 +1,10 @@
 using aroop;
 using shotodol;
 
+/**
+ * \addtogroup imgscale
+ * @{
+ */
 public class onubodh.ImageScaleCommand : M100Command {
 	etxt prfx;
 	enum Options {
@@ -110,3 +114,4 @@ public class onubodh.ImageScaleCommand : M100Command {
 		return 0;
 	}
 }
+/** @} */

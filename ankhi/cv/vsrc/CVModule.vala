@@ -2,6 +2,10 @@ using aroop;
 using shotodol;
 using onubodh;
 
+/**
+ * \addtogroup bookdetect
+ * @{
+ */
 public class onubodh.CVModule : ModulePlugin {
 	KmeansCVCommand km;
 	CentroidModelCVCommand cm;
@@ -29,3 +33,4 @@ public class onubodh.CVModule : ModulePlugin {
 		return new CVModule();
 	}
 }
+/** @} */

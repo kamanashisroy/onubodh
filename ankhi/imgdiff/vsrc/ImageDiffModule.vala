@@ -1,6 +1,10 @@
 using aroop;
 using shotodol;
 
+/**
+ * \addtogroup imgdiff
+ * @{
+ */
 public class onubodh.ImageDiffModule : ModulePlugin {
 	ImageDiffCommand cmd;
 	ImagePatchCommand pcmd;
@@ -24,3 +28,4 @@ public class onubodh.ImageDiffModule : ModulePlugin {
 		return new ImageDiffModule();
 	}
 }
+/** @} */

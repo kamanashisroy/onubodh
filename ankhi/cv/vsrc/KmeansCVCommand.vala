@@ -2,6 +2,10 @@ using aroop;
 using shotodol;
 
 
+/**
+ * \addtogroup bookdetect
+ * @{
+ */
 public class shotodol.KmeansCVCommand : M100Command {
 	etxt prfx;
 	enum Options {
@@ -60,3 +64,4 @@ public class shotodol.KmeansCVCommand : M100Command {
 	}
 }
 
+/** @} */

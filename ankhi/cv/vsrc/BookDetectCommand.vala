@@ -2,6 +2,10 @@ using aroop;
 using shotodol;
 using onubodh;
 
+/**
+ * \addtogroup bookdetect
+ * @{
+ */
 public class shotodol.BookDetectCommand : M100Command {
 	etxt prfx;
 	enum Options {
@@ -93,3 +97,4 @@ public class shotodol.BookDetectCommand : M100Command {
 	}
 }
 
+/** @} */

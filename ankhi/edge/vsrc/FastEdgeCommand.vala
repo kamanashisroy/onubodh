@@ -2,6 +2,10 @@ using aroop;
 using shotodol;
 
 
+/**
+ * \addtogroup edgedetect
+ * @{
+ */
 public class shotodol.FastEdgeCommand : M100Command {
 	etxt prfx;
 	enum Options {
@@ -53,3 +57,4 @@ public class shotodol.FastEdgeCommand : M100Command {
 	}
 }
 
+/** @} */

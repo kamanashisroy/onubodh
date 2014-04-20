@@ -2,6 +2,10 @@ using aroop;
 using shotodol;
 using onubodh;
 
+/**
+ * \addtogroup bookdetect
+ * @{
+ */
 public class onubodh.CentroidModel : Replicable {
 	etxt fn;
 	netpbmg img;
@@ -116,3 +120,4 @@ public class onubodh.CentroidModel : Replicable {
 		return 0;
 	}
 }
+/** @} */

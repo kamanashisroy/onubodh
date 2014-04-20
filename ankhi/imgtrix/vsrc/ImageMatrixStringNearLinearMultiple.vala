@@ -2,6 +2,10 @@ using aroop;
 using shotodol;
 using onubodh;
 
+/**
+ * \addtogroup imgtrix 
+ * @{
+ */
 public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 #if REMEMBER_ALL_LINES
 	ArrayList<txt> lines;
@@ -127,3 +131,4 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 		return ((longestLine == null) ? 0 : longestLine.length());
 	}
 }
+/** @} */

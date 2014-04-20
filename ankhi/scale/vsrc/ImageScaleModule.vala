@@ -1,6 +1,14 @@
 using aroop;
 using shotodol;
 
+/**
+ * \ingroup ankhi
+ * \defgroup imgscale Image Scaling module
+ */
+/**
+ * \addtogroup imgscale
+ * @{
+ */
 public class onubodh.ImageScaleModule : ModulePlugin {
 	ImageScaleCommand cmd;
 	public override int init() {
@@ -20,3 +28,4 @@ public class onubodh.ImageScaleModule : ModulePlugin {
 		return new ImageScaleModule();
 	}
 }
+/** @} */

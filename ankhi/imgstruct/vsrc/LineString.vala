@@ -2,6 +2,15 @@ using aroop;
 using shotodol;
 using onubodh;
 
+/**
+ * \ingroup ankhi
+ * \defgroup imgstruct Image structure
+ */
+
+/**
+ * \addtogroup imgstruct
+ * @{
+ */
 public class onubodh.LineString : StringStructureImpl {
 	aroop_uword8 requiredGrayVal;
 	Factory<ImageMatrixStringNearLinearMultiple> memory;
@@ -63,3 +72,4 @@ public class onubodh.LineString : StringStructureImpl {
 		return a;
 	}
 }
+/** @} */

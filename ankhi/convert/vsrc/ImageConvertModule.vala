@@ -1,6 +1,10 @@
 using aroop;
 using shotodol;
 
+/**
+ * \addtogroup imgconvert 
+ * @{
+ */
 public class onubodh.ImageConvertModule : ModulePlugin {
 	ImageConvertCommand cmd;
 	public override int init() {
@@ -20,3 +24,4 @@ public class onubodh.ImageConvertModule : ModulePlugin {
 		return new ImageConvertModule();
 	}
 }
+/** @} */

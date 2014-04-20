@@ -2,6 +2,16 @@ using aroop;
 using shotodol;
 using onubodh;
 
+/** \defgroup transform Transform */
+/**
+ * \ingroup transform
+ * \defgroup strtrans String Transform
+ */
+/**
+ * \addtogroup strtrans
+ * @{
+ */
+
 public errordomain onubodh.WordTransformError {
 	MAXIMUM_KEY_LIMIT_EXCEEDED,
 }
@@ -154,3 +164,4 @@ public class onubodh.WordTransform : Replicable {
 }
 
 
+/** @} */

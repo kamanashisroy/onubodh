@@ -2,6 +2,10 @@ using aroop;
 using shotodol;
 using onubodh;
 
+/**
+ * \addtogroup token
+ * @{
+ */
 public class onubodh.XMLTransformCommand : M100Command {
 	etxt prfx;
 	enum Options {
@@ -92,3 +96,4 @@ public class onubodh.XMLTransformCommand : M100Command {
 		return 0;
 	}
 }
+/** @} */

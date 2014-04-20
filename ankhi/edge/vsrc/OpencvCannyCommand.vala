@@ -3,6 +3,10 @@ using shotodol;
 using onubodh;
 
 
+/**
+ * \addtogroup edgedetect
+ * @{
+ */
 public class shotodol.OpencvCannyCommand : M100Command {
 	etxt prfx;
 	enum Options {
@@ -63,3 +67,4 @@ public class shotodol.OpencvCannyCommand : M100Command {
 	}
 }
 
+/** @} */

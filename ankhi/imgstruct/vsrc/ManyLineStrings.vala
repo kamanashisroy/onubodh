@@ -2,6 +2,10 @@ using aroop;
 using shotodol;
 using onubodh;
 
+/**
+ * \addtogroup imgstruct
+ * @{
+ */
 public class onubodh.ManyLineStrings : LineString {
 	Set<StringStructureImpl> lines;
 	int maxCrackLength;
@@ -182,3 +186,4 @@ public class onubodh.ManyLineStrings : LineString {
 		print("Dumped %d lines\n", totalLines);
 	}
 }
+/** @} */

@@ -2,6 +2,14 @@ using aroop;
 using shotodol;
 using onubodh;
 
+/**
+ * \ingroup ankhi
+ * \defgroup edgedetect Edge Detecting Module
+ */
+/**
+ * \addtogroup edgedetect
+ * @{
+ */
 public class onubodh.EdgeModule : ModulePlugin {
 	FastEdgeCommand fe;
 	OpencvCannyCommand cn;
@@ -25,3 +33,4 @@ public class onubodh.EdgeModule : ModulePlugin {
 		return new EdgeModule();
 	}
 }
+/** @} */

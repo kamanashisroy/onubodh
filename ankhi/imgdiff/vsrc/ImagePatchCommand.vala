@@ -1,6 +1,10 @@
 using aroop;
 using shotodol;
 
+/**
+ * \addtogroup imgdiff
+ * @{
+ */
 public class onubodh.ImagePatchCommand : M100Command {
 	etxt prfx;
 	enum Options {
@@ -87,3 +91,4 @@ public class onubodh.ImagePatchCommand : M100Command {
 		return 0;
 	}
 }
+/** @} */

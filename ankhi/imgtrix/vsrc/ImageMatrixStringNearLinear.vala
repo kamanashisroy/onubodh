@@ -2,6 +2,10 @@ using aroop;
 using shotodol;
 using onubodh;
 
+/**
+ * \addtogroup imgtrix 
+ * @{
+ */
 public class onubodh.ImageMatrixStringNearLinear : ImageMatrixString {
 	public void buildNearLinear(netpbmg*src, int x, int y, uchar radiusShift, aroop_uword8 minGrayVal) {
 		buildString(src, x, y, radiusShift, minGrayVal);
@@ -57,3 +61,4 @@ public class onubodh.ImageMatrixStringNearLinear : ImageMatrixString {
 		return points.length();
 	}
 }
+/** @} */

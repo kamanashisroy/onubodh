@@ -1,5 +1,11 @@
 using aroop;
 
+/**
+ * \ingroup lib
+ * \defgroup fastedge Fatedge edge detection library
+ * \addtogroup fastedge
+ * @{
+ */
 namespace shotodol_fastedge {
 	[CCode (cname="char", cheader_filename = "shotodol_fastedge.h")]
 	public class fastedge_filter {
@@ -7,3 +13,4 @@ namespace shotodol_fastedge {
 		public static int filter(string infile, string outfile, int*ecode);
 	}
 }
+/** @} */

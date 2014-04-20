@@ -2,6 +2,13 @@ using aroop;
 using shotodol;
 using onubodh;
 
+/**
+ * \defgroup token Tokenizer module
+ */
+/**
+ * \addtogroup token
+ * @{
+ */
 public class onubodh.TokenModule : ModulePlugin {
 	XMLTransformCommand xtrans;
 	public override int init() {
@@ -21,3 +28,4 @@ public class onubodh.TokenModule : ModulePlugin {
 		return new TokenModule();
 	}
 }
+/** @} */

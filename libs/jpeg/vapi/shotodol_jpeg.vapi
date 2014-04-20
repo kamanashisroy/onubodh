@@ -1,5 +1,11 @@
 using aroop;
 
+/**
+ * \ingroup lib
+ * \defgroup jpeg JPEG encoder/decoder
+ * \addtogroup jpeg
+ * @{
+ */
 namespace onubodh {
 	[CCode (cname="struct jpeg_image", cheader_filename = "jpegimage.h")]
 	public struct jpegimg {
@@ -17,3 +23,4 @@ namespace onubodh {
 		public unowned string getError();
 	}
 }
+/** @} */

@@ -2,6 +2,10 @@ using aroop;
 using shotodol;
 using onubodh;
 
+/**
+ * \addtogroup imgtrix 
+ * @{
+ */
 public abstract class onubodh.ImageMatrixString : ImageMatrix {
 	protected etxt points;
 	aroop_uword8 requiredGrayVal = 0;
@@ -86,3 +90,4 @@ public abstract class onubodh.ImageMatrixString : ImageMatrix {
 #endif
 	}
 }
+/** @} */

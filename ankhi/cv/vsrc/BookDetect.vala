@@ -2,6 +2,19 @@ using aroop;
 using shotodol;
 using onubodh;
 
+
+/**
+ * \defgroup ankhi An intelligent image processing library
+ */
+
+/**
+ * \ingroup ankhi
+ * \defgroup bookdetect Detect book
+ */
+/**
+ * \addtogroup bookdetect
+ * @{
+ */
 public class onubodh.BookDetect : Replicable {
 	ManyLineStrings circuit;
 	netpbmg*orig;
@@ -38,3 +51,4 @@ public class onubodh.BookDetect : Replicable {
 		out_image.close();
 	}
 }
+/** @} */

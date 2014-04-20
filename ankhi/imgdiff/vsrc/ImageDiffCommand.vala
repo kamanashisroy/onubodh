@@ -1,6 +1,15 @@
 using aroop;
 using shotodol;
 
+/**
+ * \ingroup ankhi
+ * \defgroup imgdiff Image Diff Command
+ */
+/**
+ * \addtogroup imgdiff
+ * @{
+ */
+/** @} */
 public class onubodh.ImageDiffCommand : M100Command {
 	etxt prfx;
 	enum Options {
