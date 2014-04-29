@@ -3,3 +3,4 @@ build/.config.mk
 shotodol.bin
 build/Makevars.mk
 docs/doxygen/html
+./Makefile
