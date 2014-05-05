@@ -182,8 +182,8 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 					it.content.trim_to_length(i+1);
 					it.content.shift(angleBraceStart);
 					it.shift = angleBraceStart;
-					//it.pos += i+1;
-					it.pos += i;
+					it.pos += i+1;
+					//it.pos += i;
 					return 0;
 				}
 			}
@@ -242,6 +242,7 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 		if(peelCapsule(&pl, xit) == 0) {
 			if(!pl.extract.is_empty())traversePreorder2(&pl, depth, cb);
 			xit.inner = null;
+			xit.pos--;
 #if XMLPARSER_DEBUG
 			talkative.printf("--Next after %s", xit.nextTag.to_string());xit.dump(&talkative);
 #endif
@@ -298,6 +299,12 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 
 	public void traversePreorder(WordMap*m, int depth, XMLTraverser cb, etxt*content = null, int basePos = 0) {
 		XMLIterator xit = XMLIterator(m);
+#if XMLPARSER_DEBUG
+		etxt talkative = etxt.stack(100);
+#endif
+#if XMLPARSER_DEBUG
+		talkative.printf("++traversing %s", xit.nextTag.to_string());xit.dump(&talkative);
+#endif
 		if(content != null) {
 			xit.extract = etxt.same_same(content);
 		} else {
@@ -306,16 +313,25 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 		xit.basePos = basePos;
 		
 		do {
+#if XMLPARSER_DEBUG
+			talkative.printf("~~next %s", xit.nextTag.to_string());xit.dump(&talkative);
+#endif
 			//print("-- depth:%d\n", depth);
 			nextElem(&xit);
 			if(xit.content.is_empty() && xit.nextTag.is_empty()) {
 				break;
 			}
 			cb(&xit);
+
 			if(!xit.nextIsText && (depth-1) != 0) {
-				XMLIterator pl = XMLIterator(m);
-				peelCapsule(&pl, &xit);
-				if(!pl.extract.is_empty())traversePreorder(m, depth-1, cb, &pl.extract, pl.basePos);
+				XMLIterator pl = XMLIterator(xit.m);
+				if(peelCapsule(&pl, &xit) == 0) {
+#if XMLPARSER_DEBUG
+					talkative.printf("~)/[~~Peeling %s", xit.nextTag.to_string());xit.dump(&talkative);
+#endif
+					if(!pl.extract.is_empty())traversePreorder(m, depth-1, cb, &pl.extract, pl.basePos);
+					xit.inner = null;
+				}
 			}
 		} while(true);
 	}
