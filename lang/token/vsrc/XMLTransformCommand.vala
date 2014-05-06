@@ -28,22 +28,43 @@ public class onubodh.XMLTransformCommand : M100Command {
 	}
 
 	void traverseCB(XMLIterator*xit) {
-		print(".. node :\n");
+#if XMLPARSER_DEBUG
+		etxt talk = etxt.stack(128);
+		//talk.printf("Node:%s\n", xit.nextIsText?"text":xit.nextTag.to_string());
+		talk.printf("Node\n");
+		shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
+#endif
 		if(xit.nextIsText) {
 			etxt tcontent = etxt.stack(256);
 			xit.m.getSourceReference(xit.basePos + xit.shift, xit.basePos + xit.shift + xit.content.length(), &tcontent);
-			print("Text\t\t- pos:%d,clen:%d,text content:%s\n", xit.pos, xit.content.length(), tcontent.to_string());
+#if XMLPARSER_DEBUG
+			talk.printf("Text\t\t- pos:%d,clen:%d,text content:", xit.pos, xit.content.length());
+			talk.concat(&tcontent);
+			shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
+#endif
+			
 		} else {
-			print("pos:%d,clen:%d,tag:%s\n", xit.pos, xit.content.length(), xit.nextTag.to_string());
+#if XMLPARSER_DEBUG
+			talk.printf("pos:%d,clen:%d,tag:", xit.pos, xit.content.length());
+			talk.concat(&xit.nextTag);
+			shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
+#endif
 			etxt tcontent = etxt.stack(256);
 			xit.m.getSourceReference(xit.basePos + xit.shift, xit.basePos + xit.shift + xit.content.length(), &tcontent);
-			print("Content\t\t- pos:%d,clen:%d,content:%s\n", xit.pos, xit.content.length(), tcontent.to_string());
+#if XMLPARSER_DEBUG
+			talk.printf("Content\t\t- pos:%d,clen:%d,content:", xit.pos, xit.content.length());
+			talk.concat(&tcontent);
+			shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
+#endif
 			//xit.m.getSourceReference(xit.basePos + xit.shift, xit.basePos + xit.shift + xit.attrs.length(), &tcontent);
 			//print("Attrs\t\t- pos:%d,clen:%d,attr content:%s\n", xit.pos, xit.attrs.length(), tcontent.to_string());
 			etxt attrKey = etxt.EMPTY();
 			etxt attrVal = etxt.EMPTY();
 			while(xit.nextAttr(&attrKey, &attrVal)) {
-				print("key:[%s],val:[%s]\n", attrKey.to_string(), attrVal.to_string());
+#if XMLPARSER_DEBUG
+				talk.printf("key:[%s],val:[%s]\n", attrKey.to_string(), attrVal.to_string());
+				shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
+#endif
 			}
 		}
 	}
@@ -52,6 +73,9 @@ public class onubodh.XMLTransformCommand : M100Command {
 		greet(pad);
 		SearchableSet<txt> vals = SearchableSet<txt>();
 		parseOptions(cmdstr, &vals);
+#if XMLPARSER_DEBUG
+		etxt talk = etxt.stack(128);
+#endif
 		do {
 			container<txt>? mod;
 			if((mod = vals.search(Options.INFILE, match_all)) == null) {
@@ -66,23 +90,32 @@ public class onubodh.XMLTransformCommand : M100Command {
 				print("Failed to open file:[%s]\n", infile.to_string());
 				break;
 			}
-			print("Building transform\n");
+#if XMLPARSER_DEBUG
+			talk.printf("Build transform\n");
+			shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
+#endif
 			XMLParser parser = new XMLParser();
 			WordMap map = WordMap();
-			map.extract = etxt.stack(128);
+			map.kernel = etxt.stack(128);
 			map.source = etxt.stack(128);
 			map.map = etxt.stack(128);
-			print("Feeding keywords\n");
+#if XMLPARSER_DEBUG
+			talk.printf("Feeding keywords\n");
+			shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
+#endif
 			try {
 				do {
 					if(is.read(&map.source) == 0) {
 						break;
 					} 
 					parser.transform(&map);
-					print("Extracted length:%d\n", map.extract.length());
+#if XMLPARSER_DEBUG
+					talk.printf("Extract length:%d\n", map.kernel.length());
+					shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
+#endif
 					parser.traversePreorder(&map, 100, traverseCB);
 					XMLIterator rxit = XMLIterator(&map);
-					rxit.extract = etxt.same_same(&map.extract);
+					rxit.kernel = etxt.same_same(&map.kernel);
 					parser.traversePreorder2(&rxit, 100, traverseCB);
 				} while(true);
 			} catch(IOStreamError.InputStreamError e) {

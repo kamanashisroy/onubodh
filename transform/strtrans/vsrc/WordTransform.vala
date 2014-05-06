@@ -18,14 +18,14 @@ public errordomain onubodh.WordTransformError {
 
 
 public struct onubodh.WordMap {
-	public etxt extract;
+	public etxt kernel;
 	public etxt source;
 	public etxt map;
 	internal int wordIndex;
 	internal ArrayList<txt>nonTransKeyWords;
 	public WordMap() {
 		nonTransKeyWords = ArrayList<txt>();
-		extract = etxt.EMPTY();
+		kernel = etxt.EMPTY();
 		source = etxt.EMPTY();
 		map = etxt.EMPTY();
 		wordIndex = 0;
@@ -52,14 +52,14 @@ public struct onubodh.WordMap {
 	}
 
 	public void addChar(uchar c, int shift) {
-		extract.concat_char(c);
+		kernel.concat_char(c);
 		map.concat_char((uchar)shift);
 	}
 
 	public void destroy() {
 		source.destroy();
 		map.destroy();
-		extract.destroy();
+		kernel.destroy();
 		nonTransKeyWords.destroy();
 	}
 }
