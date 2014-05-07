@@ -29,32 +29,35 @@ public class onubodh.XMLTransformCommand : M100Command {
 
 	void traverseCB(XMLIterator*xit) {
 #if XMLPARSER_DEBUG
-		etxt talk = etxt.stack(128);
-		//talk.printf("Node:%s\n", xit.nextIsText?"text":xit.nextTag.to_string());
-		talk.printf("Node\n");
-		shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
+		etxt talk = etxt.stack(512);
+		talk.printf("Node");
+		if(xit.nextIsText) talk.concat_string("text"); else talk.concat(&xit.nextTag);
+		xit.dump(&talk);
 #endif
 		if(xit.nextIsText) {
 			etxt tcontent = etxt.stack(256);
 			xit.m.getSourceReference(xit.basePos + xit.shift, xit.basePos + xit.shift + xit.content.length(), &tcontent);
 #if XMLPARSER_DEBUG
-			talk.printf("Text\t\t- pos:%d,clen:%d,text content:", xit.pos, xit.content.length());
+			talk.printf("Text\t\t- content:");
 			talk.concat(&tcontent);
-			shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
+			talk.concat_char('\t');talk.concat_char('\t');
+			xit.dump(&talk);
 #endif
 			
 		} else {
 #if XMLPARSER_DEBUG
-			talk.printf("pos:%d,clen:%d,tag:", xit.pos, xit.content.length());
+			talk.printf("Tag:");
 			talk.concat(&xit.nextTag);
-			shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
+			talk.concat_char('\t');talk.concat_char('\t');
+			xit.dump(&talk);
 #endif
 			etxt tcontent = etxt.stack(256);
 			xit.m.getSourceReference(xit.basePos + xit.shift, xit.basePos + xit.shift + xit.content.length(), &tcontent);
 #if XMLPARSER_DEBUG
-			talk.printf("Content\t\t- pos:%d,clen:%d,content:", xit.pos, xit.content.length());
+			talk.printf("Content\t\t-content:");
 			talk.concat(&tcontent);
-			shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
+			talk.concat_char('\t');talk.concat_char('\t');
+			xit.dump(&talk);
 #endif
 			//xit.m.getSourceReference(xit.basePos + xit.shift, xit.basePos + xit.shift + xit.attrs.length(), &tcontent);
 			//print("Attrs\t\t- pos:%d,clen:%d,attr content:%s\n", xit.pos, xit.attrs.length(), tcontent.to_string());
@@ -62,8 +65,12 @@ public class onubodh.XMLTransformCommand : M100Command {
 			etxt attrVal = etxt.EMPTY();
 			while(xit.nextAttr(&attrKey, &attrVal)) {
 #if XMLPARSER_DEBUG
-				talk.printf("key:[%s],val:[%s]\n", attrKey.to_string(), attrVal.to_string());
-				shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
+				talk.printf("key:val = ");
+				talk.concat(&attrKey);
+				talk.concat_char(':');
+				talk.concat(&attrVal);
+				talk.concat_char('\t');talk.concat_char('\t');
+				xit.dump(&talk);
 #endif
 			}
 		}
@@ -114,9 +121,11 @@ public class onubodh.XMLTransformCommand : M100Command {
 					shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
 #endif
 					parser.traversePreorder(&map, 100, traverseCB);
+#if false
 					XMLIterator rxit = XMLIterator(&map);
 					rxit.kernel = etxt.same_same(&map.kernel);
 					parser.traversePreorder2(&rxit, 100, traverseCB);
+#endif
 				} while(true);
 			} catch(IOStreamError.InputStreamError e) {
 				break;

@@ -1,1 +1,1 @@
-start <t f="true"> he <b> is </b> fine </t> <t> food</t> end of life
+<x href=goback label=Back></x><y href=quit label=Quit></y><e href=aboutme label=About></e><q href=opennew label=Open></q>
