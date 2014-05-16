@@ -69,6 +69,7 @@ public class onubodh.WordTransform : Replicable {
 	etxt*keyWordArrayMap[32];
 	etxt delim;
 	int keyCount;
+	bool stringLiteralAsWord;
 	enum wordTypes {
 		NON_KEY_WORD = 255,
 		MAX_KEY_INDEX_VALUE = 32,
@@ -79,6 +80,7 @@ public class onubodh.WordTransform : Replicable {
 		keyCount = 0;
 		delim = etxt.EMPTY();
 		delim.buffer(32);
+		stringLiteralAsWord = true;
 	}
 	~WordTransform() {
 		keyWords.destroy();
@@ -150,7 +152,11 @@ public class onubodh.WordTransform : Replicable {
 		etxt next = etxt.EMPTY();
 		while(true) {
 			int shift = inp.length();
-			LineAlign.next_token_delimitered(&inp, &next, &delim);
+			if(stringLiteralAsWord) {
+				LineAlign.next_token_delimitered_sliteral(&inp, &next, &delim);
+			} else {
+				LineAlign.next_token_delimitered(&inp, &next, &delim);
+			}
 			shift = shift - inp.length() ;
 			if(next.is_empty()) {
 				break;
