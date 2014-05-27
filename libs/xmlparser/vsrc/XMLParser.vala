@@ -246,6 +246,7 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 		dst.kernel = etxt.same_same(&src.content);
 		dst.kernel.trim_to_length(nextCapsuleEnd);
 		dst.kernel.shift(nextCapsule+1);
+		core.assert(dst.kernel.char_at(0) != ANGLE_BRACE_CLOSE);
 		dst.basePos = src.basePos + src.shift + nextCapsule + 1;
 		dst.shift = 0;
 		dst.pos = 0;
