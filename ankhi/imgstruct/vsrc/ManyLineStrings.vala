@@ -63,20 +63,28 @@ public class onubodh.ManyLineStrings : LineString {
 			StringStructureImpl newLine = new StringStructureImpl(img, mshift);
 			int col = a.higherOrderX;
 			int row = a.higherOrderY;
-			int xval = row*columns;
+			int cumx = row*columns; // cumulative value of x axis
 			int gap = 0;
 			int cont = 0;//100;
 			
-			for(;row < rows && gap <= maxCrackLength;(xval+=columns),row++) {
-				int xy = col+xval;
+			for(;row < rows && gap <= maxCrackLength;(cumx+=columns),row++) {
+				int xy = col+cumx;
 				ImageMatrix?b = getMatrixAt(xy);
 				if(b == null && col != (columns-1)) {
-					xy++;
+					//xy++;
 					b = getMatrixAt(xy+1);
 				}
+				if(b == null && col != (columns-2)) {
+					//xy++;
+					b = getMatrixAt(xy+2);
+				}
 				if(b == null && col != 0) {
-					xy--;xy--;
+					//xy--;//xy--;
 					b = getMatrixAt(xy-1);
+				}
+				if(b == null && (col-1) >= 0) {
+					//xy--;//xy--;
+					b = getMatrixAt(xy-2);
 				}
 				if(b == null) {
 					gap+=(1<<mshift);

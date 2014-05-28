@@ -1,10 +1,16 @@
 
 all:
-	module -load ../ankhi/cv/plugin.so
-	module -load ../ankhi/convert/plugin.so
-	module -load ../ankhi/scale/plugin.so
-	module -load ../ankhi/imgdiff/plugin.so
-	#make -t bookdetecttest_mini
+	set -var ANKHI -val ../../../ankhi
+	module -load $(ANKHI)/cv/plugin.so
+	module -load $(ANKHI)/convert/plugin.so
+	module -load $(ANKHI)/scale/plugin.so
+	module -load $(ANKHI)/imgdiff/plugin.so
+	#set -var INFILE -val ../samples/simple.pgm
+	set -var INFILE -val ../../samples/bookshelf1.pgm
+	set -var EDGEFILE -val .edge.pgm
+	echo $(INFILE)
+	make -t cvfastedgetest
+	make -t bookdetecttest_small
 	#make -t bookdetecttest_big
 	#make -t bookdetecttest_small
 	q
@@ -33,17 +39,18 @@ bookdetecttest_big:
 	bookdetect -cracklen 4 -continuity 9 -mingrayval 30 -i books_edge2.pgm -o output_continuous.pgm
 
 bookdetecttest_small:
-	bookdetect -cracklen 2 -continuity 5 -mingrayval 30 -i edC03537_gimp_edge_detected.pgm -o output_small.pgm
-	bookdetect -cracklen 4 -continuity 9 -mingrayval 30 -i edC03537_gimp_edge_detected.pgm -o output_small_continuous.pgm
+	bookdetect -cracklen 2 -continuity 5 -mingrayval 30 -i $(EDGEFILE) -o output_small.pgm
+	bookdetect -cracklen 2 -continuity 5 -mingrayval 30 -i $(EDGEFILE) -o output_small_healed.pgm -heal
+	bookdetect -cracklen 4 -continuity 9 -mingrayval 30 -i  $(EDGEFILE) -o output_small_continuous.pgm
 
 cvkmeanstest:
 	cvkmeans -i samples/bookshelf1.ppm -o .kmeans.ppm -k 30
 
 cvcentroidtest:
-	cvcentroid -i samples/simple.pgm -o .output.pgm -x 10 -y 12
-	cvcentroid -i samples/simple.pgm -o .output.pgm -x 100 -y 100
-	cvcentroid -i samples/simple.pgm -o .output.pgm -x 350 -y 100
-	cvcentroid -i samples/simple.pgm -o .output.pgm -x 350 -y 200
+	cvcentroid -i ../samples/simple.pgm -o .output.pgm -x 10 -y 12
+	cvcentroid -i ../samples/simple.pgm -o .output.pgm -x 100 -y 100
+	cvcentroid -i ../samples/simple.pgm -o .output.pgm -x 350 -y 100
+	cvcentroid -i ../samples/simple.pgm -o .output.pgm -x 350 -y 200
 
 cvfastedgetest:
-	cvfastedge -i samples/bookshelf1.pgm -o .edge.pgm
+	cvfastedge -i $(INFILE) -o $(EDGEFILE)

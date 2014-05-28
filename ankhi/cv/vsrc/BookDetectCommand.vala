@@ -32,14 +32,14 @@ public class shotodol.BookDetectCommand : M100Command {
 		etxt radius_shift = etxt.from_static("-radiusshift");
 		etxt radius_shift_help = etxt.from_static("Matrix radius by power of 2");
 		etxt heal = etxt.from_static("-heal");
-		etxt heal_help = etxt.from_static("Should it heal?yes");
+		etxt heal_help = etxt.from_static("enable healing the lines with points");
 		addOption(&input, M100Command.OptionType.TXT, Options.INFILE, &input_help);
 		addOption(&output, M100Command.OptionType.TXT, Options.OUTFILE, &output_help);
 		addOption(&crackLen, M100Command.OptionType.TXT, Options.CRACKLEN, &crackLen_help);
 		addOption(&continuity, M100Command.OptionType.TXT, Options.CONTINUITY, &continuity_help); 
 		addOption(&mingrayval, M100Command.OptionType.TXT, Options.MIN_GRAY_VAL, &mingrayval_help); 
 		addOption(&radius_shift, M100Command.OptionType.TXT, Options.RADIUS_SHIFT, &radius_shift_help); 
-		addOption(&heal, M100Command.OptionType.TXT, Options.HEAL, &heal_help); 
+		addOption(&heal, M100Command.OptionType.NONE, Options.HEAL, &heal_help); 
 	}
 
 	public override etxt*get_prefix() {

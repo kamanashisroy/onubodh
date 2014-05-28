@@ -30,15 +30,18 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 	
 	
 	public bool checkLinear(uchar a, uchar b, etxt*data, bool append_a, int*disc) {
-		int diff = b - a;
-		int mod = diff & (size - 1);
-		if(diff >= size && (mod == 1 || mod == 0 || mod == (size-1))) {
+		int diff = b - a; // cumulative distance of the points in the matrix
+		int mod = diff & (size - 1); // alternative code for diff % size 
+		if(diff >= size 
+			&& (mod == 1 || mod == 0 || mod == (size-1)) /* allow one pixel shifted points as well as perfect linear pixels  */
+			) {
 			if(append_a) {
 				data.concat_char(a);
 			}
 			//print("diff(%d,%d)=%d\n", a, b, diff);
 			data.concat_char(b);
-			(*disc)=(diff >> shift);
+			(*disc)/* calculate the missing points in the line */=(diff >> shift)-1; // alternative code for diff / size
+			
 			return true;
 		}
 		return false;
@@ -85,21 +88,21 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 		int i;
 		for(i = 0; i < points.length(); i++) {
 			etxt linearPoints = etxt.stack(points.length()+1-i);
-			int cont = 0;
+			int cont = 0; // continuity
 			uchar a = points.char_at(i);
 			uchar c = a;
 			bool append_a = true;
 			int j;
 			for(j=i+1; j < points.length();j++) {
 				uchar b = points.char_at(j);
-				int disc = 0;
+				int disc = 0; // discontinuity
 				if(checkLinear(a, b, &linearPoints, append_a, &disc) 
 					|| (a!=c && checkLinear(c, b, &linearPoints, false, &disc))) {
 					a = c;
 					c = b;
 					append_a = false;
 					cont -= disc;
-					cont += 2;
+					cont++;
 				}
 			}
 			if(linearPoints.length() > 0) {
