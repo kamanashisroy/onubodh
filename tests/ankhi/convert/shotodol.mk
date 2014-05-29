@@ -1,13 +1,17 @@
 
 all:
-	module -load ../../../ankhi/cv/plugin.so
-	module -load ../../../ankhi/convert/plugin.so
-	module -load ../../../ankhi/scale/plugin.so
-	module -load ../../../ankhi/imgdiff/plugin.so
+	set -var MODULE_DIR -val ../../../ankhi
+	module -load $(MODULE_DIR)/convert/plugin.so
 	make -t jpegconvert
 	q
 
 jpegconvert:
-	jpegconvert -i samples/bookshelf1.ppm -o .output.jpeg
-	jpegconvert -i .output.jpeg -o .output.back.ppm
+	convert -i samples/bookshelf1.ppm -o .output.jpeg
+	convert -i .output.jpeg -o .output.back.ppm
 
+convertimg:
+	convert -i $(JPGFILE) -o input.ppm
+	convert -i input.ppm -o intermediate.pgm
+	#cvfastedge -i intermediate.pgm -o $(EDGEFILE)
+	#edgefast -i intermediate.pgm -o input.pgm
+	edgecanny -i intermediate.pgm -o $(EDGEFILE)

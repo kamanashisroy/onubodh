@@ -1,0 +1,9 @@
+
+all:
+	set -var MODULE_DIR -val ../../../ankhi
+	module -load $(MODULE_DIR)/scale/plugin.so
+
+scale:
+	scale -i samples/bookshelf1.ppm -o .output.down.ppm -down 2
+	scale -i .output.down.ppm -o .output.up.ppm -up 2
+

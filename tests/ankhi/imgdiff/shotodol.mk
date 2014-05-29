@@ -1,0 +1,16 @@
+
+all:
+	set -var MODULE_DIR -val ../../../ankhi
+	module -load $(MODULE_DIR)/imgdiff/plugin.so
+	imgdiff -i1 samples/bookshelf1.ppm -i2 .output2.ppm -o output.diff
+	#imgpatch -i1 output2.ppm -i2 output.diff -o output_original.ppm
+
+hi:
+	scale -i samples/bookshelf1.ppm -o .output.down.ppm -down 2
+	scale -i .output.down.ppm -o .output.up.ppm -up 2
+	imgdiff -i1 samples/bookshelf1.ppm -i2 .output.up.ppm -o output_resample.diff
+	scale -i .output.down.ppm -o .output.up.ppm -up 2
+	imgpatch -i1 .output.up.ppm -i2 output_resample.diff -o output_resample.ppm
+	quit
+
+
