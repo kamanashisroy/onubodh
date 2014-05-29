@@ -71,19 +71,15 @@ public class onubodh.ManyLineStrings : LineString {
 				int xy = col+cumx;
 				ImageMatrix?b = getMatrixAt(xy);
 				if(b == null && col != (columns-1)) {
-					//xy++;
 					b = getMatrixAt(xy+1);
 				}
-				if(b == null && col != (columns-2)) {
-					//xy++;
-					b = getMatrixAt(xy+2);
-				}
 				if(b == null && col != 0) {
-					//xy--;//xy--;
 					b = getMatrixAt(xy-1);
 				}
+				if(b == null && col != (columns-2)) {
+					b = getMatrixAt(xy+2);
+				}
 				if(b == null && (col-1) >= 0) {
-					//xy--;//xy--;
 					b = getMatrixAt(xy-2);
 				}
 				if(b == null) {

@@ -6,13 +6,10 @@ all:
 	module -load $(ANKHI)/scale/plugin.so
 	module -load $(ANKHI)/imgdiff/plugin.so
 	#set -var INFILE -val ../samples/simple.pgm
-	set -var INFILE -val ../../samples/bookshelf1.pgm
-	set -var EDGEFILE -val .edge.pgm
+	set -var INFILE -val ../../samples/b4.pgm
+	set -var EDGEFILE -val edge.pgm
 	echo $(INFILE)
-	make -t cvfastedgetest
-	make -t bookdetecttest_small
-	#make -t bookdetecttest_big
-	#make -t bookdetecttest_small
+	make -t bookdetecttest
 	q
 	q
 
@@ -28,20 +25,12 @@ scale:
 	scale -i samples/bookshelf1.ppm -o .output.down.ppm -down 2
 	scale -i .output.down.ppm -o .output.up.ppm -up 2
 
-bookdetecttest_twice:
-	bookdetect -i output.pgm -o output_twice.pgm
-
-bookdetecttest_mini:
-	bookdetect -i samples/rect16_16.pgm -o output.pgm
-
-bookdetecttest_big:
-	bookdetect -cracklen 2 -continuity 5 -mingrayval 30 -i books_edge2.pgm -o output.pgm
-	bookdetect -cracklen 4 -continuity 9 -mingrayval 30 -i books_edge2.pgm -o output_continuous.pgm
-
-bookdetecttest_small:
-	bookdetect -cracklen 2 -continuity 5 -mingrayval 30 -i $(EDGEFILE) -o output_small.pgm
-	bookdetect -cracklen 2 -continuity 5 -mingrayval 30 -i $(EDGEFILE) -o output_small_healed.pgm -heal
-	bookdetect -cracklen 4 -continuity 9 -mingrayval 30 -i  $(EDGEFILE) -o output_small_continuous.pgm
+bookdetecttest:
+	bookdetect -crk 2 -cont 3 -mgval 30 -i $(EDGEFILE) -o output_small2.pgm -rshift 2
+	bookdetect -crk 2 -cont 3 -mgval 30 -i $(EDGEFILE) -o output_small3.pgm -rshift 3
+	bookdetect -crk 2 -cont 3 -mgval 30 -i $(EDGEFILE) -o output_small4.pgm -rshift 4
+	bookdetect -crk 2 -cont 5 -mgval 30 -i $(EDGEFILE) -o output_small_healed.pgm -heal
+	bookdetect -crk 4 -cont 9 -mgval 30 -i  $(EDGEFILE) -o output_small_continuous.pgm
 
 cvkmeanstest:
 	cvkmeans -i samples/bookshelf1.ppm -o .kmeans.ppm -k 30

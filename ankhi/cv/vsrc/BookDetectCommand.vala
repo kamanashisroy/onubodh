@@ -23,13 +23,13 @@ public class shotodol.BookDetectCommand : M100Command {
 		etxt input_help = etxt.from_static("Input file");
 		etxt output = etxt.from_static("-o");
 		etxt output_help = etxt.from_static("Output file");
-		etxt crackLen = etxt.from_static("-cracklen");
+		etxt crackLen = etxt.from_static("-crk");
 		etxt crackLen_help = etxt.from_static("Crack lengths allowed in lines");
-		etxt continuity = etxt.from_static("-continuity");
+		etxt continuity = etxt.from_static("-cont");
 		etxt continuity_help = etxt.from_static("Required continuity(value) in lines");
-		etxt mingrayval = etxt.from_static("-mingrayval");
+		etxt mingrayval = etxt.from_static("-mgval");
 		etxt mingrayval_help = etxt.from_static("Required grayval(value) in lines");
-		etxt radius_shift = etxt.from_static("-radiusshift");
+		etxt radius_shift = etxt.from_static("-rshift");
 		etxt radius_shift_help = etxt.from_static("Matrix radius by power of 2");
 		etxt heal = etxt.from_static("-heal");
 		etxt heal_help = etxt.from_static("enable healing the lines with points");

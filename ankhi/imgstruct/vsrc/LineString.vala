@@ -27,7 +27,7 @@ public class onubodh.LineString : StringStructureImpl {
 		return 0;
 	}
 	public override int heal() {
-				// for all the matrices..
+		// for all the matrices..
 		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
 		getIterator(&it, Replica_flags.ALL, 0);
 		int shift = getShift();
@@ -44,17 +44,17 @@ public class onubodh.LineString : StringStructureImpl {
 				int xy = col+xval;
 				ImageMatrix?b = getMatrixAt(xy);
 				if(b == null && col != (columns-1)) {
-					xy++;
+					//xy++;
 					b = getMatrixAt(xy+1);
 				}
 				if(b == null && col != 0) {
-					xy--;xy--;
+					//xy--;xy--;
 					b = getMatrixAt(xy-1);
 				}
 				if(b == null) {
 					b = createMatrix(img, col<<shift, row<<shift, (uchar)shift);
 					b.copyFrom(a);
-					core.assert((xy+1) == b.higherOrderXY);
+					//core.assert((xy+1) == b.higherOrderXY);
 					appendMatrix(b);
 					continue;
 				}
