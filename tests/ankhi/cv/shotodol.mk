@@ -2,7 +2,7 @@
 all:
 	set -var MODULE_DIR -val ../../../ankhi
 	module -load $(MODULE_DIR)/cv/plugin.so
-	#set -var JPGFILE -val ../../samples/b4.jpg
+	#set -var JPGFILE -val ../../samples/myshelf/406.jpg
 	set -var INFILE -val ../../samples/b4.pgm
 	set -var EDGEFILE -val edge.pgm
 	echo $(INFILE)
@@ -12,11 +12,12 @@ all:
 	q
 
 bookdetecttest:
-	bookdetect -crk 2 -cont 3 -mgval 30 -i $(EDGEFILE) -o output_small2.pgm -rshift 2
-	bookdetect -crk 2 -cont 3 -mgval 30 -i $(EDGEFILE) -o output_small3.pgm -rshift 3
-	bookdetect -crk 2 -cont 3 -mgval 30 -i $(EDGEFILE) -o output_small4.pgm -rshift 4
-	bookdetect -crk 2 -cont 5 -mgval 30 -i $(EDGEFILE) -o output_small_healed.pgm -heal
-	bookdetect -crk 4 -cont 9 -mgval 30 -i  $(EDGEFILE) -o output_small_continuous.pgm
+	bookdetect -crk 1 -cont 3 -mgval 30 -i $(EDGEFILE) -o output_small_crk1_2.pgm -rshift 2
+	bookdetect -crk 1 -cont 3 -mgval 30 -i $(EDGEFILE) -o output_small_crk1_2.pgm -rshift 2
+	bookdetect -crk 2 -cont 3 -mgval 30 -i $(EDGEFILE) -o output_small_crk2_3.pgm -rshift 3
+	bookdetect -crk 2 -cont 3 -mgval 30 -i $(EDGEFILE) -o output_small_crk2_4.pgm -rshift 4
+	bookdetect -crk 2 -cont 5 -mgval 30 -i $(EDGEFILE) -o output_small_crk2__healed.pgm -heal
+	bookdetect -crk 4 -cont 9 -mgval 30 -i  $(EDGEFILE) -o output_small_crk4__continuous.pgm
 
 cvkmeanstest:
 	cvkmeans -i samples/bookshelf1.ppm -o .kmeans.ppm -k 30

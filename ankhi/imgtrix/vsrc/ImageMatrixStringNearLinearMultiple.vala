@@ -13,6 +13,7 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 #endif
 	txt? longestLine;
 	public void buildNearLinearMultiple(netpbmg*src, int x, int y, uchar radiusShift, aroop_uword8 minGrayVal) {
+		//memclean_raw();
 		buildString(src,x,y,radiusShift, minGrayVal);
 #if REMEMBER_ALL_LINES
 		lines = ArrayList<txt>();
@@ -26,25 +27,6 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 		lines.destroy();
 #endif
 		longestLine = null;
-	}
-	
-	
-	public bool checkLinear(uchar a, uchar b, etxt*data, bool append_a, int*disc) {
-		int diff = b - a; // cumulative distance of the points in the matrix
-		int mod = diff & (size - 1); // alternative code for diff % size 
-		if(diff >= size 
-			&& (mod == 1 || mod == 0 || mod == (size-1)) /* allow one pixel shifted points as well as perfect linear pixels  */
-			) {
-			if(append_a) {
-				data.concat_char(a);
-			}
-			//print("diff(%d,%d)=%d\n", a, b, diff);
-			data.concat_char(b);
-			(*disc)/* calculate the missing points in the line */=(diff >> shift)-1; // alternative code for diff / size
-			
-			return true;
-		}
-		return false;
 	}
 		
 	public override int heal() {
@@ -77,6 +59,33 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 		return 0;
 	}
 
+	/**
+	 * \brief It takes twin points to check linearity/Connectivity.
+	 **/
+	public bool checkLinear(uchar a, uchar b, etxt*data, bool append_a, int*disc) {
+		int diff = b - a; // cumulative distance of the points in the matrix
+		int mod = diff & (size - 1); // alternative code for diff % size 
+		if(diff >= size 
+			&& (mod == 1 || mod == 0 || mod == (size-1)) /* allow one pixel shifted points as well as perfect linear pixels  */
+			) {
+			if(append_a) {
+				data.concat_char(a);
+			}
+			//print("diff(%d,%d)=%d\n", a, b, diff);
+			data.concat_char(b);
+			(*disc)/* calculate the missing points in the line */=(diff >> shift)-1; // alternative code for diff / size
+			
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * \brief It finds the lines(or nearly linear lines) comapring
+	 * (a,b), (a,c), (a,d) .. twin points using checkLinear() method.
+	 * 
+	 * \see #checkLinear() 
+	 **/
 	public override int compile() {
 		base.compile();
 		if(points.length() <= 1) {

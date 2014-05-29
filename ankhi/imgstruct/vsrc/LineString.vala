@@ -67,7 +67,8 @@ public class onubodh.LineString : StringStructureImpl {
 	}
 	public override ImageMatrix? createMatrix(netpbmg*src, int x, int y, uchar mat_size) {
 		//return new ImageMatrixStringNearLinearMultiple(src, x, y, mat_size, requiredGrayVal);
-		ImageMatrixStringNearLinearMultiple a = memory.alloc_full(64);
+		ImageMatrixStringNearLinearMultiple a = memory.alloc_full(64,0,true);
+		//ImageMatrixStringNearLinearMultiple a = memory.alloc_full(64,0);
 		a.buildNearLinearMultiple(src, x, y, mat_size, requiredGrayVal);
 		return a;
 	}
