@@ -5,10 +5,11 @@ all:
 	module -load $(ANKHI)/convert/plugin.so
 	module -load $(ANKHI)/scale/plugin.so
 	module -load $(ANKHI)/imgdiff/plugin.so
-	#set -var INFILE -val ../samples/simple.pgm
+	#set -var JPGFILE -val ../../samples/b4.jpg
 	set -var INFILE -val ../../samples/b4.pgm
 	set -var EDGEFILE -val edge.pgm
 	echo $(INFILE)
+	make -t convertimg
 	make -t bookdetecttest
 	q
 	q
@@ -43,3 +44,10 @@ cvcentroidtest:
 
 cvfastedgetest:
 	cvfastedge -i $(INFILE) -o $(EDGEFILE)
+
+convertimg:
+	convert -i $(JPGFILE) -o input.ppm
+	convert -i input.ppm -o intermediate.pgm
+	#cvfastedge -i intermediate.pgm -o $(EDGEFILE)
+	#edgefast -i intermediate.pgm -o input.pgm
+	edgecanny -i intermediate.pgm -o $(EDGEFILE)

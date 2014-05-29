@@ -1,1 +1,1 @@
-This is artificial intelligence library
+This is an artificial intelligence library
