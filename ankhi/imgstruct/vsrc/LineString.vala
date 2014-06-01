@@ -13,11 +13,11 @@ using onubodh;
  */
 public class onubodh.LineString : StringStructureImpl {
 	aroop_uword8 requiredGrayVal;
-	Factory<ImageMatrixStringNearLinearMultiple> memory;
+	SearchableFactory<ImageMatrixStringNearLinearMultiple> memory;
 	public LineString(netpbmg*src, aroop_uword8 minGrayVal, int radius_shift) {
 		base(src, radius_shift);
 		requiredGrayVal = minGrayVal;
-		memory = Factory<ImageMatrixStringNearLinearMultiple>.for_type();
+		memory = SearchableFactory<ImageMatrixStringNearLinearMultiple>.for_type();
 	}
 	~LineString() {
 		memory.destroy();

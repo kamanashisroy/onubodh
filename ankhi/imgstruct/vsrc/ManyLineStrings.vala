@@ -7,7 +7,8 @@ using onubodh;
  * @{
  */
 public class onubodh.ManyLineStrings : LineString {
-	Set<StringStructureImpl> lines;
+	//Set<StringStructureImpl> lines;
+	Factory<StringStructureImpl>lines;
 	int maxCrackLength;
 	int requiredContinuity;
 	int requiredLength;
@@ -18,7 +19,7 @@ public class onubodh.ManyLineStrings : LineString {
 		, aroop_uword8 minGrayVal
 		, int radius_shift) {
 		base(src, minGrayVal, radius_shift);
-		lines = Set<StringStructureImpl>();
+		lines = Factory<StringStructureImpl>.for_type(16, 0, factory_flags.HAS_LOCK | factory_flags.SWEEP_ON_UNREF | factory_flags.MEMORY_CLEAN);
 		maxCrackLength = myMaxCrackLength;
 		requiredContinuity = myRequiredContinuity;
 		requiredLength = myRequiredLength;
@@ -37,6 +38,92 @@ public class onubodh.ManyLineStrings : LineString {
 		}
 		it.destroy();
 	}
+
+#if true
+	/**
+	 * \brief It takes twin points to check linearity/Connectivity.
+	 **/
+	public bool checkLinearMatrix(ImageMatrix a, ImageMatrix b, StringStructureImpl newLine, bool append_a, int*disc) {
+		int diff = b.higherOrderXY - a.higherOrderXY; // cumulative distance of the points in the matrix
+		int mod = diff % columns;
+		if(diff >= (columns-1)
+			&& (mod == 1 || mod == 0 || mod == (columns-1)) /* allow one pixel shifted points as well as perfect linear pixels  */
+			) {
+			if(append_a) {
+				print("Appending\n");
+				newLine.appendMatrix(a);
+			}
+			newLine.appendMatrix(b);
+			(*disc)/* calculate the missing points in the line */=diff/columns; // alternative code for diff / size
+			return true;
+		}
+		return false;
+	}
+
+	
+	public override int compile() {
+		base.compile();
+		if(getLength() <= 1) {
+			return 0;
+		}
+		print("Total matrices interesting matrices:%d\n", getLength());
+		int usedMark = 1<<6;
+		unmarkAll(usedMark);
+
+		// for all the matrices..
+		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
+		getIterator(&it, Replica_flags.ALL, usedMark);
+		int mshift = getShift();
+		while(it.next()) {
+			container<ImageMatrix> can = it.get();
+			ImageMatrix a = can.get();
+			ImageMatrix c = a;
+			
+			// try to build a line of matrices starting from a ..
+			StringStructureImpl newLine = lines.alloc_full();//new StringStructureImpl(img, mshift);
+			newLine.buildStringStructureImpl(img, mshift);
+			int col = a.higherOrderX;
+			int row = a.higherOrderY;
+			int cumx = row*columns; // cumulative value of x axis
+			int gap = 0;
+			bool appendA = true;
+			
+			Iterator<container<ImageMatrix>> itFollow = Iterator<container<ImageMatrix>>.EMPTY();
+			getIterator(&itFollow, Replica_flags.ALL, usedMark);
+			while(itFollow.next()) {
+				container<ImageMatrix> can2 = itFollow.get();
+				if(can2.get() == a) {
+					break;
+				}
+			}
+			if(!itFollow.next()) {
+				itFollow.destroy();
+				break;
+			}
+			while(itFollow.next()) {
+				container<ImageMatrix> can2 = itFollow.get();
+				ImageMatrix b = can2.get();
+				if(checkLinearMatrix(a, b, newLine, appendA, &gap) 
+					|| (a!=c && checkLinearMatrix(c, b, newLine, false, &gap))) {
+					a = c;
+					c = b;
+					appendA = false;
+				}
+			}
+			if(newLine.getLength() > requiredLength) {
+				newLine.setContinuity(100);
+				newLine.pin();
+				print("Pinned\n");
+			}
+			itFollow.destroy();
+		}
+		
+		it.destroy();
+		print("Total lines:%d\n", lines.count_unsafe());
+		return 0;
+	}
+
+#else
 	
 	public override int compile() {
 		base.compile();
@@ -60,7 +147,8 @@ public class onubodh.ManyLineStrings : LineString {
 			}*/
 			
 			// try to build a line of matrices starting from a ..
-			StringStructureImpl newLine = new StringStructureImpl(img, mshift);
+			StringStructureImpl newLine = lines.alloc_full();
+			newLine.build(img, mshift);
 			int col = a.higherOrderX;
 			int row = a.higherOrderY;
 			int cumx = row*columns; // cumulative value of x axis
@@ -105,14 +193,13 @@ public class onubodh.ManyLineStrings : LineString {
 		print("Total lines:%d\n", lines.count_unsafe());
 		return 0;
 	}
+#endif
 	
 	const int PRUNE = 1<<6;
 	public override int heal() {
-		Iterator<container<StringStructureImpl>> it = Iterator<container<StringStructureImpl>>.EMPTY();
-		lines.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
+		Iterator<StringStructureImpl> it = Iterator<StringStructureImpl>(&lines);
 		while(it.next()) {
-			container<StringStructureImpl> can = it.get();
-			StringStructureImpl strct =  can.get();
+			StringStructureImpl strct = it.get();
 			if(strct.testFlag(PRUNE)) {
 				continue;
 			}
@@ -123,11 +210,9 @@ public class onubodh.ManyLineStrings : LineString {
 	}
 	
 	public override void fill() {
-		Iterator<container<StringStructureImpl>> it = Iterator<container<StringStructureImpl>>.EMPTY();
-		lines.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
+		Iterator<StringStructureImpl> it = Iterator<StringStructureImpl>(&lines);
 		while(it.next()) {
-			container<StringStructureImpl> can = it.get();
-			StringStructureImpl strct =  can.get();
+			StringStructureImpl strct =  it.get();
 			if(strct.testFlag(PRUNE)) {
 				continue;
 			}
@@ -137,21 +222,17 @@ public class onubodh.ManyLineStrings : LineString {
 	}
 	
 	public void mergeOverlapingLines() {
-		Iterator<container<StringStructureImpl>> it = Iterator<container<StringStructureImpl>>.EMPTY();
-		lines.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
+		Iterator<StringStructureImpl> it = Iterator<StringStructureImpl>(&lines);
 		int totalLines = 0;
 		while(it.next()) {
-			container<StringStructureImpl> can = it.get();
-			StringStructureImpl x = can.get();
+			StringStructureImpl x = it.get();
 			if(x.testFlag(PRUNE)) {
 				continue;
 			}
 			totalLines++;
-			Iterator<container<StringStructureImpl>> ity = Iterator<container<StringStructureImpl>>.EMPTY();
-			lines.iterator_hacked(&ity, Replica_flags.ALL, 0, 0);
+			Iterator<StringStructureImpl> ity = Iterator<StringStructureImpl>(&lines);
 			while(ity.next()) {
-				container<StringStructureImpl> cany = ity.get();
-				StringStructureImpl y = cany.get();
+				StringStructureImpl y = ity.get();
 				if(x == y) {
 					continue;
 				}
@@ -172,13 +253,11 @@ public class onubodh.ManyLineStrings : LineString {
 
 	
 	public override void dumpImage(netpbmg*oimg, aroop_uword8 gval) {
-		Iterator<container<StringStructureImpl>> it = Iterator<container<StringStructureImpl>>.EMPTY();
-		lines.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
+		Iterator<StringStructureImpl> it = Iterator<StringStructureImpl>(&lines);
 		bool high = true;
 		int totalLines = 0;
 		while(it.next()) {
-			container<StringStructureImpl> can = it.get();
-			StringStructureImpl strct = can.get();
+			StringStructureImpl strct = it.get();
 			if(strct.testFlag(PRUNE)) {
 				continue;
 			}

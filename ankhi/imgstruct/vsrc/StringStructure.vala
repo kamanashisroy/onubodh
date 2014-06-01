@@ -7,9 +7,13 @@ using onubodh;
  * @{
  */
 public abstract class onubodh.StringStructure : Replicable {
+	searchable_ext ext;
 	ArrayList<ImageMatrix> strings;
 	int continuity;
 	public StringStructure() {
+		buildStringStructure();
+	}
+	public void buildStringStructure() {
 		strings = ArrayList<ImageMatrix>();
 		flag = 0;
 	}

@@ -15,12 +15,16 @@ public class onubodh.StringStructureImpl : StringStructure {
 	int radius; // 4 or 8, it is actually the size of the matrix
 	int shift; // 2 if 4 and 3 if 8 so on ..
 	public StringStructureImpl(netpbmg*src, int yourShift) {
-		base();
+		buildStringStructureImpl(src, yourShift);
+	}
+	
+	public void buildStringStructureImpl(netpbmg*src, int yourShift) {
+		buildStringStructure();
 		img = src;
 		radius = 1<<yourShift;
 		shift = yourShift;
 	}
-	
+
 	public int getShift() {
 		return shift;
 	}

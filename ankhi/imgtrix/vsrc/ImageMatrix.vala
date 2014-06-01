@@ -11,7 +11,8 @@ using onubodh;
  * \addtogroup imgtrix
  * @{
  */
-public abstract class onubodh.ImageMatrix : Replicable {
+public abstract class onubodh.ImageMatrix : /*Searchable*/Replicable {
+	searchable_ext ext;
 	protected netpbmg*img;
 	public int top{public get;private set;}
 	public int left{public get;private set;}

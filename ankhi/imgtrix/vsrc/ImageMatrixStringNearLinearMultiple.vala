@@ -65,7 +65,7 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 	public bool checkLinear(uchar a, uchar b, etxt*data, bool append_a, int*disc) {
 		int diff = b - a; // cumulative distance of the points in the matrix
 		int mod = diff & (size - 1); // alternative code for diff % size 
-		if(diff >= size 
+		if(diff >= (size-1) 
 			&& (mod == 1 || mod == 0 || mod == (size-1)) /* allow one pixel shifted points as well as perfect linear pixels  */
 			) {
 			if(append_a) {
