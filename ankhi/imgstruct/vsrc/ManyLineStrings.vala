@@ -43,18 +43,21 @@ public class onubodh.ManyLineStrings : LineString {
 	/**
 	 * \brief It takes twin points to check linearity/Connectivity.
 	 **/
-	public bool checkLinearMatrix(ImageMatrix a, ImageMatrix b, StringStructureImpl newLine, bool append_a, int*disc) {
+	public bool checkLinearMatrix(ImageMatrix a, ImageMatrix b, StringStructureImpl newLine, bool append_a, int*disc, int*direction) {
 		int diff = b.higherOrderXY - a.higherOrderXY; // cumulative distance of the points in the matrix
 		int mod = diff % columns;
+		bool right = ((*direction) >= 0 && mod == 1);
+		bool left = ((*direction) <= 0 && mod == (columns-1));
 		if(diff >= (columns-1)
-			&& (mod == 1 || mod == 0 || mod == (columns-1)) /* allow one pixel shifted points as well as perfect linear pixels  */
+			&& (left  || mod == 0 || right) /* allow one pixel shifted points as well as perfect linear pixels  */
 			) {
 			if(append_a) {
-				print("Appending\n");
 				newLine.appendMatrix(a);
 			}
 			newLine.appendMatrix(b);
-			(*disc)/* calculate the missing points in the line */=diff/columns; // alternative code for diff / size
+			if((*direction == 0) && (right || left))
+				 *direction = right?1:-1;
+			(*disc)/* calculate the missing points in the line */=diff/columns;
 			return true;
 		}
 		return false;
@@ -78,6 +81,7 @@ public class onubodh.ManyLineStrings : LineString {
 			container<ImageMatrix> can = it.get();
 			ImageMatrix a = can.get();
 			ImageMatrix c = a;
+			int direction = 0;
 			
 			// try to build a line of matrices starting from a ..
 			StringStructureImpl newLine = lines.alloc_full();//new StringStructureImpl(img, mshift);
@@ -103,8 +107,8 @@ public class onubodh.ManyLineStrings : LineString {
 			while(itFollow.next()) {
 				container<ImageMatrix> can2 = itFollow.get();
 				ImageMatrix b = can2.get();
-				if(checkLinearMatrix(a, b, newLine, appendA, &gap) 
-					|| (a!=c && checkLinearMatrix(c, b, newLine, false, &gap))) {
+				if(checkLinearMatrix(a, b, newLine, appendA, &gap, &direction) 
+					|| (a!=c && checkLinearMatrix(c, b, newLine, false, &gap, &direction))) {
 					a = c;
 					c = b;
 					appendA = false;
@@ -113,7 +117,6 @@ public class onubodh.ManyLineStrings : LineString {
 			if(newLine.getLength() > requiredLength) {
 				newLine.setContinuity(100);
 				newLine.pin();
-				print("Pinned\n");
 			}
 			itFollow.destroy();
 		}
