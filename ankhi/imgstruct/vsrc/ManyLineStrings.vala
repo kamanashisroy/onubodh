@@ -11,15 +11,17 @@ public class onubodh.ManyLineStrings : LineString {
 	Factory<StringStructureImpl>lines;
 	int maxCrackLength;
 	int requiredLength;
+	bool pruneWhileCompile;
 	public ManyLineStrings(netpbmg*src
 		, int myMaxCrackLength
 		, int myRequiredLength
 		, aroop_uword8 minGrayVal
-		, int radius_shift) {
+		, int radius_shift, bool gPruneWhileCompiling) {
 		base(src, minGrayVal, radius_shift);
 		lines = Factory<StringStructureImpl>.for_type(16, 0, factory_flags.HAS_LOCK | factory_flags.SWEEP_ON_UNREF | factory_flags.MEMORY_CLEAN);
 		maxCrackLength = myMaxCrackLength;
 		requiredLength = myRequiredLength;
+		pruneWhileCompile = gPruneWhileCompiling;
 	}
 	
 	~ManyLineStrings() {
@@ -83,7 +85,7 @@ public class onubodh.ManyLineStrings : LineString {
 					c = b;
 				}
 			}
-			if(newLine.getLength() > requiredLength && (tngl.adjacent < newLine.getLength())) {
+			if(!pruneWhileCompile || (newLine.getLength() > requiredLength && (tngl.adjacent < newLine.getLength()))) {
 				newLine.setContinuity(100);
 				newLine.pin();
 			}
@@ -92,6 +94,18 @@ public class onubodh.ManyLineStrings : LineString {
 		
 		it.destroy();
 		print("Total lines:%d\n", lines.count_unsafe());
+		return 0;
+	}
+
+	public int prune() {
+		Iterator<StringStructureImpl> it = Iterator<StringStructureImpl>(&lines);
+		while(it.next()) {
+			StringStructureImpl strct = it.get();
+			if(strct.getLength() > requiredLength) {
+				strct.unpin();
+			}
+		}
+		it.destroy();
 		return 0;
 	}
 

@@ -16,6 +16,8 @@ public class shotodol.BookDetectCommand : M100Command {
 		MIN_GRAY_VAL,
 		RADIUS_SHIFT,
 		HEAL,
+		MERGE,
+		PRUNE,
 	}
 	public BookDetectCommand() {
 		base();
@@ -33,6 +35,10 @@ public class shotodol.BookDetectCommand : M100Command {
 		etxt radius_shift_help = etxt.from_static("Matrix radius by power of 2");
 		etxt heal = etxt.from_static("-heal");
 		etxt heal_help = etxt.from_static("enable healing the lines with points");
+		etxt merge = etxt.from_static("-merge");
+		etxt merge_help = etxt.from_static("merge the lines");
+		etxt prune = etxt.from_static("-prune");
+		etxt prune_help = etxt.from_static("prune the lines according to given value.(Do not prune while compile)");
 		addOption(&input, M100Command.OptionType.TXT, Options.INFILE, &input_help);
 		addOption(&output, M100Command.OptionType.TXT, Options.OUTFILE, &output_help);
 		addOption(&crackLen, M100Command.OptionType.TXT, Options.CRACKLEN, &crackLen_help);
@@ -40,6 +46,8 @@ public class shotodol.BookDetectCommand : M100Command {
 		addOption(&mingrayval, M100Command.OptionType.TXT, Options.MIN_GRAY_VAL, &mingrayval_help); 
 		addOption(&radius_shift, M100Command.OptionType.TXT, Options.RADIUS_SHIFT, &radius_shift_help); 
 		addOption(&heal, M100Command.OptionType.NONE, Options.HEAL, &heal_help); 
+		addOption(&merge, M100Command.OptionType.NONE, Options.MERGE, &merge_help); 
+		addOption(&prune, M100Command.OptionType.NONE, Options.PRUNE, &prune_help); 
 	}
 
 	public override etxt*get_prefix() {
@@ -82,11 +90,21 @@ public class shotodol.BookDetectCommand : M100Command {
 			if((mod = vals.search(Options.RADIUS_SHIFT, match_all)) != null) {
 				radius_shift = mod.get().to_int();
 			}
+			bool pruneWhileCompile = true;
+			if((mod = vals.search(Options.PRUNE, match_all)) != null) {
+				pruneWhileCompile = false;
+			}
 			//FileOutputStream fos = new FileOutputStream.from_file(outfile);
-			BookDetect s = new BookDetect(&img, allowedCrackLen, minLen, minGrayVal, radius_shift);
+			BookDetect s = new BookDetect(&img, allowedCrackLen, minLen, minGrayVal, radius_shift, pruneWhileCompile);
 			s.compile();
+			if((mod = vals.search(Options.MERGE, match_all)) != null) {
+				s.merge();
+			}
 			if((mod = vals.search(Options.HEAL, match_all)) != null) {
 				s.heal();
+			}
+			if(!pruneWhileCompile) {
+				s.prune();
 			}
 			//s.dump(fos);
 			s.dumpImage(outfile);

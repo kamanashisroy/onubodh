@@ -42,8 +42,15 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 		uchar a = points.char_at(0);
 		linearPoints.concat_char(a);
 		oldval = a;
+		int adjacent = 0;
 		for(i = 1; i < points.length(); i++) {
 			uchar x = points.char_at(i);
+			adjacent = ((x - oldval) & (size-1));
+			bool left = false;
+			if(adjacent > (size>>1)) {
+				left = true;
+				adjacent = size - adjacent;
+			}
 			do {
 				int missing = 0;
 				int diff = x - oldval;
@@ -52,7 +59,12 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 				if(missing == 0) {
 					break;
 				}
-				oldval += size; // add point
+				missing = missing >> shift;
+				
+				oldval = oldval + size; // add point
+				if(left) oldval -= 1;
+				else oldval+=1;
+				adjacent--;
 				linearPoints.concat_char(oldval);
 			} while(true);
 			linearPoints.concat_char(x);
@@ -93,7 +105,7 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 			uchar c = a;
 			bool append_a = true;
 			int j;
-			ZeroTangle tngl = ZeroTangle.byShift(shift);
+			ZeroTangle tngl = ZeroTangle.forShift(shift);
 			for(j=i+1; j < points.length();j++) {
 				uchar b = points.char_at(j);
 				if(tngl.detect163(a, b) || (a!=c && tngl.detect163(c, b))) {
@@ -116,10 +128,6 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 					longestLine = newLine;
 					longestLineLength = longestLine.length();
 					continuity = longestLineLength - tngl.crack;
-					if(continuity < 1)
-						print("length:%d,crack:%d\n", longestLineLength, tngl.crack);
-					if(continuity == (1<<shift))
-						print("line detected:%d\n", longestLineLength);
 				}
 			}
 		}

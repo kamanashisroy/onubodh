@@ -18,12 +18,12 @@ using onubodh;
 public class onubodh.BookDetect : Replicable {
 	ManyLineStrings circuit;
 	netpbmg*orig;
-	public BookDetect(netpbmg*src, int allowedCrackLen, int requiredLength, int minGrayVal, int radius_shift) {
+	public BookDetect(netpbmg*src, int allowedCrackLen, int requiredLength, int minGrayVal, int radius_shift, bool pruneWhileCompile) {
 		circuit = new ManyLineStrings(src
 			, allowedCrackLen
 			, requiredLength
 			, (aroop_uword8)minGrayVal
-			, radius_shift);
+			, radius_shift, pruneWhileCompile);
 		orig = src;
 	}
 
@@ -34,12 +34,23 @@ public class onubodh.BookDetect : Replicable {
 	public int heal() {
 		print("Healing ..\n");
 		circuit.heal();
-		print("Merging ..\n");
-		//circuit.mergeOverlapingLines();
 		print("Filling ..\n");
 		//circuit.fill();
 		return 0;
 	}
+
+	public int merge() {
+		print("Merging ..\n");
+		circuit.mergeOverlapingLines();
+		return 0;
+	}
+
+	public int prune() {
+		print("Pruning ..\n");
+		circuit.prune();
+		return 0;
+	}
+
 
 	public void dumpImage(etxt*nm) {
 		print("Dumping ..\n");
