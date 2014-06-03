@@ -1,0 +1,3 @@
+TANGLEDETECT_CSOURCES=$(wildcard $(PROJECT_HOME)/ankhi/tangle/vsrc/*.c)
+TANGLEDETECT_VSOURCE_BASE=$(basename $(notdir $(TANGLEDETECT_CSOURCES)))
+OBJECTS+=$(addprefix $(PROJECT_OBJDIR)/, $(addsuffix .o,$(TANGLEDETECT_VSOURCE_BASE)))

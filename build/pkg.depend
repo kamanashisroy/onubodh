@@ -9,6 +9,7 @@ libs/xmlparser
 ankhi/scale
 ankhi/imgdiff
 ankhi/convert
+ankhi/tangle
 ankhi/imgtrix
 ankhi/imgstruct
 ankhi/cv

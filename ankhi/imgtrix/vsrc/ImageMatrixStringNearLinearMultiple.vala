@@ -60,27 +60,6 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 	}
 
 	/**
-	 * \brief It takes twin points to check linearity/Connectivity.
-	 **/
-	public bool checkLinear(uchar a, uchar b, etxt*data, bool append_a, int*disc) {
-		int diff = b - a; // cumulative distance of the points in the matrix
-		int mod = diff & (size - 1); // alternative code for diff % size 
-		if(diff >= (size-1) 
-			&& (mod == 1 || mod == 0 || mod == (size-1)) /* allow one pixel shifted points as well as perfect linear pixels  */
-			) {
-			if(append_a) {
-				data.concat_char(a);
-			}
-			//print("diff(%d,%d)=%d\n", a, b, diff);
-			data.concat_char(b);
-			(*disc)/* calculate the missing points in the line */=(diff >> shift)-1; // alternative code for diff / size
-			
-			return true;
-		}
-		return false;
-	}
-
-	/**
 	 * \brief It finds the lines(or nearly linear lines) comapring
 	 * (a,b), (a,c), (a,d) .. twin points using checkLinear() method.
 	 * 
@@ -103,14 +82,16 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 			bool append_a = true;
 			int j;
 			for(j=i+1; j < points.length();j++) {
+				ZeroTangle tngl = ZeroTangle.byShift(shift);
 				uchar b = points.char_at(j);
-				int disc = 0; // discontinuity
-				if(checkLinear(a, b, &linearPoints, append_a, &disc) 
-					|| (a!=c && checkLinear(c, b, &linearPoints, false, &disc))) {
+				if(tngl.detect162(a, b) || (a!=c && tngl.detect162(c, b))) {
+					if(append_a) {
+						append_a = false;
+						linearPoints.concat_char(a);
+					}
 					a = c;
 					c = b;
-					append_a = false;
-					cont -= disc;
+					cont -= tngl.crack;
 					cont++;
 				}
 			}

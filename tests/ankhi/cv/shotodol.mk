@@ -12,12 +12,20 @@ all:
 	q
 
 bookdetecttest:
-	bookdetect -crk 1 -cont 3 -mgval 30 -i $(EDGEFILE) -o output_small_crk1_2.pgm -rshift 2
-	bookdetect -crk 1 -cont 3 -mgval 30 -i $(EDGEFILE) -o output_small_crk1_2.pgm -rshift 2
-	bookdetect -crk 2 -cont 3 -mgval 30 -i $(EDGEFILE) -o output_small_crk2_3.pgm -rshift 3
-	bookdetect -crk 2 -cont 3 -mgval 30 -i $(EDGEFILE) -o output_small_crk2_4.pgm -rshift 4
-	bookdetect -crk 2 -cont 5 -mgval 30 -i $(EDGEFILE) -o output_small_crk2__healed.pgm -heal
-	bookdetect -crk 4 -cont 9 -mgval 30 -i  $(EDGEFILE) -o output_small_crk4__continuous.pgm
+	bookdetect -crk 4 -mlen 3 -mgval 30 -i $(EDGEFILE) -o output_small_crk4_2.pgm -rshift 2
+	bookdetect -crk 4 -mlen 3 -mgval 30 -i $(EDGEFILE) -o output_small_crk4_3.pgm -rshift 3
+	bookdetect -crk 1 -mlen 3 -mgval 30 -i $(EDGEFILE) -o output_small_crk1_4.pgm -rshift 4
+	bookdetect -crk 2 -mlen 5 -mgval 30 -i $(EDGEFILE) -o output_small_crk2_3.pgm -rshift 3
+	bookdetect -crk 4 -mlen 5 -mgval 30 -i $(EDGEFILE) -o output_small_crk4_5.pgm -rshift 3
+	bookdetect -crk 4 -mlen 5 -mgval 30 -i $(EDGEFILE) -o output_small_crk4_5_heal.pgm -rshift 3 -heal
+	bookdetect -crk 2 -mlen 5 -mgval 30 -i $(EDGEFILE) -o output_small_crk2_4.pgm -rshift 4
+	bookdetect -crk 2 -mlen 7 -mgval 30 -i $(EDGEFILE) -o output_small_crk2_4_7.pgm -rshift 4
+	bookdetect -crk 8 -mlen 7 -mgval 30 -i $(EDGEFILE) -o output_small_crk8_4_7.pgm -rshift 4
+	bookdetect -crk 5 -mlen 7 -mgval 30 -i $(EDGEFILE) -o output_small_crk5_4_7.pgm -rshift 4
+	bookdetect -crk 2 -mlen 9 -mgval 30 -i $(EDGEFILE) -o output_small_crk2_4_9.pgm -rshift 4
+	bookdetect -crk 2 -mlen 18 -mgval 30 -i $(EDGEFILE) -o output_small_crk2_4_18.pgm -rshift 4
+	#bookdetect -crk 2 -cont 5 -mgval 30 -i $(EDGEFILE) -o output_small_crk2__healed.pgm -heal
+	#bookdetect -crk 4 -cont 9 -mgval 30 -i  $(EDGEFILE) -o output_small_crk4__continuous.pgm
 
 cvkmeanstest:
 	cvkmeans -i samples/bookshelf1.ppm -o .kmeans.ppm -k 30
