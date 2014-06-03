@@ -72,8 +72,8 @@ public class onubodh.ManyLineStrings : LineString {
 				int axy = a.higherOrderXY;
 				int bxy = b.higherOrderXY;
 				int cxy = c.higherOrderXY;
-				if(tngl.detect102(axy, bxy) 
-					|| (a!=c && tngl.detect102(cxy, bxy))) {
+				//if(tngl.detect102(axy, bxy) || (a!=c && tngl.detect102(cxy, bxy))) {
+				if(tngl.detect103(axy, bxy) || (a!=c && tngl.detect103(cxy, bxy))) {
 					if(appendA) {
 						appendA = false;
 						newLine.appendMatrix(a);
@@ -83,7 +83,7 @@ public class onubodh.ManyLineStrings : LineString {
 					c = b;
 				}
 			}
-			if(newLine.getLength() > requiredLength && tngl.adjacent < newLine.getLength()/2) {
+			if(newLine.getLength() > requiredLength && (tngl.adjacent < newLine.getLength())) {
 				newLine.setContinuity(100);
 				newLine.pin();
 			}

@@ -69,19 +69,42 @@ public struct onubodh.ZeroTangle {
 		if(div > 0)crack+=div;
 		return true;
 	}
+	public bool detect103(int a, int b) {
+		int diff = b - a; // cumulative distance of the points in the matrix
+		int mod = diff % columns;
+		int x = 5;
+		bool left = ((cosecsign) <= 0 && (mod+x >= columns && mod != 0));
+		bool right = ((cosecsign) >= 0 && (mod <= x && mod != 0));
+		if(diff < (columns-x)
+			|| !(left  || mod == 0 || right) /* allow one pixel shifted points as well as perfect linear pixels  */
+			) {
+			return false;
+		}
+		if(right || left) {
+			adjacent = adjacent+1;
+			if(cosecsign == 0)
+				cosecsign = right?1:-1;
+		}
+		int div = (diff/columns) - 1;
+		if(div > 0)crack+=div;
+		return true;
+	}
 	public bool detect150(uchar a, uchar b) {
+		core.assert(columns == (1<<shift));
 		int diff = b - a; // cumulative distance of the points in the matrix
 		int mod = diff & (columns - 1); // alternative code for diff % size 
 		if(diff >= (columns-1) 
 			&& (mod == 1 || mod == 0 || mod == (columns-1)) /* allow one pixel shifted points as well as perfect linear pixels  */
 			) {
-			int div = (diff >> shift)-1; // alternative code for diff / size
-			if(div > 0)crack+=div;
+			int div = (diff >> shift); // alternative code for diff / size
+			div--;
+			crack+=div;
 			return true;
 		}
 		return false;
 	}
 	public bool detect162(uchar a, uchar b) {
+		core.assert(columns == (1<<shift));
 		int diff = b - a; // cumulative distance of the points in the matrix
 		int mod = diff & (columns - 1); // alternative code for diff % size 
 		bool left = ((cosecsign) <= 0 && (mod == (columns-1) || mod == (columns-2)));
@@ -96,8 +119,31 @@ public struct onubodh.ZeroTangle {
 			if(cosecsign == 0)
 				cosecsign = right?1:-1;
 		}
-		int div = (diff >> shift)-1; // alternative code for diff / size
-		if(div > 0)crack+=div;
+		int div = (diff >> shift); // alternative code for diff / size
+		div--;
+		crack+=div;
+		return true;
+	}
+	public bool detect163(uchar a, uchar b) {
+		core.assert(columns == (1<<shift));
+		int diff = b - a; // cumulative distance of the points in the matrix
+		int mod = diff & (columns - 1); // alternative code for diff % size 
+		int x = shift;
+		bool left = ((cosecsign) <= 0 && (mod+x >= columns && mod != 0));
+		bool right = ((cosecsign) >= 0 && (mod <= x && mod != 0));
+		if(diff < (columns-x)
+			|| !(left  || mod == 0 || right) /* allow one pixel shifted points as well as perfect linear pixels  */
+			) {
+			return false;
+		}
+		if(right || left) {
+			adjacent = adjacent+1;
+			if(cosecsign == 0)
+				cosecsign = right?1:-1;
+		}
+		int div = (diff >> shift); // alternative code for diff / size
+		div--;
+		crack+=div;
 		return true;
 	}
 }

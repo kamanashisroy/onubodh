@@ -35,9 +35,9 @@ public class onubodh.BookDetect : Replicable {
 		print("Healing ..\n");
 		circuit.heal();
 		print("Merging ..\n");
-		circuit.mergeOverlapingLines();
+		//circuit.mergeOverlapingLines();
 		print("Filling ..\n");
-		circuit.fill();
+		//circuit.fill();
 		return 0;
 	}
 

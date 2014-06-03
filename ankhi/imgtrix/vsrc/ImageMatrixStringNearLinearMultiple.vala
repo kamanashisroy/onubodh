@@ -30,16 +30,23 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 	}
 		
 	public override int heal() {
+		/* sanity check */
+		if(points.length() <= 1) {
+			return 0;
+		}
+
 		int i;
 		etxt linearPoints = etxt.stack(size+1);
 		uchar oldval = 0;
 		int bval = (~(size-1));
-		for(i = 0; i < points.length(); i++) {
-			uchar a = points.char_at(i);
-			linearPoints.concat_char(a);
-			int missing = 0;
+		uchar a = points.char_at(0);
+		linearPoints.concat_char(a);
+		oldval = a;
+		for(i = 1; i < points.length(); i++) {
+			uchar x = points.char_at(i);
 			do {
-				int diff = oldval - a;
+				int missing = 0;
+				int diff = x - oldval;
 				if(diff < 0) break;
 				missing = (diff & bval);
 				if(missing == 0) {
@@ -48,9 +55,7 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 				oldval += size; // add point
 				linearPoints.concat_char(oldval);
 			} while(true);
-			if(missing == 0) {
-				continue;
-			}
+			linearPoints.concat_char(x);
 		}
 		points.destroy();
 		if(linearPoints.length() > 0) {
@@ -74,25 +79,32 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 		dumpString();
 #endif
 		int i;
+		int longestLineLength = 0;
 		for(i = 0; i < points.length(); i++) {
-			etxt linearPoints = etxt.stack(points.length()+1-i);
-			int cont = 0; // continuity
+			int len = points.length()-i;
+#if false
+			if(len <= longestLineLength) {
+				break;
+			}
+#endif
+			etxt linearPoints = etxt.stack(len+1);
+			int cracks = 0;
 			uchar a = points.char_at(i);
 			uchar c = a;
 			bool append_a = true;
 			int j;
+			ZeroTangle tngl = ZeroTangle.byShift(shift);
 			for(j=i+1; j < points.length();j++) {
-				ZeroTangle tngl = ZeroTangle.byShift(shift);
 				uchar b = points.char_at(j);
-				if(tngl.detect162(a, b) || (a!=c && tngl.detect162(c, b))) {
+				if(tngl.detect163(a, b) || (a!=c && tngl.detect163(c, b))) {
+				//if(tngl.detect150(a, b) || (a!=c && tngl.detect150(c, b))) {
 					if(append_a) {
 						append_a = false;
 						linearPoints.concat_char(a);
 					}
+					linearPoints.concat_char(b);
 					a = c;
 					c = b;
-					cont -= tngl.crack;
-					cont++;
 				}
 			}
 			if(linearPoints.length() > 0) {
@@ -102,7 +114,12 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 #endif
 				if(longestLine == null || longestLine.length() < newLine.length()) {
 					longestLine = newLine;
-					continuity = cont;
+					longestLineLength = longestLine.length();
+					continuity = longestLineLength - tngl.crack;
+					if(continuity < 1)
+						print("length:%d,crack:%d\n", longestLineLength, tngl.crack);
+					if(continuity == (1<<shift))
+						print("line detected:%d\n", longestLineLength);
 				}
 			}
 		}
@@ -121,7 +138,7 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 		if(lineCount == 0) 
 			return 0;
 #endif		
-		return ((longestLine == null) ? 0 : longestLine.length());
+		return ((longestLine == null) ? 0 : ((continuity > 0 )?1:0));
 	}
 }
 /** @} */

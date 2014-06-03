@@ -17,7 +17,7 @@ public class onubodh.LineString : StringStructureImpl {
 	public LineString(netpbmg*src, aroop_uword8 minGrayVal, int radius_shift) {
 		base(src, radius_shift);
 		requiredGrayVal = minGrayVal;
-		memory = SearchableFactory<ImageMatrixStringNearLinearMultiple>.for_type();
+		memory = SearchableFactory<ImageMatrixStringNearLinearMultiple>.for_type(32,factory_flags.SWEEP_ON_UNREF | factory_flags.EXTENDED | factory_flags.SEARCHABLE | factory_flags.MEMORY_CLEAN);
 	}
 	~LineString() {
 		memory.destroy();
