@@ -36,7 +36,7 @@ public struct onubodh.ZeroTangle {
 		shift = gShift;
 		width = 1<<gShift;
 	}
-	public bool detect100(int a, int b) {
+	public bool neibor100(int a, int b) {
 		int diff = b - a; // cumulative distance of the points in the matrix
 		int mod = diff % width;
 		bool left = ((cosecsign >= 0) && mod == (width-1));
@@ -55,7 +55,7 @@ public struct onubodh.ZeroTangle {
 		if(div > 0)crack+=div;
 		return true;
 	}
-	public bool detect102(int a, int b) {
+	public bool neibor102(int a, int b) {
 		int diff = b - a; // cumulative distance of the points in the matrix
 		int mod = diff % width;
 		bool left = ((cosecsign >= 0) && (mod == (width-1) || mod == (width-2)));
@@ -74,7 +74,7 @@ public struct onubodh.ZeroTangle {
 		if(div > 0)crack+=div;
 		return true;
 	}
-	public bool detect103(int a, int b) {
+	public bool neibor103(int a, int b) {
 		int diff = b - a; // cumulative distance of the points in the matrix
 		int mod = diff % width;
 		int x = 5;
@@ -94,7 +94,7 @@ public struct onubodh.ZeroTangle {
 		if(div > 0)crack+=div;
 		return true;
 	}
-	public bool detect150(uchar a, uchar b) {
+	public bool neibor150(uchar a, uchar b) {
 		core.assert(width == (1<<shift));
 		int diff = b - a; // cumulative distance of the points in the matrix
 		int mod = diff & (width - 1); // alternative code for diff % size 
@@ -108,7 +108,7 @@ public struct onubodh.ZeroTangle {
 		}
 		return false;
 	}
-	public bool detect162(uchar a, uchar b) {
+	public bool neibor162(uchar a, uchar b) {
 		core.assert(width == (1<<shift));
 		int diff = b - a; // cumulative distance of the points in the matrix
 		int mod = diff & (width - 1); // alternative code for diff % size 
@@ -129,7 +129,7 @@ public struct onubodh.ZeroTangle {
 		crack+=div;
 		return true;
 	}
-	public bool detect163(uchar a, uchar b) {
+	public bool neibor163(uchar a, uchar b) {
 		core.assert(width == (1<<shift));
 		int diff = b - a; // cumulative distance of the points in the matrix
 		int mod = diff & (width - 1); // alternative code for diff % size 

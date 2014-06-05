@@ -68,14 +68,14 @@ public class onubodh.ManyLineStrings : LineString {
 			ZeroTangle tngl = ZeroTangle(columns);
 			Iterator<container<ImageMatrix>> itFollow = Iterator<container<ImageMatrix>>.EMPTY();
 			getIterator(&itFollow, Replica_flags.ALL, usedMark);
-			while(itFollow.next() && (tngl.crack < maxCrackLength)) {
+			while(itFollow.next()) {
 				container<ImageMatrix> can2 = itFollow.get();
 				ImageMatrix b = can2.get();
 				int axy = a.higherOrderXY;
 				int bxy = b.higherOrderXY;
 				int cxy = c.higherOrderXY;
-				//if(tngl.detect102(axy, bxy) || (a!=c && tngl.detect102(cxy, bxy))) {
-				if(tngl.detect103(axy, bxy) || (a!=c && tngl.detect103(cxy, bxy))) {
+				//if(tngl.neibor102(axy, bxy) || (a!=c && tngl.neibor102(cxy, bxy))) {
+				if(tngl.neibor103(axy, bxy) || (a!=c && tngl.neibor103(cxy, bxy))) {
 					if(appendA) {
 						appendA = false;
 						newLine.appendMatrix(a);
@@ -85,8 +85,10 @@ public class onubodh.ManyLineStrings : LineString {
 					c = b;
 				}
 			}
-			if(!pruneWhileCompile || (newLine.getLength() > requiredLength && (tngl.adjacent < newLine.getLength()))) {
-				newLine.setContinuity(100);
+			newLine.cracks = tngl.crack;
+			newLine.adjacent = tngl.adjacent;
+			newLine.thin();
+			if((newLine.getLength() > 1) && (!pruneWhileCompile || (newLine.getLength() > requiredLength && (tngl.adjacent < newLine.getLength())))) {
 				newLine.pin();
 			}
 			itFollow.destroy();
@@ -99,13 +101,19 @@ public class onubodh.ManyLineStrings : LineString {
 
 	public int prune() {
 		Iterator<StringStructureImpl> it = Iterator<StringStructureImpl>(&lines);
+		int i = 0;
 		while(it.next()) {
 			StringStructureImpl strct = it.get();
-			if(strct.getLength() > requiredLength) {
+			int len = strct.getLengthInPixels();
+			int crk = strct.getCracksInPixels();
+			if(len < requiredLength || strct.adjacent >= len || crk > maxCrackLength) {
+				if(i == 0)print("Prunning [%d<%d,%d>=%d,%d>%d] \n", len, requiredLength, strct.adjacent, len, crk, maxCrackLength);
+				i++;
 				strct.unpin();
 			}
 		}
 		it.destroy();
+		print("Pruned %d lines\n", i);
 		return 0;
 	}
 

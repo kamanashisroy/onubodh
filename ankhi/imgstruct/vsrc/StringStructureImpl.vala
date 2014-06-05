@@ -51,6 +51,20 @@ public class onubodh.StringStructureImpl : StringStructure {
 		print("Total interesting matrices:%d\n", getLength());
 		return 0;
 	}
+
+	public override int getCracksInPixels() {
+		int crk = 0;
+		Iterator<container<ImageMatrixString>> it = Iterator<container<ImageMatrixString>>.EMPTY();
+		getIterator(&it, Replica_flags.ALL, 0);
+		while(it.next()) {
+			container<ImageMatrixString> can = it.get();
+			ImageMatrixString mat = can.get();
+			crk += mat.getCracks();
+		}
+		it.destroy();
+		crk += cracks<<shift;
+		return crk;
+	}
 	
 	public override bool overlaps(StringStructure other) {
 		bool olaps = false;
@@ -142,6 +156,36 @@ public class onubodh.StringStructureImpl : StringStructure {
 		return 0;
 	}
 #endif
+	public override int thin() {
+		// for all the matrices..
+		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
+		getIterator(&it, Replica_flags.ALL, 0);
+		ImageMatrix? a = null;
+		ImageMatrix? b = null;
+		while(it.next()) {
+			container<ImageMatrix> can = it.get();
+			ImageMatrix c = can.get();
+			if(a == null) {
+				a = c;
+				continue;
+			}
+			if(b == null) {
+				b = c;
+				continue;
+			}
+			if((b.higherOrderXY - a.higherOrderXY == 1) && (c.higherOrderXY - b.higherOrderXY == 1)) {
+				// Oh 3 points in a row !
+				// discard a
+				removeMatrixAT(a.higherOrderXY);
+			}
+			a = b;
+			b = c;
+		}
+
+		base.thin();
+		return 0;
+
+	}
 	public virtual ImageMatrix? createMatrix(netpbmg*src, int x, int y, uchar mat_size) {
 		return null;
 	}

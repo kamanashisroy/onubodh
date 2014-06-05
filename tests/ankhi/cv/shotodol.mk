@@ -7,7 +7,7 @@ all:
 	set -var EDGEFILE -val edge.pgm
 	echo $(INFILE)
 	#make -t convertimg
-	make -t bookdetecttest2
+	make -t bookdetecttest3
 	q
 	q
 
@@ -30,10 +30,14 @@ bookdetecttest:
 	#bookdetect -crk 4 -cont 9 -mgval 30 -i  $(EDGEFILE) -o output_small_crk4__continuous.pgm
 
 bookdetecttest2:
-	bookdetect -crk 2 -mlen 9 -mgval 30 -i $(EDGEFILE) -o output_small_crk2_mlen9_rshift4.pgm -rshift 4
-	bookdetect -crk 2 -mlen 9 -mgval 30 -i $(EDGEFILE) -o output_small_crk2_mlen9_rshift4_heal.pgm -rshift 4 -heal
-	bookdetect -crk 2 -mlen 9 -mgval 30 -i $(EDGEFILE) -o output_small_crk2_mlen9_rshift4_heal_merge.pgm -rshift 4 -heal -merge
+	bookdetect -crk 2 -mlen 200 -mgval 30 -i $(EDGEFILE) -o output_small_crk2_mlen9_rshift4.pgm -rshift 4
+	bookdetect -crk 2 -mlen 200 -mgval 30 -i $(EDGEFILE) -o output_small_crk2_mlen9_rshift4_heal.pgm -rshift 4 -heal
+	bookdetect -crk 2 -mlen 200 -mgval 30 -i $(EDGEFILE) -o output_small_crk2_mlen9_rshift4_heal_merge.pgm -rshift 4 -heal -merge
 
+bookdetecttest3:
+	bookdetect -crk 20 -mlen 550 -mgval 30 -i $(EDGEFILE) -o output.pgm -rshift 4 -prune
+	bookdetect -crk 20 -mlen 550 -mgval 30 -i $(EDGEFILE) -o output_heal_prune.pgm -rshift 4 -heal -prune
+	bookdetect -crk 20 -mlen 550 -mgval 30 -i $(EDGEFILE) -o output_heal_merge_prune.pgm -rshift 4 -heal -merge -prune
 
 
 cvkmeanstest:

@@ -10,6 +10,7 @@ public abstract class onubodh.ImageMatrixString : ImageMatrix {
 	protected etxt points;
 	aroop_uword8 requiredGrayVal = 0;
 	bool filled;
+	protected int cracks;
 	public void buildString(netpbmg*src, int x, int y, uchar radiusShift, aroop_uword8 minGrayVal) {
 		core.assert((1<<(radiusShift+1)) < 255);
 		buildMain(src,x,y,radiusShift);
@@ -62,6 +63,14 @@ public abstract class onubodh.ImageMatrixString : ImageMatrix {
 			int y = (pos>>shift)+top;
 		}
 		print("]\n");
+	}
+
+	public virtual int getCracks() {
+		return cracks;
+	}
+
+	public virtual int getLength() {
+		return points.length();
 	}
 	
 	public override void dumpImage(netpbmg*oImg, aroop_uword8 gval) {

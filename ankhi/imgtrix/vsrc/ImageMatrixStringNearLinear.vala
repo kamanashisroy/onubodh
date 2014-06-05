@@ -30,6 +30,11 @@ public class onubodh.ImageMatrixStringNearLinear : ImageMatrixString {
 		return 0;
 	}
 
+	public override int thin() {
+		core.assert("I cannot thin" == null);
+		return 0;
+	}
+
 	public override int compile() {
 		base.compile();
 		if(points.length() <= 1) {

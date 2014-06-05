@@ -28,6 +28,39 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 #endif
 		longestLine = null;
 	}
+
+	
+	public override int thin() {
+		uchar a = 255;
+		uchar b = 255;
+		int i;
+		etxt linearPoints = etxt.stack(points.length()+1);
+		int skipped = 0;
+		for(i = 0; i < points.length(); i++) {
+			uchar c = points.char_at(i);
+			if(a == 255) {
+				a = c;continue;
+			}
+			if(b == 255) {
+				b = c;continue;
+			}
+			if((b - a == 1) && (c - b == 1)) {
+				// skip a ..
+				skipped++;
+			} else {
+				linearPoints.concat_char(a);
+			}
+			a = b;
+			b = c;
+		}
+		if(skipped > 0) {
+			points.trim_to_length(0);
+			points.concat(&linearPoints);
+			if(a != 255)points.concat_char(a);
+			if(b != 255)points.concat_char(b);
+		}
+		return 0;
+	}
 		
 	public override int heal() {
 		/* sanity check */
@@ -36,7 +69,7 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 		}
 
 		int i;
-		etxt linearPoints = etxt.stack(size+1);
+		etxt linearPoints = etxt.stack(size<<3+1);
 		uchar oldval = 0;
 		int bval = (~(size-1));
 		uchar a = points.char_at(0);
@@ -108,8 +141,8 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 			ZeroTangle tngl = ZeroTangle.forShift(shift);
 			for(j=i+1; j < points.length();j++) {
 				uchar b = points.char_at(j);
-				if(tngl.detect163(a, b) || (a!=c && tngl.detect163(c, b))) {
-				//if(tngl.detect150(a, b) || (a!=c && tngl.detect150(c, b))) {
+				if(tngl.neibor163(a, b) || (a!=c && tngl.neibor163(c, b))) {
+				//if(tngl.neibor150(a, b) || (a!=c && tngl.neibor150(c, b))) {
 					if(append_a) {
 						append_a = false;
 						linearPoints.concat_char(a);
@@ -127,7 +160,7 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 				if(longestLine == null || longestLine.length() < newLine.length()) {
 					longestLine = newLine;
 					longestLineLength = longestLine.length();
-					continuity = longestLineLength - tngl.crack;
+					cracks = tngl.crack;
 				}
 			}
 		}
@@ -146,7 +179,7 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 		if(lineCount == 0) 
 			return 0;
 #endif		
-		return ((longestLine == null) ? 0 : ((continuity > 0 )?1:0));
+		return ((longestLine == null) ? 0 : (((getLength()-getCracks()) > 0 )?1:0));
 	}
 }
 /** @} */

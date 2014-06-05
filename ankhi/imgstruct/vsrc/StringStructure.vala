@@ -9,7 +9,8 @@ using onubodh;
 public abstract class onubodh.StringStructure : Replicable {
 	searchable_ext ext;
 	ArrayList<ImageMatrix> strings;
-	int continuity;
+	public int cracks;
+	public int adjacent;
 	public StringStructure() {
 		buildStringStructure();
 	}
@@ -22,8 +23,31 @@ public abstract class onubodh.StringStructure : Replicable {
 		strings.destroy();
 	}
 	
-	public void setContinuity(int cont) {
-		continuity = cont;
+	public int getLengthInPixels() {
+		int len = 0;
+		Iterator<container<ImageMatrixString>> it = Iterator<container<ImageMatrixString>>.EMPTY();
+		strings.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
+		while(it.next()) {
+			container<ImageMatrixString> can = it.get();
+			len += can.get().getLength();
+		}
+		it.destroy();
+		return len;
+	}
+
+	public virtual int getCracksInPixels() {
+		int crk = 0;
+		/*
+		Iterator<container<ImageMatrixString>> it = Iterator<container<ImageMatrixString>>.EMPTY();
+		strings.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
+		while(it.next()) {
+			container<ImageMatrixString> can = it.get();
+			ImageMatrixString mat = can.get();
+			crk += mat.getCracks();
+		}
+		it.destroy();
+		crk += cracks*mtsize;*/
+		return crk;
 	}
 	
 	public int getLength() {
@@ -32,6 +56,11 @@ public abstract class onubodh.StringStructure : Replicable {
 
 	public virtual int appendMatrix(ImageMatrix x) {
 		strings.set(x.higherOrderXY, x);
+		return 0;
+	}
+
+	public virtual int removeMatrixAT(int higherOrderXY) {
+		strings.set(higherOrderXY, null);
 		return 0;
 	}
 	
@@ -59,7 +88,18 @@ public abstract class onubodh.StringStructure : Replicable {
 		it.destroy();
 		return 0;
 	}
-	
+
+	public virtual int thin() {
+		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
+		strings.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
+		while(it.next()) {
+			container<ImageMatrix> can = it.get();
+			can.get().thin();
+		}
+		it.destroy();
+		return 0;
+	}
+
 	public abstract bool overlaps(StringStructure other);
 	
 	public abstract bool neibor(StringStructure other);
