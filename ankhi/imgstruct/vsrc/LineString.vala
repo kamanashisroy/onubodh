@@ -17,7 +17,7 @@ public class onubodh.LineString : StringStructureImpl {
 	public LineString(netpbmg*src, aroop_uword8 minGrayVal, int radius_shift) {
 		base(src, radius_shift);
 		requiredGrayVal = minGrayVal;
-		memory = SearchableFactory<ImageMatrixStringNearLinearMultiple>.for_type(32,factory_flags.SWEEP_ON_UNREF | factory_flags.EXTENDED | factory_flags.SEARCHABLE | factory_flags.MEMORY_CLEAN);
+		memory = SearchableFactory<ImageMatrixStringNearLinearMultiple>.for_type(128,factory_flags.SWEEP_ON_UNREF | factory_flags.EXTENDED | factory_flags.SEARCHABLE | factory_flags.MEMORY_CLEAN);
 	}
 	~LineString() {
 		memory.destroy();
@@ -67,8 +67,8 @@ public class onubodh.LineString : StringStructureImpl {
 	}
 	public override ImageMatrix? createMatrix(netpbmg*src, int x, int y, uchar mat_size) {
 		//return new ImageMatrixStringNearLinearMultiple(src, x, y, mat_size, requiredGrayVal);
-		ImageMatrixStringNearLinearMultiple a = memory.alloc_full(64,0,true);
-		//ImageMatrixStringNearLinearMultiple a = memory.alloc_full(64,0);
+		ImageMatrixStringNearLinearMultiple a = memory.alloc_full(0,0,true);
+		//ImageMatrixStringNearLinearMultiple a = memory.alloc_full(0,0);
 		a.buildNearLinearMultiple(src, x, y, mat_size, requiredGrayVal);
 		return a;
 	}

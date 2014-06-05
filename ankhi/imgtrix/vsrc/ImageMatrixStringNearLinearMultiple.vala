@@ -12,6 +12,7 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 	int lineCount;
 #endif
 	txt? longestLine;
+	int longestLineOpposite;
 	public void buildNearLinearMultiple(netpbmg*src, int x, int y, uchar radiusShift, aroop_uword8 minGrayVal) {
 		//memclean_raw();
 		buildString(src,x,y,radiusShift, minGrayVal);
@@ -20,6 +21,7 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 		lineCount = 0;
 #endif
 		longestLine = null;
+		longestLineOpposite = 0;
 	}
 	
 	~ImageMatrixStringNearLinearMultiple() {
@@ -109,6 +111,12 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 		return 0;
 	}
 
+	int calcOpposite(etxt*ln) {
+		uchar y1 = ln.char_at(0);
+		uchar y2 = ln.char_at(ln.length()-1);
+		return (y2-y1) >> shift;
+	}
+
 	/**
 	 * \brief It finds the lines(or nearly linear lines) comapring
 	 * (a,b), (a,c), (a,d) .. twin points using checkLinear() method.
@@ -124,11 +132,11 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 		dumpString();
 #endif
 		int i;
-		int longestLineLength = 0;
+		int longestLineOpposite = 0;
 		for(i = 0; i < points.length(); i++) {
 			int len = points.length()-i;
 #if false
-			if(len <= longestLineLength) {
+			if(len <= longestLineOpposite) {
 				break;
 			}
 #endif
@@ -141,8 +149,9 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 			ZeroTangle tngl = ZeroTangle.forShift(shift);
 			for(j=i+1; j < points.length();j++) {
 				uchar b = points.char_at(j);
-				if(tngl.neibor163(a, b) || (a!=c && tngl.neibor163(c, b))) {
 				//if(tngl.neibor150(a, b) || (a!=c && tngl.neibor150(c, b))) {
+				//if(tngl.neibor163(a, b) || (a!=c && tngl.neibor163(c, b))) {
+				if(tngl.neibor164(a, b) || (a!=c && tngl.neibor164(c, b))) {
 					if(append_a) {
 						append_a = false;
 						linearPoints.concat_char(a);
@@ -157,10 +166,13 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 #if REMEMBER_ALL_LINES
 				lines.set(lineCount++, newLine);
 #endif
-				if(longestLine == null || longestLine.length() < newLine.length()) {
+				int newLineOpposite = calcOpposite(newLine);
+				if(longestLine == null || (longestLineOpposite < newLineOpposite) || (longestLineOpposite == newLineOpposite && adjacent > tngl.adjacent)) {
 					longestLine = newLine;
-					longestLineLength = longestLine.length();
+					longestLineOpposite = newLineOpposite;
 					cracks = tngl.crack;
+					adjacent = tngl.adjacent;
+					opposite = newLineOpposite;
 				}
 			}
 		}
@@ -173,6 +185,9 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 #endif
 		}
 		return 0;
+	}
+	public override int getLength() {
+		return opposite;
 	}
 	public override int getVal() {
 #if REMEMBER_ALL_LINES

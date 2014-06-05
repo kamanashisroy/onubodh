@@ -74,8 +74,9 @@ public class onubodh.ManyLineStrings : LineString {
 				int axy = a.higherOrderXY;
 				int bxy = b.higherOrderXY;
 				int cxy = c.higherOrderXY;
-				//if(tngl.neibor102(axy, bxy) || (a!=c && tngl.neibor102(cxy, bxy))) {
-				if(tngl.neibor103(axy, bxy) || (a!=c && tngl.neibor103(cxy, bxy))) {
+				if(tngl.neibor100(axy, bxy) || (a!=c && tngl.neibor102(cxy, bxy))) {
+				//if(tngl.neibor103(axy, bxy) || (a!=c && tngl.neibor103(cxy, bxy))) {
+				//if(tngl.neibor104(axy, bxy) || (a!=c && tngl.neibor104(cxy, bxy))) {
 					if(appendA) {
 						appendA = false;
 						newLine.appendMatrix(a);
@@ -104,6 +105,11 @@ public class onubodh.ManyLineStrings : LineString {
 		int i = 0;
 		while(it.next()) {
 			StringStructureImpl strct = it.get();
+			if(strct.testFlag(PRUNE)) {
+				i++;
+				strct.unpin();
+				continue;
+			}
 			int len = strct.getLengthInPixels();
 			int crk = strct.getCracksInPixels();
 			if(len < requiredLength || strct.adjacent >= len || crk > maxCrackLength) {
@@ -142,37 +148,54 @@ public class onubodh.ManyLineStrings : LineString {
 		}
 		it.destroy();
 	}
-	
+
+	const int DONE_ALREADY = 1<<7;
 	public void mergeOverlapingLines() {
+		while(mergeOverlapingLinesHelper());
+	}
+	
+	bool mergeOverlapingLinesHelper() {
 		Iterator<StringStructureImpl> it = Iterator<StringStructureImpl>(&lines);
-		int totalLines = 0;
-		while(it.next()) {
+		bool callbackMerge = false;
+		while(!callbackMerge && it.next()) {
 			StringStructureImpl x = it.get();
-			if(x.testFlag(PRUNE)) {
-				continue;
+			callbackMerge = mergeIfMatchedWithLine(x);
+			if(!callbackMerge) {
+				x.flagIt(DONE_ALREADY);
 			}
-			totalLines++;
-			Iterator<StringStructureImpl> ity = Iterator<StringStructureImpl>(&lines);
-			while(ity.next()) {
-				StringStructureImpl y = ity.get();
-				if(x == y) {
-					continue;
-				}
-				if(y.testFlag(PRUNE)) {
-					continue;
-				}
-				if(!x.overlaps(y) && !x.neibor(y)) {
-					continue;
-				}
-				x.merge(y);
-				y.flagIt(PRUNE);
-			}
-			ity.destroy();
 		}
 		it.destroy();
-		print("Merged to %d lines\n", totalLines);
+		return callbackMerge;
 	}
 
+	bool mergeIfMatchedWithLine(StringStructureImpl x) {
+		bool callbackMerge = false;
+		if(x.testFlag(PRUNE)) {
+			x.unpin();
+			return false;
+		}
+		if(x.testFlag(DONE_ALREADY)) {
+			return false;
+		}
+		Iterator<StringStructureImpl> ity = Iterator<StringStructureImpl>(&lines);
+		while(!callbackMerge && ity.next()) {
+			StringStructureImpl y = ity.get();
+			if(x == y) {
+				continue;
+			}
+			if(y.testFlag(PRUNE)) {
+				continue;
+			}
+			if(!x.overlaps(y) && !x.neibor(y)) {
+				continue;
+			}
+			x.merge(y);
+			y.flagIt(PRUNE);
+			callbackMerge = true;
+		}
+		ity.destroy();
+		return callbackMerge;
+	}
 	
 	public override void dumpImage(netpbmg*oimg, aroop_uword8 gval) {
 		Iterator<StringStructureImpl> it = Iterator<StringStructureImpl>(&lines);

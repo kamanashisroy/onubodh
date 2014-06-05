@@ -11,6 +11,8 @@ public abstract class onubodh.ImageMatrixString : ImageMatrix {
 	aroop_uword8 requiredGrayVal = 0;
 	bool filled;
 	protected int cracks;
+	protected int opposite;
+	protected int adjacent;
 	public void buildString(netpbmg*src, int x, int y, uchar radiusShift, aroop_uword8 minGrayVal) {
 		core.assert((1<<(radiusShift+1)) < 255);
 		buildMain(src,x,y,radiusShift);
@@ -18,6 +20,9 @@ public abstract class onubodh.ImageMatrixString : ImageMatrix {
 		requiredGrayVal = minGrayVal;
 		//print("matrix : %d,%d - %d\n", x, y, mat_size);
 		filled = false;
+		cracks = 0;
+		opposite = 0;
+		adjacent = 0;
 	}
 	
 	public override void copyFrom(ImageMatrix other) {

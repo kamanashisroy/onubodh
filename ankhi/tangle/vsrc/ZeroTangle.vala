@@ -94,6 +94,26 @@ public struct onubodh.ZeroTangle {
 		if(div > 0)crack+=div;
 		return true;
 	}
+	public bool neibor104(int a, int b) {
+		int diff = b - a; // cumulative distance of the points in the matrix
+		int mod = diff % width;
+		int x = 2;
+		bool left = ((cosecsign >= 0) && (mod+x >= width && mod != 0));
+		bool right = ((cosecsign <= 0) && (mod <= x && mod != 0));
+		if(diff < (width-x)
+			|| !(left  || mod == 0 || right) /* allow one pixel shifted points as well as perfect linear pixels  */
+			) {
+			return false;
+		}
+		if(right || left) {
+			adjacent = adjacent+1;
+			if(cosecsign == 0)
+				cosecsign = right?-1:1;
+		}
+		int div = (diff/width) - 1;
+		if(div > 0)crack+=div;
+		return true;
+	}
 	public bool neibor150(uchar a, uchar b) {
 		core.assert(width == (1<<shift));
 		int diff = b - a; // cumulative distance of the points in the matrix
@@ -134,6 +154,28 @@ public struct onubodh.ZeroTangle {
 		int diff = b - a; // cumulative distance of the points in the matrix
 		int mod = diff & (width - 1); // alternative code for diff % size 
 		int x = shift;
+		bool left = ((cosecsign >= 0) && (mod+x >= width && mod != 0));
+		bool right = ((cosecsign <= 0) && (mod <= x && mod != 0));
+		if(diff < (width-x)
+			|| !(left  || mod == 0 || right) /* allow one pixel shifted points as well as perfect linear pixels  */
+			) {
+			return false;
+		}
+		if(right || left) {
+			adjacent = adjacent+1;
+			if(cosecsign == 0)
+				cosecsign = right?-1:1;
+		}
+		int div = (diff >> shift); // alternative code for diff / size
+		div--;
+		crack+=div;
+		return true;
+	}
+	public bool neibor164(uchar a, uchar b) {
+		core.assert(width == (1<<shift));
+		int diff = b - a; // cumulative distance of the points in the matrix
+		int mod = diff & (width - 1); // alternative code for diff % size 
+		int x = 2;
 		bool left = ((cosecsign >= 0) && (mod+x >= width && mod != 0));
 		bool right = ((cosecsign <= 0) && (mod <= x && mod != 0));
 		if(diff < (width-x)

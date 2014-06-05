@@ -25,10 +25,16 @@ public abstract class onubodh.StringStructure : Replicable {
 	
 	public int getLengthInPixels() {
 		int len = 0;
+		int y = -1;
 		Iterator<container<ImageMatrixString>> it = Iterator<container<ImageMatrixString>>.EMPTY();
 		strings.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
 		while(it.next()) {
 			container<ImageMatrixString> can = it.get();
+			ImageMatrixString mat = can.get();
+			if(y == mat.higherOrderY) {
+				continue;
+			}
+			y = mat.higherOrderY;
 			len += can.get().getLength();
 		}
 		it.destroy();

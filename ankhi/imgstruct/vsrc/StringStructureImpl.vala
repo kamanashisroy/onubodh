@@ -110,6 +110,15 @@ public class onubodh.StringStructureImpl : StringStructure {
 				print("Neibor ......\n");
 				break;
 			}
+			xy -= columns;
+			xy -= columns;
+			if(xy > 0 && (other.getMatrixAt(xy) != null
+				|| other.getMatrixAt(xy+1) != null
+				|| other.getMatrixAt(xy-1) != null)) {
+				nbr = true;
+				print("Neibor ......\n");
+				break;
+			}
 		}
 		it.destroy();
 		return nbr;
@@ -122,7 +131,9 @@ public class onubodh.StringStructureImpl : StringStructure {
 			container<ImageMatrix> can = it.get();
 			ImageMatrix x = can.get();
 			//print("Merging ......\n");
-			appendMatrix(x);
+			if(getMatrixAt(x.higherOrderXY) == null) {
+				appendMatrix(x);
+			}
 		}
 		it.destroy();
 	}
