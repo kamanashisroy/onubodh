@@ -27,7 +27,7 @@ public class onubodh.RawImage : Replicable {
 	public int width{public get;private set;}
 	public int height{public get;private set;}
 	public RawImageType type{public get;private set;}
-	mem rawData;
+	public mem rawData;
 	public RawImage(int aWidth, int aHeight, RawImageType aType) {
 		width = aWidth;
 		height = aHeight;
