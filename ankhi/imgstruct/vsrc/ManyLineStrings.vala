@@ -75,8 +75,6 @@ public class onubodh.ManyLineStrings : LineString {
 				int bxy = b.higherOrderXY;
 				int cxy = c.higherOrderXY;
 				if(tngl.neibor100(axy, bxy) || (a!=c && tngl.neibor102(cxy, bxy))) {
-				//if(tngl.neibor103(axy, bxy) || (a!=c && tngl.neibor103(cxy, bxy))) {
-				//if(tngl.neibor104(axy, bxy) || (a!=c && tngl.neibor104(cxy, bxy))) {
 					if(appendA) {
 						appendA = false;
 						newLine.appendMatrix(a);

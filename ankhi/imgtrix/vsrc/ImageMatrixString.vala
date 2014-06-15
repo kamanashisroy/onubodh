@@ -45,7 +45,6 @@ public abstract class onubodh.ImageMatrixString : ImageMatrix {
 				aroop_uword8 gval = 0;
 				img.getGrayVal(x+left,y+top,&gval);
 				if(gval > requiredGrayVal) {
-					//print("scanning : %d,%d - %d[%d]\n", x+left, y+top, cumx+(uchar)x, gval);
 					myPoints.concat_char(cumx+(uchar)x);
 				}
 			}

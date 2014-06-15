@@ -10,13 +10,16 @@ public class onubodh.CVModule : ModulePlugin {
 	KmeansCVCommand km;
 	CentroidModelCVCommand cm;
 	BookDetectCommand ss;
+	BarcodeROIDetectCommand barc;
 	public override int init() {
 		km = new KmeansCVCommand();
 		cm = new CentroidModelCVCommand();
 		ss = new BookDetectCommand();
+		barc = new BarcodeROIDetectCommand();
 		CommandServer.server.cmds.register(km);
 		CommandServer.server.cmds.register(cm);
 		CommandServer.server.cmds.register(ss);
+		CommandServer.server.cmds.register(barc);
 		return 0;
 	}
 
@@ -24,6 +27,7 @@ public class onubodh.CVModule : ModulePlugin {
 		CommandServer.server.cmds.unregister(km);
 		CommandServer.server.cmds.unregister(cm);
 		CommandServer.server.cmds.unregister(ss);
+		CommandServer.server.cmds.unregister(barc);
 		base.deinit();
 		return 0;
 	}

@@ -7,6 +7,7 @@ all:
 	set -var EDGEFILE -val edge.pgm
 	echo $(INFILE)
 	#make -t convertimg
+	#make -t barcodedetect
 	make -t bookdetecttest3
 	q
 	q
@@ -35,8 +36,9 @@ bookdetecttest2:
 	bookdetect -crk 2 -mlen 200 -mgval 30 -i $(EDGEFILE) -o output_small_crk2_mlen9_rshift4_heal_merge.pgm -rshift 4 -heal -merge
 
 bookdetecttest3:
-	bookdetect -crk 20 -mlen 100 -mgval 30 -i $(EDGEFILE) -o output20.pgm -rshift 4 -prune
-	bookdetect -crk 10 -mlen 70 -mgval 30 -i $(EDGEFILE) -o output20_rshift2.pgm -rshift 2 -merge
+	bookdetect -crk 20 -mlen 100 -mgval 30 -i $(EDGEFILE) -o output.pgm -rshift 4 -prune
+	bookdetect -crk 10 -mlen 70 -mgval 30 -i $(EDGEFILE) -o output_rshift3.pgm -rshift 3 -prune
+	bookdetect -crk 10 -mlen 70 -mgval 30 -i $(EDGEFILE) -o output_rshift2.pgm -rshift 2 -merge
 
 
 cvkmeanstest:
@@ -50,4 +52,7 @@ cvcentroidtest:
 
 cvfastedgetest:
 	cvfastedge -i $(INFILE) -o $(EDGEFILE)
+
+barcodedetect:
+	barcodedetect -msp 40 -mgval 60 -i $(EDGEFILE) -o output_small_msp10_rshift3.pgm -rshift 3
 

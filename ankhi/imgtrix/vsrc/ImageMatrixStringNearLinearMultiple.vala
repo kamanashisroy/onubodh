@@ -149,8 +149,6 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 			ZeroTangle tngl = ZeroTangle.forShift(shift);
 			for(j=i+1; j < points.length();j++) {
 				uchar b = points.char_at(j);
-				//if(tngl.neibor150(a, b) || (a!=c && tngl.neibor150(c, b))) {
-				//if(tngl.neibor163(a, b) || (a!=c && tngl.neibor163(c, b))) {
 				if(tngl.neibor164(a, b) || (a!=c && tngl.neibor164(c, b))) {
 					if(append_a) {
 						append_a = false;
@@ -161,7 +159,7 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 					c = b;
 				}
 			}
-			if(linearPoints.length() > 0) {
+			if(linearPoints.length() > 0 && linearPoints.length() < (size*(size-2))) {
 				txt newLine = new txt.memcopy_etxt(&linearPoints);
 #if REMEMBER_ALL_LINES
 				lines.set(lineCount++, newLine);
