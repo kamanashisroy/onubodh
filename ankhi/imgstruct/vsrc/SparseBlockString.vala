@@ -35,6 +35,8 @@ public class onubodh.SparseBlockString : StringStructureImpl {
 			print("SparseBlock:Checking matrix (%d>=%d)\n", mat.getVal(), requiredSparsityVal);
 			if(mat.getVal() < requiredSparsityVal) {
 				removeMatrixAT(mat.higherOrderXY);
+			} else {
+				mat.highlight();
 			}
 		}
 		it.destroy();

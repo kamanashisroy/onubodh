@@ -18,10 +18,14 @@ public abstract class onubodh.ImageMatrix : /*Searchable*/Replicable {
 	public int left{public get;private set;}
 	protected uchar size;
 	protected uchar shift;
-	int flag;
+	protected int flag;
 	public int higherOrderX{public get;private set;}
 	public int higherOrderY{public get;private set;}
 	public int higherOrderXY{public get;private set;}
+	enum MatrixFlags {
+		HIGHLIGHT = 1,
+		FILL = 1<<1,
+	}
 	public void buildMain(netpbmg*src, int x, int y, uchar radiusShift) {
 		img = src;
 		top = y;
@@ -39,6 +43,7 @@ public abstract class onubodh.ImageMatrix : /*Searchable*/Replicable {
 	public abstract int heal();
 	public abstract int thin();
 	public abstract int fill();
+	public abstract int highlight();
 	public abstract int compile();
 	public abstract int getVal();
 	public abstract void dumpImage(netpbmg*out, aroop_uword8 gval);

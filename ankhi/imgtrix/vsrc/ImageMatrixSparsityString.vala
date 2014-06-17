@@ -8,8 +8,10 @@ using onubodh;
  */
 public class onubodh.ImageMatrixSparsityString : ImageMatrixString {
 	int diffsum;
+	etxt diffPoints;
 	public void buildSparsityString(netpbmg*src, int x, int y, uchar radiusShift, aroop_uword8 minGrayVal) {
 		diffsum = 0;
+		diffPoints = etxt.EMPTY();
 		buildString(src, x, y, radiusShift, minGrayVal);
 	}
 
@@ -28,10 +30,10 @@ public class onubodh.ImageMatrixSparsityString : ImageMatrixString {
 		if(points.length() <= 1) {
 			return 0;
 		}
-		etxt diffPoints = etxt.stack(points.length());
 		int i,j;
 		uchar a = -1;
 		diffsum = 0;
+		diffPoints.buffer(points.length());
 		for(i = 0; i < points.length(); i++) {
 			if(a == -1) {
 				a = points.char_at(i);
@@ -47,9 +49,6 @@ public class onubodh.ImageMatrixSparsityString : ImageMatrixString {
 			diffPoints.concat_char(diff);
 		}
 		points.destroy();
-		if(diffPoints.length() > 0) {
-			points = etxt.dup_etxt(&diffPoints);
-		}
 		return 0;
 	}
 	public override int getVal() {

@@ -9,7 +9,6 @@ using onubodh;
 public abstract class onubodh.ImageMatrixString : ImageMatrix {
 	protected etxt points;
 	aroop_uword8 requiredGrayVal = 0;
-	bool filled;
 	protected int cracks;
 	protected int opposite;
 	protected int adjacent;
@@ -19,7 +18,6 @@ public abstract class onubodh.ImageMatrixString : ImageMatrix {
 		points = etxt.EMPTY();
 		requiredGrayVal = minGrayVal;
 		//print("matrix : %d,%d - %d\n", x, y, mat_size);
-		filled = false;
 		cracks = 0;
 		opposite = 0;
 		adjacent = 0;
@@ -31,7 +29,12 @@ public abstract class onubodh.ImageMatrixString : ImageMatrix {
 	}
 	
 	public override int fill() {
-		filled = true;
+		flagIt(MatrixFlags.FILL);
+		return 0;
+	}
+	
+	public override int highlight() {
+		flagIt(MatrixFlags.HIGHLIGHT);
 		return 0;
 	}
 	
@@ -79,7 +82,19 @@ public abstract class onubodh.ImageMatrixString : ImageMatrix {
 	
 	public override void dumpImage(netpbmg*oImg, aroop_uword8 gval) {
 		int i = 0;
-		if(filled) {
+		if((flag & MatrixFlags.HIGHLIGHT) != 0) {
+			int y;
+			for(y = 0; y < size; y++) {
+				oImg.setGrayVal(left,y+top,gval);
+				oImg.setGrayVal(left+size,y+top,gval);
+			}
+			int x;
+			for(x=0; x < size; x++) {
+				oImg.setGrayVal(x+left,top,gval);
+				oImg.setGrayVal(x+left,top+size,gval);
+			}
+		}
+		if((flag & MatrixFlags.FILL) != 0) {
 			int y;
 			int maxy = top+size;
 			for(y = top; y < maxy; y++) {

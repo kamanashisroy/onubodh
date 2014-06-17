@@ -7,8 +7,8 @@ all:
 	set -var EDGEFILE -val edge.pgm
 	echo $(INFILE)
 	#make -t convertimg
-	#make -t barcodedetect
-	make -t bookdetecttest3
+	make -t barcodedetect
+	#make -t bookdetecttest3
 	q
 	q
 
