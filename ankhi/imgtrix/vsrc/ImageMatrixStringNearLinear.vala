@@ -11,20 +11,6 @@ public class onubodh.ImageMatrixStringNearLinear : ImageMatrixString {
 		buildString(src, x, y, radiusShift, minGrayVal);
 	}
 
-	public static bool diffIsInteresting(uchar a, uchar b, etxt*data, bool append_a, int msize) {
-		int diff = b - a;
-		int mod = diff & (msize - 1);
-		if(diff >= msize && (mod == 1 || mod == 0 || mod == (msize-1))) {
-			if(append_a) {
-				data.concat_char(a);
-			}
-			//print("diff(%d,%d)=%d\n", a, b, diff);
-			data.concat_char(b);
-			return true;
-		}
-		return false;
-	}
-	
 	public override int heal() {
 		core.assert("I cannot heal" == null);
 		return 0;
@@ -46,13 +32,17 @@ public class onubodh.ImageMatrixStringNearLinear : ImageMatrixString {
 			uchar a = points.char_at(i);
 			uchar c = a;
 			bool append_a = true;
+			ZeroTangle tngl = ZeroTangle.forShift(shift);
 			for(j=i+1; j < points.length();j++) {
 				uchar b = points.char_at(j);
-				if(diffIsInteresting(a, b, &linearPoints, append_a, size) 
-					|| (a!=c && diffIsInteresting(c, b, &linearPoints, false, size))) {
+				if(tngl.neibor164(a, b) || (a!=c && tngl.neibor164(c, b))) {
+					if(append_a) {
+						append_a = false;
+						linearPoints.concat_char(a);
+					}
+					linearPoints.concat_char(b);
 					a = c;
 					c = b;
-					append_a = false;
 				}
 			}
 		}

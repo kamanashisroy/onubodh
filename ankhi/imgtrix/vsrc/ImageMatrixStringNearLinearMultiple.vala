@@ -165,12 +165,12 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 				lines.set(lineCount++, newLine);
 #endif
 				int newLineOpposite = calcOpposite(newLine);
-				if(longestLine == null || (longestLineOpposite < newLineOpposite) || (longestLineOpposite == newLineOpposite && adjacent > tngl.adjacent)) {
+				if(longestLine == null || (longestLineOpposite < newLineOpposite) || (longestLineOpposite == newLineOpposite && features[feat.ADJACENT] > tngl.adjacent)) {
 					longestLine = newLine;
 					longestLineOpposite = newLineOpposite;
-					cracks = tngl.crack;
-					adjacent = tngl.adjacent;
-					opposite = newLineOpposite;
+					features[feat.CRACKS] = tngl.crack;
+					features[feat.ADJACENT] = tngl.adjacent;
+					features[feat.LENGTH] = newLineOpposite;
 				}
 			}
 		}
@@ -184,15 +184,12 @@ public class onubodh.ImageMatrixStringNearLinearMultiple : ImageMatrixString {
 		}
 		return 0;
 	}
-	public override int getLength() {
-		return opposite;
-	}
 	public override int getVal() {
 #if REMEMBER_ALL_LINES
 		if(lineCount == 0) 
 			return 0;
 #endif		
-		return ((longestLine == null) ? 0 : (((getLength()-getCracks()) > 0 )?1:0));
+		return ((longestLine == null) ? 0 : (((getFeature(feat.CRACKS)-getFeature(feat.CRACKS)) > 0 )?1:0));
 	}
 }
 /** @} */

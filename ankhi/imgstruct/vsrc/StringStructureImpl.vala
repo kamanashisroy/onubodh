@@ -59,7 +59,7 @@ public class onubodh.StringStructureImpl : StringStructure {
 		while(it.next()) {
 			container<ImageMatrixString> can = it.get();
 			ImageMatrixString mat = can.get();
-			crk += mat.getCracks();
+			crk += mat.getFeature(ImageMatrixString.feat.CRACKS);
 		}
 		it.destroy();
 		crk += cracks<<shift;

@@ -35,7 +35,7 @@ public abstract class onubodh.StringStructure : Replicable {
 				continue;
 			}
 			y = mat.higherOrderY;
-			len += can.get().getLength();
+			len += can.get().getFeature(ImageMatrixString.feat.LENGTH);
 		}
 		it.destroy();
 		return len;
