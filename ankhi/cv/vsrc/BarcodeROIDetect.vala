@@ -36,6 +36,12 @@ public class onubodh.BarcodeROIDetect : Replicable {
 		circuit.dumpImage(&out_image, 240);
 		out_image.write(nm.to_string());
 		out_image.close();
+		etxt featuresfile = etxt.stack(128);
+		featuresfile.concat_string("features");
+		featuresfile.concat(nm);
+		FileOutputStream fos = new FileOutputStream.from_file(&featuresfile);
+		circuit.dumpFeatures(fos);
+		fos.close();
 	}
 }
 /** @} */

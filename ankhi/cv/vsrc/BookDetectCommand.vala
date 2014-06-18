@@ -94,7 +94,6 @@ public class shotodol.BookDetectCommand : M100Command {
 			if((mod = vals.search(Options.PRUNE, match_all)) != null) {
 				pruneWhileCompile = false;
 			}
-			//FileOutputStream fos = new FileOutputStream.from_file(outfile);
 			BookDetect s = new BookDetect(&img, allowedCrackLen, minLen, minGrayVal, radius_shift, pruneWhileCompile);
 			s.compile();
 			if((mod = vals.search(Options.MERGE, match_all)) != null) {
@@ -106,6 +105,7 @@ public class shotodol.BookDetectCommand : M100Command {
 			if(!pruneWhileCompile) {
 				s.prune();
 			}
+			//FileOutputStream fos = new FileOutputStream.from_file(outfile);
 			//s.dump(fos);
 			s.dumpImage(outfile);
 			return 0;
