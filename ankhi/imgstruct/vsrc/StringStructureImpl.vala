@@ -7,28 +7,34 @@ using onubodh;
  * @{
  */
 public class onubodh.StringStructureImpl : StringStructure {
+	protected aroop_uword8 requiredGrayVal;
 	protected netpbmg*img;
 	protected int img_width;
 	protected int img_height;
 	protected int columns;
 	protected int rows;
 	int radius; // 4 or 8, it is actually the size of the matrix
-	int shift; // 2 if 4 and 3 if 8 so on ..
-	public StringStructureImpl(netpbmg*src, int yourShift) {
+	protected aroop_uword8 shift; // 2 if 4 and 3 if 8 so on ..
+	public StringStructureImpl(netpbmg*src, int yourShift, aroop_uword8 minGrayVal) {
 		buildStringStructureImpl(src, yourShift);
+		requiredGrayVal = minGrayVal;
 	}
 	
 	public void buildStringStructureImpl(netpbmg*src, int yourShift) {
 		buildStringStructure();
 		img = src;
 		radius = 1<<yourShift;
-		shift = yourShift;
+		shift = (aroop_uword8)yourShift;
 	}
 
 	public int getShift() {
 		return shift;
 	}
-	
+
+	public override bool pruneMatrix(ImageMatrix mat) {
+		return mat.getFeature(ImageMatrixString.feat.LENGTH) > 0;
+	}
+
 	public override int compile() {
 		img_width = img.width;
 		img_height = img.height;
@@ -41,9 +47,9 @@ public class onubodh.StringStructureImpl : StringStructure {
 		print("rows:%d, columns:%d\n", rows, columns);
 		for(y=0;y<img_height;y+=radius) {
 			for(x=0;x<img_width;x+=radius) {
-				ImageMatrix mat = createMatrix(img, x, y, (uchar)shift);
+				ImageMatrix mat = createMatrix2(x, y);
 				mat.compile();
-				if(mat.getVal() > 0) {
+				if(!pruneMatrix(mat)) {
 					appendMatrix(mat);
 				}
 			}
@@ -59,7 +65,7 @@ public class onubodh.StringStructureImpl : StringStructure {
 		while(it.next()) {
 			container<ImageMatrixString> can = it.get();
 			ImageMatrixString mat = can.get();
-			crk += mat.getFeature(ImageMatrixString.feat.CRACKS);
+			crk += mat.getFeature(ImageMatrixStringNearLinear.feat.CRACKS);
 		}
 		it.destroy();
 		crk += cracks<<shift;
@@ -197,7 +203,7 @@ public class onubodh.StringStructureImpl : StringStructure {
 		return 0;
 
 	}
-	public virtual ImageMatrix? createMatrix(netpbmg*src, int x, int y, uchar mat_size) {
+	public virtual ImageMatrix? createMatrix2(int x, int y) {
 		return null;
 	}
 }

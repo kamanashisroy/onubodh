@@ -12,12 +12,10 @@ using onubodh;
  * @{
  */
 public class onubodh.LineString : StringStructureImpl {
-	aroop_uword8 requiredGrayVal;
-	SearchableFactory<ImageMatrixStringNearLinearMultiple> memory;
+	SearchableFactory<ImageMatrixStringNearLinearPlus> memory;
 	public LineString(netpbmg*src, aroop_uword8 minGrayVal, int radius_shift) {
-		base(src, radius_shift);
-		requiredGrayVal = minGrayVal;
-		memory = SearchableFactory<ImageMatrixStringNearLinearMultiple>.for_type(128,factory_flags.SWEEP_ON_UNREF | factory_flags.EXTENDED | factory_flags.SEARCHABLE | factory_flags.MEMORY_CLEAN);
+		base(src, radius_shift, minGrayVal);
+		memory = SearchableFactory<ImageMatrixStringNearLinearPlus>.for_type(128,factory_flags.SWEEP_ON_UNREF | factory_flags.EXTENDED | factory_flags.SEARCHABLE | factory_flags.MEMORY_CLEAN);
 	}
 	~LineString() {
 		memory.destroy();
@@ -52,7 +50,7 @@ public class onubodh.LineString : StringStructureImpl {
 					b = getMatrixAt(xy-1);
 				}
 				if(b == null) {
-					b = createMatrix(img, col<<shift, row<<shift, (uchar)shift);
+					b = this.createMatrix(img, col<<shift, row<<shift, (uchar)shift, requiredGrayVal, this.createMatrix);
 					b.copyFrom(a);
 					//core.assert((xy+1) == b.higherOrderXY);
 					appendMatrix(b);
@@ -65,11 +63,12 @@ public class onubodh.LineString : StringStructureImpl {
 		base.heal();
 		return 0;
 	}
-	public override ImageMatrix? createMatrix(netpbmg*src, int x, int y, uchar mat_size) {
-		//return new ImageMatrixStringNearLinearMultiple(src, x, y, mat_size, requiredGrayVal);
-		ImageMatrixStringNearLinearMultiple a = memory.alloc_full(0,0,true);
-		//ImageMatrixStringNearLinearMultiple a = memory.alloc_full(0,0);
-		a.buildNearLinearMultiple(src, x, y, mat_size, requiredGrayVal);
+	public override ImageMatrix? createMatrix2(int x, int y) {
+		return createMatrix(img, x, y, shift, requiredGrayVal, createMatrix);
+	}
+	public ImageMatrix? createMatrix(netpbmg*src, int x, int y, uchar mat_size, aroop_uword8 minGrayVal, FactoryCreatorForMatrix fcm) {
+		ImageMatrixStringNearLinearPlus a = memory.alloc_full(0,0,true);
+		a.buildNearLinearPlus(src, x, y, mat_size, minGrayVal, fcm);
 		return a;
 	}
 }

@@ -78,6 +78,7 @@ public abstract class onubodh.StringStructure : Replicable {
 		strings.iterator_hacked(it, if_set, if_not_set, 0);
 	}
 	
+	public abstract bool pruneMatrix(ImageMatrix mat);
 	public virtual int compile() {
 		core.assert("Unimplemented" == null);
 		return 0;
@@ -139,7 +140,6 @@ public abstract class onubodh.StringStructure : Replicable {
 				val.zero_terminate();
 				os.write(&val);
 			}
-			val.printf("%d,", mat.getVal());
 			val.zero_terminate();
 			os.write(&val);
 			x++;

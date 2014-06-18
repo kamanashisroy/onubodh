@@ -11,6 +11,7 @@ using onubodh;
  * \addtogroup imgtrix
  * @{
  */
+public delegate ImageMatrix? onubodh.FactoryCreatorForMatrix(netpbmg*src, int x, int y, uchar mat_size, aroop_uword8 minGrayVal, FactoryCreatorForMatrix fc);
 public abstract class onubodh.ImageMatrix : /*Searchable*/Replicable {
 	searchable_ext ext;
 	protected netpbmg*img;
@@ -26,7 +27,9 @@ public abstract class onubodh.ImageMatrix : /*Searchable*/Replicable {
 		HIGHLIGHT = 1,
 		FILL = 1<<1,
 	}
-	public void buildMain(netpbmg*src, int x, int y, uchar radiusShift) {
+	public FactoryCreatorForMatrix fcreate;
+	public ImageMatrix?submatrix;
+	public void buildMain(netpbmg*src, int x, int y, uchar radiusShift, FactoryCreatorForMatrix fcm) {
 		img = src;
 		top = y;
 		left = x;
@@ -38,6 +41,8 @@ public abstract class onubodh.ImageMatrix : /*Searchable*/Replicable {
 		int columns = (src.width >> shift);
 		columns += ((src.width & (( 1<< shift)-1)) == 0?0:1);
 		higherOrderXY = higherOrderX + higherOrderY*columns;
+		fcreate = fcm; 
+		submatrix = null;
 	}
 	public abstract void copyFrom(ImageMatrix other);
 	public abstract int heal();
@@ -45,7 +50,8 @@ public abstract class onubodh.ImageMatrix : /*Searchable*/Replicable {
 	public abstract int fill();
 	public abstract int highlight();
 	public abstract int compile();
-	public abstract int getVal();
+	public abstract int drycompile();
+	public abstract int getFeature(int feat);
 	public abstract void dumpImage(netpbmg*out, aroop_uword8 gval);
 	public bool testFlag(int myFlag) {
 		return (flag & myFlag) != 0;

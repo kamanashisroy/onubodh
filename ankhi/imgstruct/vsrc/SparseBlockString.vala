@@ -12,12 +12,10 @@ using onubodh;
  * @{
  */
 public class onubodh.SparseBlockString : StringStructureImpl {
-	aroop_uword8 requiredGrayVal;
 	int requiredSparsityVal;
 	SearchableFactory<ImageMatrixSparsityString> memory;
 	public SparseBlockString(netpbmg*src, aroop_uword8 minGrayVal, int radius_shift, int minSparsityVal) {
-		base(src, radius_shift);
-		requiredGrayVal = minGrayVal;
+		base(src, radius_shift, minGrayVal);
 		requiredSparsityVal = minSparsityVal;
 		memory = SearchableFactory<ImageMatrixSparsityString>.for_type(128,factory_flags.SWEEP_ON_UNREF | factory_flags.EXTENDED | factory_flags.SEARCHABLE | factory_flags.MEMORY_CLEAN);
 	}
@@ -32,8 +30,8 @@ public class onubodh.SparseBlockString : StringStructureImpl {
 		while(it.next()) {
 			container<ImageMatrixSparsityString> can = it.get();
 			ImageMatrixSparsityString mat = can.get();
-			print("SparseBlock:Checking matrix (%d>=%d)\n", mat.getVal(), requiredSparsityVal);
-			if(mat.getVal() < requiredSparsityVal) {
+			print("SparseBlock:Checking matrix (%d>=%d)\n", mat.getFeature(ImageMatrixSparsityString.feat.SPARSITY), requiredSparsityVal);
+			if(mat.getFeature(ImageMatrixSparsityString.feat.SPARSITY) < requiredSparsityVal) {
 				removeMatrixAT(mat.higherOrderXY);
 			} else {
 				mat.highlight();
@@ -46,9 +44,12 @@ public class onubodh.SparseBlockString : StringStructureImpl {
 		base.heal();
 		return 0;
 	}
-	public override ImageMatrix? createMatrix(netpbmg*src, int x, int y, uchar mat_size) {
+	public override ImageMatrix? createMatrix2(int x, int y) {
+		return createMatrix(img, x, y, shift, requiredGrayVal, createMatrix);
+	}
+	public ImageMatrix? createMatrix(netpbmg*src, int x, int y, uchar mat_size, aroop_uword8 minGrayVal, FactoryCreatorForMatrix fcm) {
 		ImageMatrixSparsityString a = memory.alloc_full(0,0,true);
-		a.buildSparsityString(src, x, y, mat_size, requiredGrayVal);
+		a.buildSparsityString(src, x, y, mat_size, minGrayVal, fcm);
 		return a;
 	}
 }

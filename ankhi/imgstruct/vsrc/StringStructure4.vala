@@ -21,6 +21,10 @@ public abstract class onubodh.StringStructure4 : StringStructure {
 		img = src;
 	}
 	
+	public bool pruneMatrix4(ImageMatrix mat) {
+		return mat.getFeature(ImageMatrixString.feat.LENGTH) > 0;
+	}
+
 	public int compile4() {
 		img_width = img.width;
 		img_height = img.height;
@@ -35,7 +39,7 @@ public abstract class onubodh.StringStructure4 : StringStructure {
 			for(x=0;x<img_width;x+=MatrixSize.MATRIX_4) {
 				ImageMatrix mat = createMatrix(img, x, y, MatrixSize.MATRIX_4);
 				mat.compile();
-				if(mat.getVal() > 0) {
+				if(!pruneMatrix4(mat)) {
 					appendMatrix(mat);
 				}
 			}

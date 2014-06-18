@@ -7,12 +7,14 @@ using onubodh;
  * @{
  */
 public class onubodh.ImageMatrixSparsityString : ImageMatrixString {
-	int diffsum;
 	etxt diffPoints;
-	public void buildSparsityString(netpbmg*src, int x, int y, uchar radiusShift, aroop_uword8 minGrayVal) {
-		diffsum = 0;
+	public enum feat {
+		SPARSITY = 5,
+		AREA,
+	}
+	public void buildSparsityString(netpbmg*src, int x, int y, uchar radiusShift, aroop_uword8 minGrayVal, FactoryCreatorForMatrix fcm) {
 		diffPoints = etxt.EMPTY();
-		buildString(src, x, y, radiusShift, minGrayVal);
+		buildString(src, x, y, radiusShift, minGrayVal, fcm);
 	}
 
 	public override int heal() {
@@ -30,9 +32,10 @@ public class onubodh.ImageMatrixSparsityString : ImageMatrixString {
 		if(points.length() <= 1) {
 			return 0;
 		}
-		int i,j;
+		int i;
 		uchar a = -1;
-		diffsum = 0;
+		features[feat.SPARSITY] = 0;
+		features[feat.AREA] = 0;
 		diffPoints.buffer(points.length());
 		for(i = 0; i < points.length(); i++) {
 			if(a == -1) {
@@ -45,14 +48,15 @@ public class onubodh.ImageMatrixSparsityString : ImageMatrixString {
 				continue;
 			}
 			uchar diff = a-c;
-			diffsum += diff;
+			features[feat.SPARSITY] += diff;
 			diffPoints.concat_char(diff);
 		}
-		points.destroy();
+		features[feat.AREA] = points.length();
 		return 0;
 	}
-	public override int getVal() {
-		return diffsum;
+	public override int drycompile() {
+		base.drycompile();
+		return compile();
 	}
 }
 /** @} */

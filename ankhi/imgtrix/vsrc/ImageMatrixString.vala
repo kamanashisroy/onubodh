@@ -8,17 +8,14 @@ using onubodh;
  */
 public abstract class onubodh.ImageMatrixString : ImageMatrix {
 	protected etxt points;
-	aroop_uword8 requiredGrayVal = 0;
+	protected aroop_uword8 requiredGrayVal = 0;
 	protected int features[8];
 	public enum feat {
-		CRACKS = 0,
-		OPPOSITE,
-		ADJACENT,
-		LENGTH,
+		LENGTH = 0,
 	}
-	public void buildString(netpbmg*src, int x, int y, uchar radiusShift, aroop_uword8 minGrayVal) {
+	public void buildString(netpbmg*src, int x, int y, uchar radiusShift, aroop_uword8 minGrayVal, FactoryCreatorForMatrix fcm) {
 		core.assert((1<<(radiusShift+1)) < 255);
-		buildMain(src,x,y,radiusShift);
+		buildMain(src,x,y,radiusShift, fcm);
 		points = etxt.EMPTY();
 		requiredGrayVal = minGrayVal;
 		//print("matrix : %d,%d - %d\n", x, y, mat_size);
@@ -31,6 +28,7 @@ public abstract class onubodh.ImageMatrixString : ImageMatrix {
 	public override void copyFrom(ImageMatrix other) {
 		points.destroy();
 		points = etxt.same_same(&((ImageMatrixString)other).points);
+		features[feat.LENGTH] = points.length();
 	}
 	
 	public override int fill() {
@@ -62,6 +60,11 @@ public abstract class onubodh.ImageMatrixString : ImageMatrix {
 		return 0;
 	}
 	
+	public override int drycompile() {
+		features[feat.LENGTH] = points.length();
+		return 0;
+	}
+
 	public void dumpString() {
 		int i;
 		print("[");
@@ -78,7 +81,7 @@ public abstract class onubodh.ImageMatrixString : ImageMatrix {
 		print("]\n");
 	}
 
-	public virtual int getFeature(int feat) {
+	public override int getFeature(int feat) {
 		return features[feat];
 	}
 
