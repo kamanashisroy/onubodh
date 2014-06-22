@@ -22,23 +22,13 @@ public class onubodh.SparseBlockString : StringStructureImpl {
 	~LineString() {
 		memory.destroy();
 	}
-	public override int compile() {
-		base.compile();
-		// for all the matrices..
-		Iterator<container<ImageMatrixSparsityString>> it = Iterator<container<ImageMatrixSparsityString>>.EMPTY();
-		getIterator(&it, Replica_flags.ALL, 0);
-		while(it.next()) {
-			container<ImageMatrixSparsityString> can = it.get();
-			ImageMatrixSparsityString mat = can.get();
-			print("SparseBlock:Checking matrix (%d>=%d)\n", mat.getFeature(ImageMatrixSparsityString.feat.SPARSITY), requiredSparsityVal);
-			if(mat.getFeature(ImageMatrixSparsityString.feat.SPARSITY) < requiredSparsityVal) {
-				removeMatrixAT(mat.higherOrderXY);
-			} else {
-				mat.highlight();
-			}
-		}
-		it.destroy();
-		return 0;
+	public override bool pruneMatrix(ImageMatrix mat) {
+		if(mat.getFeature(ImageMatrixSparsityString.feat.SPARSITY) > 0)print("SparseBlock:Checking matrix (%d>=%d)\n", mat.getFeature(ImageMatrixSparsityString.feat.SPARSITY), requiredSparsityVal);
+		if(mat.getFeature(ImageMatrixSparsityString.feat.SPARSITY) < requiredSparsityVal)
+			return true;
+		else
+			mat.highlight();
+		return false;
 	}
 	public override int heal() {
 		base.heal();

@@ -204,7 +204,8 @@ public class onubodh.StringStructureImpl : StringStructure {
 
 	}
 	public override void dumpFeatures(OutputStream os) {
-		etxt val = etxt.stack(64);
+		etxt val = etxt.stack(128);
+		etxt intval = etxt.stack(8);
 		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
 		getIterator(&it, Replica_flags.ALL, 0);
 		while(it.next()) {
@@ -212,20 +213,17 @@ public class onubodh.StringStructureImpl : StringStructure {
 			ImageMatrix mat = can.get();
 			int higher_order_x = mat.higherOrderX;
 			int higher_order_y = mat.higherOrderY;
-			val.printf("<map name=\"detectfeatures\"><area shape=\"rect\" coords=\"%d,%d,%d,%d\" title=\"", mat.top, mat.left, mat.top+radius, mat.left+radius);
-			val.zero_terminate();
-			os.write(&val);
+			val.printf("<area shape=\"rect\" coords=\"%d,%d,%d,%d\" title=\"", mat.top, mat.left, mat.top+radius, mat.left+radius);
 			int i;
-			for(i=0; i < 8; i++); {
-				val.printf("%d,", mat.getFeature(i));
+			for(i=0; i < 8; i++) {
+				intval.printf("%d,", mat.getFeature(i));
+				val.concat(&intval);
 			}
-			val.concat_string("\"></map>");
-			val.zero_terminate();
-			os.write(&val);
-			val.printf("\n");
+			val.concat_string("\"/>\n");
 			val.zero_terminate();
 			os.write(&val);
 		}
+		os.close();
 		val.destroy();
 	}
 	public virtual ImageMatrix? createMatrix2(int x, int y) {

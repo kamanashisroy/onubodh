@@ -2,6 +2,7 @@
 all:
 	set -var MODULE_DIR -val ../../../ankhi
 	module -load $(MODULE_DIR)/cv/plugin.so
+	module -load $(MODULE_DIR)/convert/plugin.so
 	#set -var JPGFILE -val ../../samples/myshelf/406.jpg
 	set -var INFILE -val ../../samples/b4.pgm
 	set -var EDGEFILE -val edge.pgm
@@ -54,5 +55,6 @@ cvfastedgetest:
 	cvfastedge -i $(INFILE) -o $(EDGEFILE)
 
 barcodedetect:
-	barcodedetect -msp 40 -mgval 60 -i $(EDGEFILE) -o output_small_msp10_rshift3.pgm -rshift 3
+	barcodedetect -msp 10 -mgval 60 -i $(EDGEFILE) -o output_small_msp10_rshift3.pgm -rshift 3
+	#convert -i output_small_msp10_rshift3.pgm -o output.jpg
 
