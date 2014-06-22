@@ -1,7 +1,7 @@
 <html>
 <body>
-<img src="./img.bmp" usemap="#imgfeatures" />
-<img src="./output.bmp" usemap="#imgfeatures" />
+<img src="./input.jpg" usemap="#imgfeatures" />
+<img src="./output.jpg" usemap="#imgfeatures" />
 <map name="imgfeatures">
 <?php readfile("./features.txt"); ?>
 </map>

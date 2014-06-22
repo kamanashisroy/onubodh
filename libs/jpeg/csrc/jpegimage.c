@@ -136,13 +136,14 @@ jpeg_image_write (struct jpeg_image*img, int quality, char * filename)
 
   /* Step 3: set parameters for compression */
 
+	int input_components = (img->raw->type == NETPBM_IMAGE_TYPE_PPM)?3:1;
   /* First we supply a description of the input image.
    * Four fields of the cinfo struct must be filled in:
    */
   img->impl.c.image_width = img->raw->width; 	/* image width and height, in pixels */
   img->impl.c.image_height = img->raw->height;
-  img->impl.c.input_components = 3;		/* # of color components per pixel */
-  img->impl.c.in_color_space = JCS_RGB; 	/* colorspace of input image */
+  img->impl.c.input_components = input_components;		/* # of color components per pixel */
+  img->impl.c.in_color_space = (img->raw->type == NETPBM_IMAGE_TYPE_PPM)?JCS_RGB:JCS_GRAYSCALE; 	/* colorspace of input image */
   /* Now use the library's routine to set default compression parameters.
    * (You must set at least cinfo.in_color_space before calling this,
    * since the defaults depend on the source color space.)
@@ -169,7 +170,7 @@ jpeg_image_write (struct jpeg_image*img, int quality, char * filename)
    * more if you wish, though.
    */
   //row_stride = image_width * 3;	/* JSAMPLEs per row in image_buffer */
-  row_stride = img->raw->width * 3;	/* JSAMPLEs per row in image_buffer */
+  row_stride = img->raw->width * input_components;	/* JSAMPLEs per row in image_buffer */
 
   while (img->impl.c.next_scanline < img->impl.c.image_height) {
     /* jpeg_write_scanlines expects an array of pointers to scanlines.
