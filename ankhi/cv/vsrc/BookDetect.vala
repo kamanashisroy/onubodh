@@ -18,12 +18,10 @@ using onubodh;
 public class onubodh.BookDetect : Replicable {
 	ManyLineStrings circuit;
 	netpbmg*orig;
-	public BookDetect(netpbmg*src, int allowedCrackLen, int requiredLength, int minGrayVal, int radius_shift, bool pruneWhileCompile) {
+	public BookDetect(netpbmg*src, int minGrayVal, int radius_shift, int[] featureVals, int[]featureOps) {
 		circuit = new ManyLineStrings(src
-			, allowedCrackLen
-			, requiredLength
 			, (aroop_uword8)minGrayVal
-			, radius_shift, pruneWhileCompile);
+			, radius_shift, featureVals, featureOps);
 		orig = src;
 	}
 
@@ -59,6 +57,16 @@ public class onubodh.BookDetect : Replicable {
 		circuit.dumpImage(&out_image, 240);
 		out_image.write(nm.to_string());
 		out_image.close();
+	}
+
+	public void dumpFeatures(etxt*nm) {
+		etxt featuresfile = etxt.stack(128);
+		featuresfile.concat_string("features_");
+		featuresfile.concat(nm);
+		featuresfile.concat_string(".txt");
+		FileOutputStream fos = new FileOutputStream.from_file(&featuresfile);
+		circuit.dumpFeatures(fos);
+		fos.close();
 	}
 }
 /** @} */

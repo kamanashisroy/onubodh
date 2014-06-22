@@ -13,7 +13,7 @@ public class shotodol.BarcodeROIDetectCommand : M100Command {
 		OUTFILE,
 		MIN_GRAY_VAL,
 		RADIUS_SHIFT,
-		MIN_SPARSITY_VAL,
+		FEATURES,
 		NO_IMAGE_OUTPUT,
 	}
 	public BarcodeROIDetectCommand() {
@@ -22,8 +22,8 @@ public class shotodol.BarcodeROIDetectCommand : M100Command {
 		etxt input_help = etxt.from_static("Input file");
 		etxt output = etxt.from_static("-o");
 		etxt output_help = etxt.from_static("Output file");
-		etxt minimumSparseValue = etxt.from_static("-msp");
-		etxt minimumSparseValue_help = etxt.from_static("Required/Minimum Sparsity");
+		etxt features = etxt.from_static("-features");
+		etxt features_help = etxt.from_static("Required features. Comma separated values.");
 		etxt mingrayval = etxt.from_static("-mgval");
 		etxt mingrayval_help = etxt.from_static("Required grayval(value) in lines");
 		etxt radius_shift = etxt.from_static("-rshift");
@@ -32,7 +32,7 @@ public class shotodol.BarcodeROIDetectCommand : M100Command {
 		etxt noimgout_help = etxt.from_static("Do not dump image");
 		addOption(&input, M100Command.OptionType.TXT, Options.INFILE, &input_help);
 		addOption(&output, M100Command.OptionType.TXT, Options.OUTFILE, &output_help);
-		addOption(&minimumSparseValue, M100Command.OptionType.TXT, Options.MIN_SPARSITY_VAL, &minimumSparseValue_help);
+		addOption(&features, M100Command.OptionType.TXT, Options.FEATURES, &features_help);
 		addOption(&mingrayval, M100Command.OptionType.TXT, Options.MIN_GRAY_VAL, &mingrayval_help); 
 		addOption(&radius_shift, M100Command.OptionType.TXT, Options.RADIUS_SHIFT, &radius_shift_help); 
 		addOption(&noimgout, M100Command.OptionType.NONE, Options.NO_IMAGE_OUTPUT, &noimgout_help); 
@@ -62,9 +62,11 @@ public class shotodol.BarcodeROIDetectCommand : M100Command {
 				break;
 			}
 			unowned txt outfile = mod.get();
-			int minSparsityValue = 10;
-			if((mod = vals.search(Options.MIN_SPARSITY_VAL, match_all)) != null) {
-				minSparsityValue = mod.get().to_int();
+			int featureVals[8];
+			int featureOps[8];
+			if((mod = vals.search(Options.FEATURES, match_all)) != null) {
+				unowned txt fstring = mod.get();
+				ImageMatrixUtils.parseFeatures(fstring, featureVals, featureOps);
 			}
 			int minGrayVal = 10;
 			if((mod = vals.search(Options.MIN_GRAY_VAL, match_all)) != null) {
@@ -78,7 +80,7 @@ public class shotodol.BarcodeROIDetectCommand : M100Command {
 			if((mod = vals.search(Options.NO_IMAGE_OUTPUT, match_all)) != null) {
 				output_image = false;
 			}
-			BarcodeROIDetect s = new BarcodeROIDetect(&img, minGrayVal, radius_shift, minSparsityValue);
+			BarcodeROIDetect s = new BarcodeROIDetect(&img, minGrayVal, radius_shift, featureVals, featureOps);
 			s.compile();
 			if(output_image) {
 				s.dumpImage(outfile);

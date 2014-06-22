@@ -12,23 +12,19 @@ using onubodh;
  * @{
  */
 public class onubodh.SparseBlockString : StringStructureImpl {
-	int requiredSparsityVal;
 	SearchableFactory<ImageMatrixSparsityString> memory;
-	public SparseBlockString(netpbmg*src, aroop_uword8 minGrayVal, int radius_shift, int minSparsityVal) {
-		base(src, radius_shift, minGrayVal);
-		requiredSparsityVal = minSparsityVal;
+	public SparseBlockString(netpbmg*src, aroop_uword8 minGrayVal, int radius_shift, int[] featureVals, int[] featureOps) {
+		base(src, radius_shift, minGrayVal, featureVals, featureOps);
 		memory = SearchableFactory<ImageMatrixSparsityString>.for_type(128,factory_flags.SWEEP_ON_UNREF | factory_flags.EXTENDED | factory_flags.SEARCHABLE | factory_flags.MEMORY_CLEAN);
 	}
 	~LineString() {
 		memory.destroy();
 	}
 	public override bool pruneMatrix(ImageMatrix mat) {
-		if(mat.getFeature(ImageMatrixSparsityString.feat.SPARSITY) > 0)print("SparseBlock:Checking matrix (%d>=%d)\n", mat.getFeature(ImageMatrixSparsityString.feat.SPARSITY), requiredSparsityVal);
-		if(mat.getFeature(ImageMatrixSparsityString.feat.SPARSITY) < requiredSparsityVal)
-			return true;
-		else
+		bool p = base.pruneMatrix(mat);
+		if(!p)
 			mat.highlight();
-		return false;
+		return p;
 	}
 	public override int heal() {
 		base.heal();

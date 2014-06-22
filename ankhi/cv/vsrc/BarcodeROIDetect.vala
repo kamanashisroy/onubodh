@@ -18,10 +18,10 @@ using onubodh;
 public class onubodh.BarcodeROIDetect : Replicable {
 	SparseBlockString circuit;
 	netpbmg*orig;
-	public BarcodeROIDetect(netpbmg*src, int minGrayVal, int radius_shift, int minSparsityVal) {
+	public BarcodeROIDetect(netpbmg*src, int minGrayVal, int radius_shift, int[] featuresVals, int[] featureOps) {
 		circuit = new SparseBlockString(src
 			, (aroop_uword8)minGrayVal
-			, radius_shift, minSparsityVal);
+			, radius_shift, featuresVals, featureOps);
 		orig = src;
 	}
 

@@ -13,8 +13,8 @@ using onubodh;
  */
 public class onubodh.LineString : StringStructureImpl {
 	SearchableFactory<ImageMatrixStringNearLinearPlus> memory;
-	public LineString(netpbmg*src, aroop_uword8 minGrayVal, int radius_shift) {
-		base(src, radius_shift, minGrayVal);
+	public LineString(netpbmg*src, aroop_uword8 minGrayVal, int radius_shift, int[] featureVals, int[] featureOps) {
+		base(src, radius_shift, minGrayVal, featureVals, featureOps);
 		memory = SearchableFactory<ImageMatrixStringNearLinearPlus>.for_type(128,factory_flags.SWEEP_ON_UNREF | factory_flags.EXTENDED | factory_flags.SEARCHABLE | factory_flags.MEMORY_CLEAN);
 	}
 	~LineString() {

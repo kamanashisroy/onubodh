@@ -15,8 +15,15 @@ public class onubodh.StringStructureImpl : StringStructure {
 	protected int rows;
 	int radius; // 4 or 8, it is actually the size of the matrix
 	protected aroop_uword8 shift; // 2 if 4 and 3 if 8 so on ..
-	public StringStructureImpl(netpbmg*src, int yourShift, aroop_uword8 minGrayVal) {
+	int reqVals[8];
+	int reqOps[8];
+	public StringStructureImpl(netpbmg*src, int yourShift, aroop_uword8 minGrayVal, int[]featureVals, int[]featureOps) {
 		buildStringStructureImpl(src, yourShift);
+		int i = 0;
+		for(i = 0; i < 8; i++) {
+			reqVals[i] = featureVals[i];
+			reqOps[i] = featureOps[i];
+		}
 		requiredGrayVal = minGrayVal;
 	}
 	
@@ -32,7 +39,24 @@ public class onubodh.StringStructureImpl : StringStructure {
 	}
 
 	public override bool pruneMatrix(ImageMatrix mat) {
-		return mat.getFeature(ImageMatrixString.feat.LENGTH) > 0;
+		int i = 0;
+		for(i = 0; i < 8; i++) {
+			int ft = mat.getFeature(i);
+			switch(reqOps[i]) {
+			case ImageMatrixUtils.feature_ops.GT:
+				if(ft <= reqVals[i]) return true;
+				break;
+			case ImageMatrixUtils.feature_ops.LT:
+				if(ft >= reqVals[i]) return true;
+				break;
+			case ImageMatrixUtils.feature_ops.EQ:
+				if(ft != reqVals[i]) return true;
+				break;
+			default:
+				break;
+			}
+		}
+		return false;
 	}
 
 	public override int compile() {
