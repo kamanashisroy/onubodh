@@ -26,20 +26,33 @@ public class onubodh.ImageMatrixStringNearLinear : ImageMatrixString {
 		return 0;
 	}
 
-	public ImageMatrixStringNearLinear appendSubmatrix(etxt*givenPoints) {
+	protected bool containsPoints(etxt*givenPoints) {
+		int i;
+		for(i = 0; i < givenPoints.length(); i++) {
+			if(!points.contains_char(givenPoints.char_at(i)))
+				return false;
+		}
+		return true;
+	}
+
+	public ImageMatrixStringNearLinear?appendSubmatrix(etxt*givenPoints) {
 		ImageMatrixStringNearLinear?smat = this;
+		ImageMatrixStringNearLinear?ret = null;
 		do {
 			if(smat.submatrix != null) {
-				smat = (ImageMatrixStringNearLinear)smat.submatrix;
+				ret = (ImageMatrixStringNearLinear)smat.submatrix;
+				smat = ret;
+				if(smat.containsPoints(givenPoints)) 
+					return null;
 				continue;
 			}
-			smat.submatrix = fcreate(img, left, top, shift, requiredGrayVal, fcreate);
-			smat = (ImageMatrixStringNearLinear)smat.submatrix;
-			smat.points = etxt.dup_etxt(givenPoints);
-			smat.drycompile();
+			ret = (ImageMatrixStringNearLinear)fcreate(img, left, top, shift, requiredGrayVal, fcreate);
+			smat.submatrix = ret;
+			ret.points = etxt.dup_etxt(givenPoints);
+			ret.drycompile();
 			break;
 		} while(true);
-		return smat;
+		return ret;
 	}
 
 	int calcOpposite(etxt*ln) {
@@ -73,9 +86,11 @@ public class onubodh.ImageMatrixStringNearLinear : ImageMatrixString {
 				}
 			}
 			if(linearPoints.length() > 1) {
-				ImageMatrixStringNearLinear mat = appendSubmatrix(&linearPoints);
-				mat.features[feat.CRACKS] = tngl.crack;
-				mat.features[feat.ADJACENT] = tngl.adjacent;
+				ImageMatrixStringNearLinear?mat = appendSubmatrix(&linearPoints);
+				if(mat != null) {
+					mat.features[feat.CRACKS] = tngl.crack;
+					mat.features[feat.ADJACENT] = tngl.adjacent;
+				}
 			}
 			linearPoints.destroy();
 		}
