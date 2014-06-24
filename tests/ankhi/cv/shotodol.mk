@@ -14,7 +14,7 @@ all:
 	q
 
 bookdetecttest:
-	bookdetect -mgval 30 -i $(INPUTFILE) -o output.pgm -rshift 4 -features ",,,,"
+	bookdetect -mgval 30 -i $(INPUTFILE) -o output.pgm -rshift 4 -features ">15,,,,,=15,<5"
 	convert -i output.pgm -o output.jpg
 	convert -i $(INPUTFILE) -o input.jpg
 

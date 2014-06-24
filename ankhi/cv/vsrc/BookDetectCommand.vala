@@ -76,6 +76,11 @@ public class shotodol.BookDetectCommand : M100Command {
 			}
 			int featureVals[8];
 			int featureOps[8];
+			int i = 0;
+			for(i = 0; i < 8; i++) {
+				featureVals[i] = 0;
+				featureOps[i] = 0;
+			}
 			if((mod = vals.search(Options.FEATURES, match_all)) != null) {
 				unowned txt fstring = mod.get();
 				ImageMatrixUtils.parseFeatures(fstring, featureVals, featureOps);

@@ -18,6 +18,7 @@ public struct onubodh.ZeroTangle {
 	public int adjacent;
 	/** \brief Sign value of the cosec triganomatric function associated with the line  */
 	public int cosecsign;
+	public int sparsity;
 	/** \brief Number of pixels or number of matrices available horizontally */
 	public int width;
 	/** \brief This is a value to perform specific tasks, width = (1<<shift) */
@@ -27,6 +28,7 @@ public struct onubodh.ZeroTangle {
 		adjacent = 0;
 		cosecsign = 0;
 		shift = 0;
+		sparsity = 0;
 		width = gwidth;
 	}
 	public ZeroTangle.forShift(int gShift) {
@@ -53,6 +55,7 @@ public struct onubodh.ZeroTangle {
 		}
 		int div = (diff/width) - 1;
 		if(div > 0)crack+=div;
+		sparsity += diff;
 		return true;
 	}
 	public bool neibor102(int a, int b) {
@@ -72,6 +75,7 @@ public struct onubodh.ZeroTangle {
 		}
 		int div = (diff/width) - 1;
 		if(div > 0)crack+=div;
+		sparsity += diff;
 		return true;
 	}
 	public bool neibor103(int a, int b) {
@@ -92,6 +96,7 @@ public struct onubodh.ZeroTangle {
 		}
 		int div = (diff/width) - 1;
 		if(div > 0)crack+=div;
+		sparsity += diff;
 		return true;
 	}
 	public bool neibor104(int a, int b) {
@@ -112,6 +117,7 @@ public struct onubodh.ZeroTangle {
 		}
 		int div = (diff/width) - 1;
 		if(div > 0)crack+=div;
+		sparsity += diff;
 		return true;
 	}
 	public bool neibor150(uchar a, uchar b) {
@@ -124,6 +130,7 @@ public struct onubodh.ZeroTangle {
 			int div = (diff >> shift); // alternative code for diff / size
 			div--;
 			crack+=div;
+			sparsity += diff;
 			return true;
 		}
 		return false;
@@ -147,6 +154,7 @@ public struct onubodh.ZeroTangle {
 		int div = (diff >> shift); // alternative code for diff / size
 		div--;
 		crack+=div;
+		sparsity += diff;
 		return true;
 	}
 	public bool neibor163(uchar a, uchar b) {
@@ -169,6 +177,7 @@ public struct onubodh.ZeroTangle {
 		int div = (diff >> shift); // alternative code for diff / size
 		div--;
 		crack+=div;
+		sparsity += diff;
 		return true;
 	}
 	public bool neibor164(uchar a, uchar b) {
@@ -191,6 +200,7 @@ public struct onubodh.ZeroTangle {
 		int div = (diff >> shift); // alternative code for diff / size
 		div--;
 		crack+=div;
+		sparsity += diff;
 		return true;
 	}
 }

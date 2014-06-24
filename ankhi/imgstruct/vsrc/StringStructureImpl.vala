@@ -13,7 +13,7 @@ public class onubodh.StringStructureImpl : StringStructure {
 	protected int img_height;
 	protected int columns;
 	protected int rows;
-	int radius; // 4 or 8, it is actually the size of the matrix
+	protected int radius; // 4 or 8, it is actually the size of the matrix
 	protected aroop_uword8 shift; // 2 if 4 and 3 if 8 so on ..
 	int reqVals[8];
 	int reqOps[8];

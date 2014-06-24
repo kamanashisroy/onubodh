@@ -20,10 +20,6 @@ public class onubodh.LineString : StringStructureImpl {
 	~LineString() {
 		memory.destroy();
 	}
-	public override int compile() {
-		base.compile();
-		return 0;
-	}
 	public override int heal() {
 		// for all the matrices..
 		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
@@ -70,6 +66,35 @@ public class onubodh.LineString : StringStructureImpl {
 		ImageMatrixStringNearLinearPlus a = memory.alloc_full(0,0,true);
 		a.buildNearLinearPlus(src, x, y, mat_size, minGrayVal, fcm);
 		return a;
+	}
+
+	public override int compile() {
+		img_width = img.width;
+		img_height = img.height;
+		columns = (img_width >> shift);
+		columns += ((img_width & (( 1<< shift)-1)) == 0?0:1);
+		rows = (img_height >> shift);
+		rows += ((img_height & (( 1<< shift)-1)) == 0?0:1);
+		
+		int x,y;
+		print("rows:%d, columns:%d\n", rows, columns);
+		for(y=0;y<img_height;y+=radius) {
+			for(x=0;x<img_width;x+=radius) {
+				ImageMatrixStringNearLinearPlus?mat = (ImageMatrixStringNearLinearPlus)createMatrix2(x, y);
+				mat.compile();
+				do {
+					ImageMatrixStringNearLinearPlus?linemat = (ImageMatrixStringNearLinearPlus)mat.submatrix;
+					if(linemat == null) break;
+					if(!pruneMatrix(linemat)) {
+						appendMatrix(linemat);
+						break;
+					}
+					mat = linemat;
+				} while(true);
+			}
+		}
+		print("Total interesting matrices:%d\n", getLength());
+		return 0;
 	}
 }
 /** @} */

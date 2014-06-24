@@ -190,6 +190,7 @@ public class onubodh.ManyLineStrings : LineString {
 		return callbackMerge;
 	}
 	
+#if false
 	public override void dumpImage(netpbmg*oimg, aroop_uword8 gval) {
 		Iterator<StringStructureImpl> it = Iterator<StringStructureImpl>(&lines);
 		bool high = true;
@@ -206,5 +207,6 @@ public class onubodh.ManyLineStrings : LineString {
 		it.destroy();
 		print("Dumped %d lines\n", totalLines);
 	}
+#endif
 }
 /** @} */

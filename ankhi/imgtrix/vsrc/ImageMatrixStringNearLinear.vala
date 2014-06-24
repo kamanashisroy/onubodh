@@ -11,6 +11,7 @@ public class onubodh.ImageMatrixStringNearLinear : ImageMatrixString {
 		CRACKS = 4,
 		OPPOSITE, // It is the perpendicular side of a right-angled triangle, the opposite side of the angle theta.
 		ADJACENT,
+		SPARSITY,
 	}
 	public void buildNearLinear(netpbmg*src, int x, int y, uchar radiusShift, aroop_uword8 minGrayVal, FactoryCreatorForMatrix fcm) {
 		buildString(src, x, y, radiusShift, minGrayVal, fcm);
@@ -90,6 +91,7 @@ public class onubodh.ImageMatrixStringNearLinear : ImageMatrixString {
 				if(mat != null) {
 					mat.features[feat.CRACKS] = tngl.crack;
 					mat.features[feat.ADJACENT] = tngl.adjacent;
+					mat.features[feat.SPARSITY] = tngl.sparsity;
 				}
 			}
 			linearPoints.destroy();

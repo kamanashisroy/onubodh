@@ -10,3 +10,7 @@ backup:
 clean:backup
 	$(RM) *.pgm
 	
+
+feature:
+	php genfeatures.php > features.html
+
