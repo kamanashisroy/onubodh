@@ -9,9 +9,11 @@ using onubodh;
 public abstract class onubodh.ImageMatrixString : ImageMatrix {
 	protected etxt points;
 	protected aroop_uword8 requiredGrayVal = 0;
-	protected int features[8];
+	protected int features[32];
 	public enum feat {
 		LENGTH = 0,
+		CONTRAST = 16,
+		MAX_FEATURES=32,
 	}
 	public void buildString(netpbmg*src, int x, int y, uchar radiusShift, aroop_uword8 minGrayVal, FactoryCreatorForMatrix fcm) {
 		core.assert((1<<(radiusShift+1)) < 255);
@@ -20,7 +22,7 @@ public abstract class onubodh.ImageMatrixString : ImageMatrix {
 		requiredGrayVal = minGrayVal;
 		//print("matrix : %d,%d - %d\n", x, y, mat_size);
 		int i = 0;
-		for(i = 0; i < 8; i++) {
+		for(i = 0; i < feat.MAX_FEATURES; i++) {
 			features[i] = 0;
 		}
 	}
@@ -45,21 +47,31 @@ public abstract class onubodh.ImageMatrixString : ImageMatrix {
 		int y;
 		uchar cumx = 0;
 		etxt myPoints = etxt.stack(size*size);
+		int highval = 0;
+		int lowval = 0;
 		for(y=0,cumx=0;(y<size) && ((y+top) < img.height) ;y++,cumx+=size) {
 			int x;
 			for(x=0;(x<size) && ((x+left) < img.width);x++) {
 				aroop_uword8 gval = 0;
 				img.getGrayVal(x+left,y+top,&gval);
 				if(gval > requiredGrayVal) {
+					highval += gval;
 					myPoints.concat_char(cumx+(uchar)x);
+				} else {
+					lowval += gval;
 				}
 			}
 		}
 		points = etxt.dup_etxt(&myPoints);
-		features[feat.LENGTH] = points.length();
+		myPoints.destroy();
+		int len = points.length();
+		int empty = size*size-len;
+		if(len > 0 && empty > 0)
+		features[feat.CONTRAST] = highval/len - lowval/empty;
+		drycompile();
 		return 0;
 	}
-	
+
 	public override int drycompile() {
 		features[feat.LENGTH] = points.length();
 		return 0;

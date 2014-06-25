@@ -15,12 +15,12 @@ public class onubodh.StringStructureImpl : StringStructure {
 	protected int rows;
 	protected int radius; // 4 or 8, it is actually the size of the matrix
 	protected aroop_uword8 shift; // 2 if 4 and 3 if 8 so on ..
-	int reqVals[8];
-	int reqOps[8];
+	int reqVals[ImageMatrixString.feat.MAX_FEATURES];
+	int reqOps[ImageMatrixString.feat.MAX_FEATURES];
 	public StringStructureImpl(netpbmg*src, int yourShift, aroop_uword8 minGrayVal, int[]featureVals, int[]featureOps) {
 		buildStringStructureImpl(src, yourShift);
 		int i = 0;
-		for(i = 0; i < 8; i++) {
+		for(i = 0; i < ImageMatrixString.feat.MAX_FEATURES; i++) {
 			reqVals[i] = featureVals[i];
 			reqOps[i] = featureOps[i];
 		}
@@ -40,7 +40,7 @@ public class onubodh.StringStructureImpl : StringStructure {
 
 	public override bool pruneMatrix(ImageMatrix mat) {
 		int i = 0;
-		for(i = 0; i < 8; i++) {
+		for(i = 0; i < ImageMatrixString.feat.MAX_FEATURES; i++) {
 			int ft = mat.getFeature(i);
 			switch(reqOps[i]) {
 			case ImageMatrixUtils.feature_ops.GT:
@@ -57,6 +57,12 @@ public class onubodh.StringStructureImpl : StringStructure {
 			}
 		}
 		return false;
+	}
+
+	protected int showProgress() {
+		print("#");
+		shotodol_platform.ProcessControl.mesmerize();
+		return 0;
 	}
 
 	public override int compile() {
@@ -77,6 +83,7 @@ public class onubodh.StringStructureImpl : StringStructure {
 					appendMatrix(mat);
 				}
 			}
+			showProgress();
 		}
 		print("Total interesting matrices:%d\n", getLength());
 		return 0;
@@ -228,8 +235,9 @@ public class onubodh.StringStructureImpl : StringStructure {
 
 	}
 	public override void dumpFeatures(OutputStream os) {
-		etxt val = etxt.stack(128);
-		etxt intval = etxt.stack(8);
+		etxt val = etxt.stack(512);
+		etxt data = etxt.stack(128);
+		etxt intval = etxt.stack(32);
 		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
 		getIterator(&it, Replica_flags.ALL, 0);
 		while(it.next()) {
@@ -237,17 +245,19 @@ public class onubodh.StringStructureImpl : StringStructure {
 			ImageMatrix mat = can.get();
 			int higher_order_x = mat.higherOrderX;
 			int higher_order_y = mat.higherOrderY;
-			val.printf("<area shape=\"rect\" coords=\"%d,%d,%d,%d\" title=\"", mat.top, mat.left, mat.top+radius, mat.left+radius);
 			int i;
-			for(i=0; i < 8; i++) {
+			data.trim_to_length(0);
+			for(i=0; i < ImageMatrixString.feat.MAX_FEATURES; i++) {
 				intval.printf("%d,", mat.getFeature(i));
-				val.concat(&intval);
+				data.concat(&intval);
 			}
-			val.concat_string("\"/>\n");
+			data.zero_terminate();
+			val.printf("<area shape=\"rect\" coords=\"%d,%d,%d,%d\"  href=\"javascript:void(0)\" onclick=\"updateVal(this.title);\" title=\"%s\"/>\n", mat.left, mat.top, mat.left+radius, mat.top+radius, data.to_string());
 			val.zero_terminate();
 			os.write(&val);
 		}
 		os.close();
+		data.destroy();
 		val.destroy();
 	}
 	public virtual ImageMatrix? createMatrix2(int x, int y) {

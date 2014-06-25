@@ -87,11 +87,13 @@ public class onubodh.LineString : StringStructureImpl {
 					if(linemat == null) break;
 					if(!pruneMatrix(linemat)) {
 						appendMatrix(linemat);
+						linemat.highlight();
 						break;
 					}
 					mat = linemat;
 				} while(true);
 			}
+			showProgress();
 		}
 		print("Total interesting matrices:%d\n", getLength());
 		return 0;

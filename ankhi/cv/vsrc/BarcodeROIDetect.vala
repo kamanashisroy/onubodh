@@ -16,10 +16,10 @@ using onubodh;
  * @{
  */
 public class onubodh.BarcodeROIDetect : Replicable {
-	SparseBlockString circuit;
+	BlockString circuit;
 	netpbmg*orig;
 	public BarcodeROIDetect(netpbmg*src, int minGrayVal, int radius_shift, int[] featuresVals, int[] featureOps) {
-		circuit = new SparseBlockString(src
+		circuit = new BlockString(src
 			, (aroop_uword8)minGrayVal
 			, radius_shift, featuresVals, featureOps);
 		orig = src;
@@ -39,10 +39,11 @@ public class onubodh.BarcodeROIDetect : Replicable {
 	}
 
 	public void dumpFeatures(etxt*nm) {
-		etxt featuresfile = etxt.stack(128);
+		etxt featuresfile = etxt.stack(512);
 		featuresfile.concat_string("features_");
 		featuresfile.concat(nm);
 		featuresfile.concat_string(".txt");
+		featuresfile.zero_terminate();
 		FileOutputStream fos = new FileOutputStream.from_file(&featuresfile);
 		circuit.dumpFeatures(fos);
 		fos.close();

@@ -11,6 +11,6 @@ clean:backup
 	$(RM) *.pgm
 	
 
-feature:
+features.html:features_output.pgm.txt
 	php genfeatures.php > features.html
 

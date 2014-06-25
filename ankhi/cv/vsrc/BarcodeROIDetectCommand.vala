@@ -62,8 +62,13 @@ public class shotodol.BarcodeROIDetectCommand : M100Command {
 				break;
 			}
 			unowned txt outfile = mod.get();
-			int featureVals[8];
-			int featureOps[8];
+			int featureVals[ImageMatrixString.feat.MAX_FEATURES];
+			int featureOps[ImageMatrixString.feat.MAX_FEATURES];
+			int i = 0;
+			for(i = 0; i < ImageMatrixString.feat.MAX_FEATURES; i++) {
+				featureVals[i] = 0;
+				featureOps[i] = 0;
+			}
 			if((mod = vals.search(Options.FEATURES, match_all)) != null) {
 				unowned txt fstring = mod.get();
 				ImageMatrixUtils.parseFeatures(fstring, featureVals, featureOps);

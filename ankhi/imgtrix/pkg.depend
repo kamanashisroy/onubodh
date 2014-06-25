@@ -1,3 +1,4 @@
+OS_PLATFORM/platform_extra
 libs/iostream
 -ONUBODH_HOME
 libs/netpbm

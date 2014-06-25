@@ -7,9 +7,8 @@ all:
 	set -var INFILE -val ../../samples/b4.pgm
 	set -var INPUTFILE -val edge.pgm
 	echo $(INFILE)
-	#make -t convertimg
-	#make -t barcodedetect
-	make -t bookdetecttest
+	make -t barcodedetect
+	#make -t bookdetecttest
 	q
 	q
 
@@ -32,7 +31,7 @@ cvfastedgetest:
 	cvfastedge -i $(INFILE) -o $(INPUTFILE)
 
 barcodedetect:
-	barcodedetect -features ",,,,,>10" -mgval 60 -i $(INPUTFILE) -o output_small_msp10_rshift3.pgm -rshift 3
-	convert -i output_small_msp10_rshift3.pgm -o output.jpg
+	barcodedetect -features ",,,,,,,>10" -mgval 60 -i $(INPUTFILE) -o output.pgm -rshift 3
+	convert -i output.pgm -o output.jpg
 	convert -i $(INPUTFILE) -o input.jpg
 

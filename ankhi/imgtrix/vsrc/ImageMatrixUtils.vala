@@ -11,13 +11,13 @@ public class onubodh.ImageMatrixUtils : Replicable {
 	public static void parseFeatures(etxt*input, int[] outputFeatureVal, int[] outputFeatureOps) {
 		int i = 0;
 		int findex = 0;
-		for(findex = 0; findex < 8; findex++) {
+		for(findex = 0; findex < ImageMatrixString.feat.MAX_FEATURES; findex++) {
 			outputFeatureVal[findex] = 0;
 			outputFeatureOps[findex] = 0;
 		}
 
 		findex = 0;
-		for(i = 0; i < input.length() && findex < 8; i++) {
+		for(i = 0; i < input.length() && findex < ImageMatrixString.feat.MAX_FEATURES; i++) {
 			uchar c = input.char_at(i);
 			if(c == ',') {
 				findex++;

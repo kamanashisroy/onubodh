@@ -74,10 +74,10 @@ public class shotodol.BookDetectCommand : M100Command {
 			if((mod = vals.search(Options.RADIUS_SHIFT, match_all)) != null) {
 				radius_shift = mod.get().to_int();
 			}
-			int featureVals[8];
-			int featureOps[8];
+			int featureVals[ImageMatrixString.feat.MAX_FEATURES];
+			int featureOps[ImageMatrixString.feat.MAX_FEATURES];
 			int i = 0;
-			for(i = 0; i < 8; i++) {
+			for(i = 0; i < ImageMatrixString.feat.MAX_FEATURES; i++) {
 				featureVals[i] = 0;
 				featureOps[i] = 0;
 			}

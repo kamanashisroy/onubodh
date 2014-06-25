@@ -11,13 +11,13 @@ using onubodh;
  * \addtogroup imgstruct
  * @{
  */
-public class onubodh.SparseBlockString : StringStructureImpl {
-	SearchableFactory<ImageMatrixSparsityString> memory;
-	public SparseBlockString(netpbmg*src, aroop_uword8 minGrayVal, int radius_shift, int[] featureVals, int[] featureOps) {
+public class onubodh.BlockString : StringStructureImpl {
+	SearchableFactory<ImageMatrixStringFull> memory;
+	public BlockString(netpbmg*src, aroop_uword8 minGrayVal, int radius_shift, int[] featureVals, int[] featureOps) {
 		base(src, radius_shift, minGrayVal, featureVals, featureOps);
-		memory = SearchableFactory<ImageMatrixSparsityString>.for_type(128,factory_flags.SWEEP_ON_UNREF | factory_flags.EXTENDED | factory_flags.SEARCHABLE | factory_flags.MEMORY_CLEAN);
+		memory = SearchableFactory<ImageMatrixStringFull>.for_type(128,factory_flags.SWEEP_ON_UNREF | factory_flags.EXTENDED | factory_flags.SEARCHABLE | factory_flags.MEMORY_CLEAN);
 	}
-	~LineString() {
+	~BlockString() {
 		memory.destroy();
 	}
 	public override bool pruneMatrix(ImageMatrix mat) {
@@ -34,8 +34,8 @@ public class onubodh.SparseBlockString : StringStructureImpl {
 		return createMatrix(img, x, y, shift, requiredGrayVal, createMatrix);
 	}
 	public ImageMatrix? createMatrix(netpbmg*src, int x, int y, uchar mat_size, aroop_uword8 minGrayVal, FactoryCreatorForMatrix fcm) {
-		ImageMatrixSparsityString a = memory.alloc_full(0,0,true);
-		a.buildSparsityString(src, x, y, mat_size, minGrayVal, fcm);
+		ImageMatrixStringFull a = memory.alloc_full(0,0,true);
+		a.buildStringFull(src, x, y, mat_size, minGrayVal, fcm);
 		return a;
 	}
 }

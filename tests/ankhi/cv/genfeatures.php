@@ -1,22 +1,18 @@
 <html>
 <head>
-<script type="text/javascript" src="jquery-1.11.1.min.js"></script>
 <script type="text/javascript">
-$(document).ready(function(){
-	$('#region').val("hi");
-	$('#imgfeatures').on('click', 'area', function (e) {
-		var titleval = e.target.title;
-		var ourvals = titleval.split(/,/);
-		var labels = ["Length","","","","Cracks","Opposite","Adjacent","Sparsity",""];
-		var output = "";
-		var i = 0;
-		for(i=0;i<8;i++) {
-			output += labels[i] + ":" + ourvals[i] + ",";
-		}
-		$('#region').val(output);
-	});
-});
+function updateVal(x) {
+	var ourvals = x.split(/,/);
+	var labels = ["Length","","","","Cracks","Opposite","Adjacent","Sparsity","","","","","","","","","Contrast","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""];
+	var output = "";
+	var i = 0;
+	for(i=0;i<32;i++) {
+		output += labels[i] + ":" + ourvals[i] + ",";
+	}
+	document.getElementById('region').value = output;
+};
 </script>
+
 </head>
 <body>
 <div class="regionspacing">
@@ -25,7 +21,7 @@ $(document).ready(function(){
   <input type="text" id="region" name="region" class="form-control input-md" size=50/>
 </div>
 <map name="imgfeatures" id="imgfeatures">
-<?php readfile("./features.txt"); ?>
+<?php readfile("./features_output.pgm.txt"); ?>
 </map>
 <img src="./output.jpg" usemap="#imgfeatures" />
 <!-- img src="./input.jpg" usemap="#imgfeatures" / -->
