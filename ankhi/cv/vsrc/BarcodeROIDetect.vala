@@ -20,8 +20,8 @@ public class onubodh.BarcodeROIDetect : Replicable {
 	netpbmg*orig;
 	public BarcodeROIDetect(netpbmg*src, int minGrayVal, int radius_shift, int[] featuresVals, int[] featureOps) {
 		circuit = new BlockString(src
-			, (aroop_uword8)minGrayVal
-			, radius_shift, featuresVals, featureOps);
+			, radius_shift, (aroop_uword8)minGrayVal
+			, featuresVals, featureOps);
 		orig = src;
 	}
 

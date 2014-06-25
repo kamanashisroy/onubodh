@@ -23,9 +23,10 @@ public abstract class onubodh.ImageMatrix : /*Searchable*/Replicable {
 	public int higherOrderX{public get;private set;}
 	public int higherOrderY{public get;private set;}
 	public int higherOrderXY{public get;private set;}
-	enum MatrixFlags {
+	public enum MatrixFlags {
 		HIGHLIGHT = 1,
 		FILL = 1<<1,
+		UNUSED1 = 1<<2,
 	}
 	public FactoryCreatorForMatrix fcreate;
 	public ImageMatrix?submatrix;

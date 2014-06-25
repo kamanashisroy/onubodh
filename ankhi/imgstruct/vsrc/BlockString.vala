@@ -13,7 +13,7 @@ using onubodh;
  */
 public class onubodh.BlockString : StringStructureImpl {
 	SearchableFactory<ImageMatrixStringFull> memory;
-	public BlockString(netpbmg*src, aroop_uword8 minGrayVal, int radius_shift, int[] featureVals, int[] featureOps) {
+	public BlockString(netpbmg*src, int radius_shift, aroop_uword8 minGrayVal, int[] featureVals, int[] featureOps) {
 		base(src, radius_shift, minGrayVal, featureVals, featureOps);
 		memory = SearchableFactory<ImageMatrixStringFull>.for_type(128,factory_flags.SWEEP_ON_UNREF | factory_flags.EXTENDED | factory_flags.SEARCHABLE | factory_flags.MEMORY_CLEAN);
 	}

@@ -19,17 +19,22 @@ public class onubodh.StructureDetect : Replicable {
 	public enum imgStructTypes {
 		LINE = 0,
 		BLOCK,
+		BLOCK_CLUSTER,
 	}
 	StringStructureImpl circuit;
 	netpbmg*orig;
 	public StructureDetect(netpbmg*src, int tp, int minGrayVal, int radius_shift, int[] featureVals, int[] featureOps) {
 		orig = src;
-		if(tp == imgStructTypes.LINE) {
-			circuit = new ManyLineStrings(src
-				, (aroop_uword8)minGrayVal
-				, radius_shift, featureVals, featureOps);
-		} else {
+		if(tp == imgStructTypes.BLOCK_CLUSTER) {
+			circuit = new BlockStringCluster(src
+				, radius_shift, (aroop_uword8)minGrayVal
+				, featureVals, featureOps);
+		} else if(tp == imgStructTypes.BLOCK) {
 			circuit = new BlockString(src
+				, radius_shift, (aroop_uword8)minGrayVal
+				, featureVals, featureOps);
+		} else {
+			circuit = new ManyLineStrings(src
 				, (aroop_uword8)minGrayVal
 				, radius_shift, featureVals, featureOps);
 		}

@@ -3,8 +3,21 @@ using shotodol;
 using onubodh;
 
 /**
- * \addtogroup bookdetect
+ * \addtogroup cv
  * @{
+ * \useage 
+ * 
+ * bookdetecttest:
+ *       structdetect -mgval 30 -i $(INPUTFILE) -o output.pgm -rshift 4 -features ">15,,,,,=15,<5"
+ *       convert -i output.pgm -o output.jpg
+ *       convert -i $(INPUTFILE) -o input.jpg
+ *
+ *
+ *   barcodedetect:
+ *        structdetect -st 1 -features ",,,,,,,>10" -mgval 60 -i $(INPUTFILE) -o output.pgm -rshift 3
+ *        convert -i output.pgm -o output.jpg
+ *        convert -i $(INPUTFILE) -o input.jpg
+ *
  */
 public class shotodol.StructureDetectCommand : M100Command {
 	etxt prfx;
