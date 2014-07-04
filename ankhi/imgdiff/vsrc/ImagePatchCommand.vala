@@ -14,15 +14,9 @@ public class onubodh.ImagePatchCommand : M100Command {
 	}
 	public ImagePatchCommand() {
 		base();
-		etxt input1 = etxt.from_static("-i1");
-		etxt input_help1 = etxt.from_static("First input file");
-		etxt input2 = etxt.from_static("-i2");
-		etxt input_help2 = etxt.from_static("Second input file(The diff file)");
-		etxt output = etxt.from_static("-o");
-		etxt output_help = etxt.from_static("Output file");
-		addOption(&input1, M100Command.OptionType.TXT, Options.INFILE1, &input_help1);
-		addOption(&input2, M100Command.OptionType.TXT, Options.INFILE2, &input_help2);
-		addOption(&output, M100Command.OptionType.TXT, Options.OUTFILE, &output_help); 
+		addOptionString("-i1", M100Command.OptionType.TXT, Options.INFILE1, "First input file");
+		addOptionString("-i2", M100Command.OptionType.TXT, Options.INFILE2, "Second input file(The diff file)");
+		addOptionString("-o", M100Command.OptionType.TXT, Options.OUTFILE, "Output file(The merged file)"); 
 	}
 
 	public override etxt*get_prefix() {
@@ -48,46 +42,35 @@ public class onubodh.ImagePatchCommand : M100Command {
 		return 0;
 	}
 
-	public override int act_on(etxt*cmdstr, OutputStream pad) {
-		greet(pad);
+	public override int act_on(etxt*cmdstr, OutputStream pad) throws M100CommandError.ActionFailed {
 		int ecode = 0;
-		SearchableSet<txt> vals = SearchableSet<txt>();
-		parseOptions(cmdstr, &vals);
-		do {
-			container<txt>? mod;
-			if((mod = vals.search(Options.INFILE1, match_all)) == null) {
-				break;
-			}
-			unowned txt infile1 = mod.get();
-			if((mod = vals.search(Options.INFILE2, match_all)) == null) {
-				break;
-			}
-			unowned txt infile2 = mod.get();
-			if((mod = vals.search(Options.OUTFILE, match_all)) == null) {
-				break;
-			}
-			unowned txt outfile = mod.get();
-			netpbmg firstimg = netpbmg.for_file(infile1.to_string());
-			if(firstimg.open(&ecode) != 0) {
-				break;
-			}
-			netpbmg secondimg = netpbmg.for_file(infile2.to_string());
-			if(secondimg.open(&ecode) != 0) {
-				break;
-			}
-			// sanity check
-			if(firstimg.width != secondimg.width || firstimg.height != secondimg.height || firstimg.type != secondimg.type) {
-				break;
-			}
-			netpbmg oimg = netpbmg.alloc_like(&firstimg);
-			patch(oimg, firstimg, secondimg);
-			oimg.write(outfile.to_string());
-			//pngcoder.encode(outfile.to_string(), &oimg);
-			oimg.close();
-			bye(pad, true);
-			return 0;
-		} while(false);
-		bye(pad, false);
+		ArrayList<txt> vals = ArrayList<txt>();
+		if(parseOptions(cmdstr, &vals) != 0) {
+			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument");
+		}
+		txt?x = null;
+		txt?y = null;
+		txt?z = null;
+		if((x = vals[Options.INFILE1]) == null || (y = vals[Options.INFILE2]) == null || (z = vals[Options.OUTFILE]) == null) {
+			throw new M100CommandError.ActionFailed.INSUFFICIENT_ARGUMENT("Insufficient argument");
+		}
+		netpbmg firstimg = netpbmg.for_file(x.to_string());
+		if(firstimg.open(&ecode) != 0) {
+			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument, Cannot open first input.");
+		}
+		netpbmg secondimg = netpbmg.for_file(y.to_string());
+		if(secondimg.open(&ecode) != 0) {
+			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument, Cannot open second input.");
+		}
+		// sanity check
+		if(firstimg.width != secondimg.width || firstimg.height != secondimg.height || firstimg.type != secondimg.type) {
+			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument, The two input files are of different size/type.");
+		}
+		netpbmg oimg = netpbmg.alloc_like(&firstimg);
+		patch(oimg, firstimg, secondimg);
+		oimg.write(z.to_string());
+		//pngcoder.encode(outfile.to_string(), &oimg);
+		oimg.close();
 		return 0;
 	}
 }

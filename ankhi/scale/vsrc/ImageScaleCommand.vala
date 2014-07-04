@@ -15,18 +15,10 @@ public class onubodh.ImageScaleCommand : M100Command {
 	}
 	public ImageScaleCommand() {
 		base();
-		etxt input = etxt.from_static("-i");
-		etxt input_help = etxt.from_static("Input file");
-		etxt output = etxt.from_static("-o");
-		etxt output_help = etxt.from_static("Output file");
-		etxt up = etxt.from_static("-up");
-		etxt up_help = etxt.from_static("Upsample to a multiple, say '-up 2' means sampling it to twice");
-		etxt down = etxt.from_static("-down");
-		etxt down_help = etxt.from_static("Downsample to a multiple, say '-down 2' means sampling it to half");
-		addOption(&input, M100Command.OptionType.TXT, Options.INFILE, &input_help);
-		addOption(&output, M100Command.OptionType.TXT, Options.OUTFILE, &output_help); 
-		addOption(&up, M100Command.OptionType.TXT, Options.UPSAMPLE, &up_help);
-		addOption(&down, M100Command.OptionType.TXT, Options.DOWNSAMPLE, &down_help);
+		addOptionString("-i", M100Command.OptionType.TXT, Options.INFILE, "Input file");
+		addOptionString("-o", M100Command.OptionType.TXT, Options.OUTFILE, "Output file"); 
+		addOptionString("-up", M100Command.OptionType.TXT, Options.UPSAMPLE, "Upsample to a multiple, say '-up 2' means sampling it to twice");
+		addOptionString("-down", M100Command.OptionType.TXT, Options.DOWNSAMPLE, "Downsample to a multiple, say '-down 2' means sampling it to half");
 	}
 
 	public override etxt*get_prefix() {
@@ -65,52 +57,43 @@ public class onubodh.ImageScaleCommand : M100Command {
 		return 0;
 	}
 
-	public override int act_on(etxt*cmdstr, OutputStream pad) {
-		greet(pad);
+	public override int act_on(etxt*cmdstr, OutputStream pad) throws M100CommandError.ActionFailed {
 		int ecode = 0;
-		SearchableSet<txt> vals = SearchableSet<txt>();
-		parseOptions(cmdstr, &vals);
-		do {
-			container<txt>? mod;
-			if((mod = vals.search(Options.INFILE, match_all)) == null) {
-				break;
+		ArrayList<txt> vals = ArrayList<txt>();
+		if(parseOptions(cmdstr, &vals) != 0) {
+			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument");
+		}
+		txt?infile = vals[Options.INFILE];
+		txt?outfile = vals[Options.OUTFILE];
+		if(infile == null || outfile == null) {
+			throw new M100CommandError.ActionFailed.INSUFFICIENT_ARGUMENT("Insufficient argument");
+		}
+		netpbmg iimg = netpbmg.for_file(infile.to_string());
+		if(iimg.open(&ecode) != 0) {
+			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument: cannot open input file.");
+		}
+		txt?arg = vals[Options.UPSAMPLE];
+		if(arg != null) {
+			int up = arg.to_int();
+			if(up == 0) {
+				throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument: upsample ratio cannot be 0.");
 			}
-			unowned txt infile = mod.get();
-			if((mod = vals.search(Options.OUTFILE, match_all)) == null) {
-				break;
+			netpbmg oimg = netpbmg.alloc_full(iimg.width*up, iimg.height*up, iimg.type);
+			upsample(oimg, iimg, up);
+			oimg.write(outfile.to_string());
+			return 0;
+		}
+		arg = vals[Options.DOWNSAMPLE];
+		if(arg != null) {
+			int down = arg.to_int();
+			if(down == 0) {
+				throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument: downsample ratio cannot be 0.");
 			}
-			unowned txt outfile = mod.get();
-			if((mod = vals.search(Options.UPSAMPLE, match_all)) != null) {
-				int up = mod.get().to_int();
-				if(up == 0) {
-					break;
-				}
-				netpbmg iimg = netpbmg.for_file(infile.to_string());
-				if(iimg.open(&ecode) != 0) {
-					break;
-				}
-				netpbmg oimg = netpbmg.alloc_full(iimg.width*up, iimg.height*up, iimg.type);
-				upsample(oimg, iimg, up);
-				oimg.write(outfile.to_string());
-				bye(pad, true);
-				return 0;
-			} else if((mod = vals.search(Options.DOWNSAMPLE, match_all)) != null) {
-				int down = mod.get().to_int();
-				if(down == 0) {
-					break;
-				}
-				netpbmg iimg = netpbmg.for_file(infile.to_string());
-				if(iimg.open(&ecode) != 0) {
-					break;
-				}
-				netpbmg oimg = netpbmg.alloc_full(iimg.width/down, iimg.height/down, iimg.type);
-				downsample(oimg, iimg, down);
-				oimg.write(outfile.to_string());
-				bye(pad, true);
-				return 0;
-			}
-		} while(false);
-		bye(pad, false);
+			netpbmg oimg = netpbmg.alloc_full(iimg.width/down, iimg.height/down, iimg.type);
+			downsample(oimg, iimg, down);
+			oimg.write(outfile.to_string());
+			return 0;
+		}
 		return 0;
 	}
 }

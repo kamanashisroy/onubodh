@@ -133,7 +133,7 @@ public class onubodh.WordTransform : Replicable {
 	}
 
 	uchar getCharValue(WordMap*m, etxt*token) {
-		aroop_hash h = token.get_hash();
+		aroop_hash h = token.getStringHash();
 		//print("hash:%ld\n", h);
 		TransKeyWord?kw = keyWords.search(h, (x) => {/*print("Examining %s\n", ((TransKeyWord)x).word.to_string());*/return ((TransKeyWord)x).word.equals(token)?0:1;});
 		if(kw != null) {

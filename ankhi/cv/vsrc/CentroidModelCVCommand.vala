@@ -17,18 +17,10 @@ public class onubodh.CentroidModelCVCommand : M100Command {
 	}
 	public CentroidModelCVCommand() {
 		base();
-		etxt input = etxt.from_static("-i");
-		etxt input_help = etxt.from_static("Input file");
-		etxt output = etxt.from_static("-o");
-		etxt output_help = etxt.from_static("Output file");
-		addOption(&input, M100Command.OptionType.TXT, Options.INFILE, &input_help);
-		addOption(&output, M100Command.OptionType.TXT, Options.OUTFILE, &output_help); 
-		etxt x = etxt.from_static("-x");
-		etxt x_help = etxt.from_static("x coordinate value of the point");
-		etxt y = etxt.from_static("-y");
-		etxt y_help = etxt.from_static("y coordinate value of the point");
-		addOption(&x, M100Command.OptionType.TXT, Options.X_VAL, &x_help);
-		addOption(&y, M100Command.OptionType.TXT, Options.Y_VAL, &y_help); 
+		addOptionString("-i", M100Command.OptionType.TXT, Options.INFILE, "Input file.");
+		addOptionString("-o", M100Command.OptionType.TXT, Options.OUTFILE, "Output file."); 
+		addOptionString("-x", M100Command.OptionType.INT, Options.X_VAL, "x coordinate value of the point");
+		addOptionString("-y", M100Command.OptionType.INT, Options.Y_VAL, "y coordinate value of the point"); 
 	}
 
 	public override etxt*get_prefix() {
@@ -36,43 +28,37 @@ public class onubodh.CentroidModelCVCommand : M100Command {
 		return &prfx;
 	}
 
-	public override int act_on(etxt*cmdstr, OutputStream pad) {
-		greet(pad);
-		SearchableSet<txt> vals = SearchableSet<txt>();
-		parseOptions(cmdstr, &vals);
-		do {
-			container<txt>? mod;
-			if((mod = vals.search(Options.INFILE, match_all)) == null) {
-				break;
-			}
-			unowned txt infile = mod.get();
-			if((mod = vals.search(Options.OUTFILE, match_all)) == null) {
-				break;
-			}
-			unowned txt outfile = mod.get();
-			if((mod = vals.search(Options.X_VAL, match_all)) == null) {
-				break;
-			}
-			int x = mod.get().to_int();
-			if((mod = vals.search(Options.Y_VAL, match_all)) == null) {
-				break;
-			}
-			int y = mod.get().to_int();
-			{
-				etxt dlg = etxt.stack(128);
-				dlg.printf("<Computer Vision> Applying centroid method on:%s, at point (%d,%d)\n", infile.to_string(), x, y);
-				pad.write(&dlg);
-			}
-			CentroidModel cm = new CentroidModel(infile.to_string());
-			cm.prepare();
-			if(cm.findEdges(x,y,pad) == 0) {
-				etxt dlg = etxt.from_static("<Computer Vision>Found something interesting\n");
-				pad.write(&dlg);
-			}
-			bye(pad, true);
-			return 0;
-		} while(false);
-		bye(pad, false);
+	public override int act_on(etxt*cmdstr, OutputStream pad) throws M100CommandError.ActionFailed {
+		int ecode = 0;
+		ArrayList<txt> vals = ArrayList<txt>();
+		if(parseOptions(cmdstr, &vals) != 0) {
+			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument");
+		}
+		txt?infile = null;
+		txt?outfile = null;
+		if((infile = vals[Options.INFILE]) == null || (outfile = vals[Options.OUTFILE]) == null) {
+			throw new M100CommandError.ActionFailed.INSUFFICIENT_ARGUMENT("Insufficient argument");
+		}
+		txt?arg = null;
+		if((arg = vals[Options.X_VAL]) == null) {
+			throw new M100CommandError.ActionFailed.INSUFFICIENT_ARGUMENT("Insufficient argument");
+		}
+		int x = arg.to_int();
+		if((arg = vals[Options.Y_VAL]) == null) {
+			throw new M100CommandError.ActionFailed.INSUFFICIENT_ARGUMENT("Insufficient argument");
+		}
+		int y = arg.to_int();
+		{
+			etxt dlg = etxt.stack(128);
+			dlg.printf("<Computer Vision> Applying centroid method on:%s, at point (%d,%d)\n", infile.to_string(), x, y);
+			pad.write(&dlg);
+		}
+		CentroidModel cm = new CentroidModel(infile.to_string());
+		cm.prepare();
+		if(cm.findEdges(x,y,pad) == 0) {
+			etxt dlg = etxt.from_static("<Computer Vision>Found something interesting\n");
+			pad.write(&dlg);
+		}
 		return 0;
 	}
 }

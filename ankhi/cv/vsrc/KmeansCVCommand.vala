@@ -15,51 +15,39 @@ public class shotodol.KmeansCVCommand : M100Command {
 	}
 	public KmeansCVCommand() {
 		base();
-		etxt input = etxt.from_static("-i");
-		etxt input_help = etxt.from_static("Input ppm file");
-		etxt output = etxt.from_static("-o");
-		etxt output_help = etxt.from_static("Output ppm file");
-		addOption(&input, M100Command.OptionType.TXT, Options.INFILE, &input_help);
-		addOption(&output, M100Command.OptionType.TXT, Options.OUTFILE, &output_help); 
-		etxt k = etxt.from_static("-k");
-		etxt k_help = etxt.from_static("value of k");
-		addOption(&k, M100Command.OptionType.TXT, Options.K_VAL, &k_help);
+		addOptionString("-i", M100Command.OptionType.TXT, Options.INFILE, "Input ppm file.");
+		addOptionString("-o", M100Command.OptionType.TXT, Options.OUTFILE, "Output ppm file."); 
+		addOptionString("-k", M100Command.OptionType.INT, Options.K_VAL, "value of k");
 	}
 
 	public override etxt*get_prefix() {
 		prfx = etxt.from_static("cvkmeans");
 		return &prfx;
 	}
-	public override int act_on(etxt*cmdstr, OutputStream pad) {
-		greet(pad);
-		SearchableSet<txt> vals = SearchableSet<txt>();
-		parseOptions(cmdstr, &vals);
-		do {
-			container<txt>? mod;
-			if((mod = vals.search(Options.INFILE, match_all)) == null) {
-				break;
-			}
-			unowned txt infile = mod.get();
-			if((mod = vals.search(Options.OUTFILE, match_all)) == null) {
-				break;
-			}
-			unowned txt outfile = mod.get();
-			int kval = 30;
-			if((mod = vals.search(Options.K_VAL, match_all)) != null) {
-				kval = mod.get().to_int();
-			}
-			int ecode = 0;
-			etxt dlg = etxt.stack(128);
-			dlg.printf("<Computer Vision>kmeans cluster:%s -> %s\n", infile.to_string(), outfile.to_string());
+	public override int act_on(etxt*cmdstr, OutputStream pad) throws M100CommandError.ActionFailed {
+		ArrayList<txt> vals = ArrayList<txt>();
+		if(parseOptions(cmdstr, &vals) != 0) {
+			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument");
+		}
+		txt?infile = null;
+		txt?outfile = null;
+		if((infile = vals[Options.INFILE]) == null || (outfile = vals[Options.OUTFILE]) == null) {
+			throw new M100CommandError.ActionFailed.INSUFFICIENT_ARGUMENT("Insufficient argument");
+		}
+		int kval = 30;
+		txt?arg = null;
+		if((arg = vals[Options.K_VAL]) != null) {
+			kval = arg.to_int();
+		}
+		int ecode = 0;
+		etxt dlg = etxt.stack(128);
+		dlg.printf("<Computer Vision>kmeans cluster:%s -> %s\n", infile.to_string(), outfile.to_string());
+		pad.write(&dlg);
+		if(shotodol_dryman_kmeans.dryman_kmeans.cluster(infile.to_string(), outfile.to_string(), kval, &ecode) != 0) {
+			dlg.printf("<Computer Vision> Internal error while filtering %d\n", ecode);
 			pad.write(&dlg);
-			if(shotodol_dryman_kmeans.dryman_kmeans.cluster(infile.to_string(), outfile.to_string(), kval, &ecode) != 0) {
-				dlg.printf("<Computer Vision> Internal error while filtering %d\n", ecode);
-				pad.write(&dlg);
-			}
-			bye(pad, true);
-			return 0;
-		} while(false);
-		bye(pad, false);
+			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument");
+		}
 		return 0;
 	}
 }

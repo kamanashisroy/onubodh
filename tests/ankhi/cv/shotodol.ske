@@ -7,8 +7,8 @@ all:
 	set -var INFILE -val ../../samples/b4.pgm
 	set -var INPUTFILE -val edge.pgm
 	echo $(INFILE)
-	make -t barcodedetect
-	#make -t bookdetecttest
+	#shake -t barcodedetect
+	shake -t bookdetecttest
 	q
 	q
 

@@ -14,12 +14,8 @@ public class shotodol.FastEdgeCommand : M100Command {
 	}
 	public FastEdgeCommand() {
 		base();
-		etxt input = etxt.from_static("-i");
-		etxt input_help = etxt.from_static("Input pgm file");
-		etxt output = etxt.from_static("-o");
-		etxt output_help = etxt.from_static("Output pgm file");
-		addOption(&input, M100Command.OptionType.TXT, Options.INFILE, &input_help);
-		addOption(&output, M100Command.OptionType.TXT, Options.OUTFILE, &output_help); 
+		addOptionString("-i", M100Command.OptionType.TXT, Options.INFILE, "Input pgm file.");
+		addOptionString("-o", M100Command.OptionType.TXT, Options.OUTFILE, "Output pgm file."); 
 	}
 
 	public override etxt*get_prefix() {
@@ -27,32 +23,25 @@ public class shotodol.FastEdgeCommand : M100Command {
 		return &prfx;
 	}
 
-	public override int act_on(etxt*cmdstr, OutputStream pad) {
-		greet(pad);
-		SearchableSet<txt> vals = SearchableSet<txt>();
-		parseOptions(cmdstr, &vals);
-		do {
-			container<txt>? mod;
-			if((mod = vals.search(Options.INFILE, match_all)) == null) {
-				break;
-			}
-			unowned txt infile = mod.get();
-			if((mod = vals.search(Options.OUTFILE, match_all)) == null) {
-				break;
-			}
-			unowned txt outfile = mod.get(); // should be pgm file
-			int ecode = 0;
-			etxt dlg = etxt.stack(128);
-			dlg.printf("<Edge detect>edge filter:%s -> %s\n", infile.to_string(), outfile.to_string());
+	public override int act_on(etxt*cmdstr, OutputStream pad) throws M100CommandError.ActionFailed {
+		int ecode = 0;
+		ArrayList<txt> vals = ArrayList<txt>();
+		if(parseOptions(cmdstr, &vals) != 0) {
+			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument");
+		}
+		txt?infile = null;
+		txt?outfile = null;
+		if((infile = vals[Options.INFILE]) == null || (outfile = vals[Options.OUTFILE]) == null) {
+			throw new M100CommandError.ActionFailed.INSUFFICIENT_ARGUMENT("Insufficient argument");
+		}
+		etxt dlg = etxt.stack(128);
+		dlg.printf("<Edge detect>edge filter:%s -> %s\n", infile.to_string(), outfile.to_string());
+		pad.write(&dlg);
+		if(shotodol_fastedge.fastedge_filter.filter(infile.to_string(), outfile.to_string(), &ecode) != 0) {
+			dlg.printf("<Edge detect> Internal error while filtering %d\n", ecode);
 			pad.write(&dlg);
-			if(shotodol_fastedge.fastedge_filter.filter(infile.to_string(), outfile.to_string(), &ecode) != 0) {
-				dlg.printf("<Edge detect> Internal error while filtering %d\n", ecode);
-				pad.write(&dlg);
-			}
-			bye(pad, true);
-			return 0;
-		} while(false);
-		bye(pad, false);
+			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument, It did not work.");
+		}
 		return 0;
 	}
 }
