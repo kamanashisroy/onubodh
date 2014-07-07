@@ -1,5 +1,5 @@
 
-all:
+onLoad:
 	set -var MODULE_DIR -val ../../../ankhi
 	module -load $(MODULE_DIR)/imgdiff/plugin.so
 	imgdiff -i1 samples/bookshelf1.ppm -i2 .output2.ppm -o output.diff

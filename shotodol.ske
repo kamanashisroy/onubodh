@@ -1,4 +1,4 @@
 
-all:
+onLoad:
 	module -load ankhi/cv/plugin.so
 	module -load ankhi/convert/plugin.so

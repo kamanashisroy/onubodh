@@ -1,5 +1,5 @@
 
-all:
+onLoad:
 	set -var MODULE_DIR -val ../../../ankhi
 	module -load $(MODULE_DIR)/cv/plugin.so
 	module -load $(MODULE_DIR)/convert/plugin.so
