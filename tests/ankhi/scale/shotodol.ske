@@ -1,7 +1,7 @@
 
 onLoad:
 	set -var MODULE_DIR -val ../../../ankhi
-	module -load $(MODULE_DIR)/scale/plugin.so
+	module -load $(MODULE_DIR)/scale/dynalib.so
 
 scale:
 	scale -i samples/bookshelf1.ppm -o .output.down.ppm -down 2

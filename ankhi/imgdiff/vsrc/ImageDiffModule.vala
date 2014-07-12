@@ -5,20 +5,15 @@ using shotodol;
  * \addtogroup imgdiff
  * @{
  */
-public class onubodh.ImageDiffModule : ModulePlugin {
-	ImageDiffCommand cmd;
-	ImagePatchCommand pcmd;
+public class onubodh.ImageDiffModule : DynamicModule {
 	public override int init() {
-		cmd = new ImageDiffCommand();
-		pcmd = new ImagePatchCommand();
-		CommandServer.server.cmds.register(cmd);
-		CommandServer.server.cmds.register(pcmd);
+		txt command = new txt.from_static("command");
+		Plugin.register(command, new M100Extension(new ImageDiffCommand(), this));
+		Plugin.register(command, new M100Extension(new ImagePatchCommand(), this));
 		return 0;
 	}
 
 	public override int deinit() {
-		CommandServer.server.cmds.unregister(cmd);
-		CommandServer.server.cmds.unregister(pcmd);
 		base.deinit();
 		return 0;
 	}

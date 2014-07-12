@@ -2,4 +2,4 @@ vapi/*.vapi
 include/*.h
 *.c
 static_objects.a
-plugin.so
+dynalib.so

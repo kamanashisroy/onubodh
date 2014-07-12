@@ -1,5 +1,5 @@
 vapi/*.vapi
 include/*.h
 *.c
-plugin.so
+dynalib.so
 static_objects.a

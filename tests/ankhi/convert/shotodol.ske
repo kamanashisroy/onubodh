@@ -1,7 +1,7 @@
 
 onLoad:
 	set -var MODULE_DIR -val ../../../ankhi
-	module -load $(MODULE_DIR)/convert/plugin.so
+	module -load $(MODULE_DIR)/convert/dynalib.so
 	make -t jpegconvert
 	q
 

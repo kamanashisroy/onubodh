@@ -10,20 +10,18 @@ using onubodh;
  * \addtogroup edgedetect
  * @{
  */
-public class onubodh.EdgeModule : ModulePlugin {
-	FastEdgeCommand fe;
-	OpencvCannyCommand cn;
+public class onubodh.EdgeModule : DynamicModule {
+	public EdgeModule() {
+		name = etxt.from_static("edge");
+	}
 	public override int init() {
-		fe = new FastEdgeCommand();
-		cn = new OpencvCannyCommand();
-		CommandServer.server.cmds.register(fe);
-		CommandServer.server.cmds.register(cn);
+		txt command = new txt.from_static("command");
+		Plugin.register(command, new M100Extension(new FastEdgeCommand(), this));
+		Plugin.register(command, new M100Extension(new OpencvCannyCommand(), this));
 		return 0;
 	}
 
 	public override int deinit() {
-		CommandServer.server.cmds.unregister(fe);
-		CommandServer.server.cmds.unregister(cn);
 		base.deinit();
 		return 0;
 	}

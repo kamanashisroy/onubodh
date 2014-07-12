@@ -33,7 +33,7 @@ public class shotodol.BookDetectCommand : M100Command {
 		return &prfx;
 	}
 
-	public override int act_on(etxt*cmdstr, OutputStream pad) throws M100CommandError.ActionFailed {
+	public override int act_on(etxt*cmdstr, OutputStream pad, M100CommandSet cmds) throws M100CommandError.ActionFailed {
 		int ecode = 0;
 		ArrayList<txt> vals = ArrayList<txt>();
 		if(parseOptions(cmdstr, &vals) != 0) {

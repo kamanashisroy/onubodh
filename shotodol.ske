@@ -1,4 +1,4 @@
 
 onLoad:
-	module -load ankhi/cv/plugin.so
-	module -load ankhi/convert/plugin.so
+	module -load ankhi/cv/dynalib.so
+	module -load ankhi/convert/dynalib.so

@@ -5,16 +5,17 @@ using shotodol;
  * \addtogroup imgconvert 
  * @{
  */
-public class onubodh.ImageConvertModule : ModulePlugin {
-	ImageConvertCommand cmd;
+public class onubodh.ImageConvertModule : DynamicModule {
+	public ImageConvertModule() {
+		name = etxt.from_static("convert");
+	}
 	public override int init() {
-		cmd = new ImageConvertCommand();
-		CommandServer.server.cmds.register(cmd);
+		txt command = new txt.from_static("command");
+		Plugin.register(command, new M100Extension(new ImageConvertCommand(), this));
 		return 0;
 	}
 
 	public override int deinit() {
-		CommandServer.server.cmds.unregister(cmd);
 		base.deinit();
 		return 0;
 	}

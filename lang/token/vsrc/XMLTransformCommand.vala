@@ -72,7 +72,7 @@ public class onubodh.XMLTransformCommand : M100Command {
 		}
 	}
 
-	public override int act_on(etxt*cmdstr, OutputStream pad) throws M100CommandError.ActionFailed {
+	public override int act_on(etxt*cmdstr, OutputStream pad, M100CommandSet cmds) throws M100CommandError.ActionFailed {
 		ArrayList<txt> vals = ArrayList<txt>();
 		if(parseOptions(cmdstr, &vals) != 0) {
 			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument");

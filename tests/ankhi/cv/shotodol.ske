@@ -1,8 +1,9 @@
 
 onLoad:
 	set -var MODULE_DIR -val ../../../ankhi
-	module -load $(MODULE_DIR)/cv/plugin.so
-	module -load $(MODULE_DIR)/convert/plugin.so
+	module -load $(MODULE_DIR)/cv/dynalib.so
+	module -load $(MODULE_DIR)/convert/dynalib.so
+	rehash
 	#set -var JPGFILE -val ../../samples/myshelf/406.jpg
 	set -var INFILE -val ../../samples/b4.pgm
 	set -var INPUTFILE -val edge.pgm

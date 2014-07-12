@@ -1,6 +1,6 @@
 
 onLoad:
-	module -load ../../lang/token/plugin.so
+	module -load ../../lang/token/dynalib.so
 	xtransform -i input.xml
 	wa -l 100
 	q

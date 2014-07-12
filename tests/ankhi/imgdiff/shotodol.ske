@@ -1,7 +1,7 @@
 
 onLoad:
 	set -var MODULE_DIR -val ../../../ankhi
-	module -load $(MODULE_DIR)/imgdiff/plugin.so
+	module -load $(MODULE_DIR)/imgdiff/dynalib.so
 	imgdiff -i1 samples/bookshelf1.ppm -i2 .output2.ppm -o output.diff
 	#imgpatch -i1 output2.ppm -i2 output.diff -o output_original.ppm
 

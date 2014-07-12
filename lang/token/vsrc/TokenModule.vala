@@ -9,16 +9,14 @@ using onubodh;
  * \addtogroup token
  * @{
  */
-public class onubodh.TokenModule : ModulePlugin {
-	XMLTransformCommand xtrans;
+public class onubodh.TokenModule : DynamicModule {
 	public override int init() {
-		xtrans = new XMLTransformCommand();
-		CommandServer.server.cmds.register(xtrans);
+		txt command = new txt.from_static("command");
+		Plugin.register(command, new M100Extension(new XMLTransformCommand(), this));
 		return 0;
 	}
 
 	public override int deinit() {
-		CommandServer.server.cmds.unregister(xtrans);
 		base.deinit();
 		return 0;
 	}

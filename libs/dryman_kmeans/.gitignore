@@ -1,2 +1,2 @@
-plugin.so
+dynalib.so
 static_objects.a

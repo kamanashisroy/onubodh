@@ -9,16 +9,14 @@ using shotodol;
  * \addtogroup imgscale
  * @{
  */
-public class onubodh.ImageScaleModule : ModulePlugin {
-	ImageScaleCommand cmd;
+public class onubodh.ImageScaleModule : DynamicModule {
 	public override int init() {
-		cmd = new ImageScaleCommand();
-		CommandServer.server.cmds.register(cmd);
+		txt command = new txt.from_static("command");
+		Plugin.register(command, new M100Extension(new ImageScaleCommand(), this));
 		return 0;
 	}
 
 	public override int deinit() {
-		CommandServer.server.cmds.unregister(cmd);
 		base.deinit();
 		return 0;
 	}

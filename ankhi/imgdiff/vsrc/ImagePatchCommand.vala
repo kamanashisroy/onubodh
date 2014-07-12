@@ -42,7 +42,7 @@ public class onubodh.ImagePatchCommand : M100Command {
 		return 0;
 	}
 
-	public override int act_on(etxt*cmdstr, OutputStream pad) throws M100CommandError.ActionFailed {
+	public override int act_on(etxt*cmdstr, OutputStream pad, M100CommandSet cmds) throws M100CommandError.ActionFailed {
 		int ecode = 0;
 		ArrayList<txt> vals = ArrayList<txt>();
 		if(parseOptions(cmdstr, &vals) != 0) {
