@@ -8,7 +8,7 @@ using onubodh;
  */
 public class onubodh.TransKeyWord : Searchable {
 	public uchar index;
-	public etxt word;
+	public estr word;
 	public void rehash() {
 		aroop_hash h = word.getStringHash();
 		//print("+ hash:%ld\n", h);

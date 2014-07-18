@@ -9,10 +9,15 @@ using shotodol;
  * \addtogroup imgscale
  * @{
  */
-public class onubodh.ImageScaleModule : DynamicModule {
+class onubodh.ImageScaleModule : DynamicModule {
+	public ImageScaleModule() {
+		estr modnm = estr.set_static_string("command");
+		estr ver = estr.set_static_string("0.0.0");
+		base(&modnm, &ver);
+	}
 	public override int init() {
-		txt command = new txt.from_static("command");
-		Plugin.register(command, new M100Extension(new ImageScaleCommand(), this));
+		estr command = estr.set_static_string("command");
+		Plugin.register(&command, new M100Extension(new ImageScaleCommand(), this));
 		return 0;
 	}
 

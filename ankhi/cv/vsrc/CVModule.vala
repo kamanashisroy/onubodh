@@ -8,15 +8,17 @@ using onubodh;
  */
 public class onubodh.CVModule : DynamicModule {
 	public CVModule() {
-		name = etxt.from_static("cv");
+		estr nm = estr.set_static_string("cv");
+		estr ver = estr.set_static_string("0.0.0");
+		base(&nm,&ver);
 	}
 	public override int init() {
-		txt command = new txt.from_static("command");
-		Plugin.register(command, new M100Extension(new KmeansCVCommand(), this));
-		Plugin.register(command, new M100Extension(new CentroidModelCVCommand(), this));
-		Plugin.register(command, new M100Extension(new BookDetectCommand(), this));
-		Plugin.register(command, new M100Extension(new StructureDetectCommand(), this));
-		Plugin.register(command, new M100Extension(new BarcodeROIDetectCommand(), this));
+		estr command = estr.set_static_string("command");
+		Plugin.register(&command, new M100Extension(new KmeansCVCommand(), this));
+		Plugin.register(&command, new M100Extension(new CentroidModelCVCommand(), this));
+		Plugin.register(&command, new M100Extension(new BookDetectCommand(), this));
+		Plugin.register(&command, new M100Extension(new StructureDetectCommand(), this));
+		Plugin.register(&command, new M100Extension(new BarcodeROIDetectCommand(), this));
 		return 0;
 	}
 

@@ -9,10 +9,16 @@ using onubodh;
  * \addtogroup token
  * @{
  */
-public class onubodh.TokenModule : DynamicModule {
+class onubodh.TokenModule : DynamicModule {
+	TokenModule() {
+		estr nm = estr.set_static_string("string token");
+		estr ver = estr.set_static_string("0.0.0");
+		base(&nm,&ver);
+	}
+	
 	public override int init() {
-		txt command = new txt.from_static("command");
-		Plugin.register(command, new M100Extension(new XMLTransformCommand(), this));
+		estr command = estr.set_static_string("command");
+		Plugin.register(&command, new M100Extension(new XMLTransformCommand(), this));
 		return 0;
 	}
 

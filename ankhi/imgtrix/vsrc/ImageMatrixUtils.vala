@@ -8,7 +8,7 @@ public class onubodh.ImageMatrixUtils : Replicable {
 		LT,
 		EQ,
 	}
-	public static void parseFeatures(etxt*input, int[] outputFeatureVal, int[] outputFeatureOps) {
+	public static void parseFeatures(estr*input, int[] outputFeatureVal, int[] outputFeatureOps) {
 		int i = 0;
 		int findex = 0;
 		for(findex = 0; findex < ImageMatrixString.feat.MAX_FEATURES; findex++) {

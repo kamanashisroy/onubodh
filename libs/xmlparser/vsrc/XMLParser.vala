@@ -9,9 +9,9 @@ using onubodh;
  */
 public struct onubodh.XMLIterator {
 	public WordMap*m;
-	public etxt kernel;
-	public etxt nextTag;
-	public etxt content;
+	public estr kernel;
+	public estr nextTag;
+	public estr content;
 	public int basePos;
 	public int pos;
 	public int shift;
@@ -20,9 +20,9 @@ public struct onubodh.XMLIterator {
 	public bool nextIsText;
 	protected XMLIterator*inner;
 	public XMLIterator(WordMap*aM) {
-		kernel = etxt.EMPTY();
-		nextTag = etxt.EMPTY();
-		content = etxt.EMPTY();
+		kernel = estr();
+		nextTag = estr();
+		content = estr();
 		pos = 0;
 		shift = 0;
 		basePos = 0;
@@ -31,10 +31,10 @@ public struct onubodh.XMLIterator {
 		attrShift = 0;
 		inner = null;
 	}
-	public XMLIterator.same_same(XMLIterator*other) {
-		kernel = etxt.same_same(&other.kernel);
-		nextTag = etxt.same_same(&other.nextTag);
-		content = etxt.same_same(&other.content);
+	public XMLIterator.copy_shallow(XMLIterator*other) {
+		kernel = estr.copy_shallow(&other.kernel);
+		nextTag = estr.copy_shallow(&other.nextTag);
+		content = estr.copy_shallow(&other.content);
 		pos = other.pos;
 		nextIsText = other.nextIsText;
 		basePos = other.basePos;
@@ -43,10 +43,10 @@ public struct onubodh.XMLIterator {
 		attrShift = other.attrShift;
 		inner = null;
 	}
-	public XMLIterator.for_kernel(etxt*aExtract) {
-		kernel = etxt.same_same(aExtract);
-		nextTag = etxt.EMPTY();
-		content = etxt.EMPTY();
+	public XMLIterator.for_kernel(estr*aExtract) {
+		kernel = estr.copy_shallow(aExtract);
+		nextTag = estr();
+		content = estr();
 		pos = 0;
 		nextIsText = false;
 		basePos = 0;
@@ -54,18 +54,18 @@ public struct onubodh.XMLIterator {
 		attrShift = 0;
 		inner = null;
 	}
-	public bool nextAttr(etxt*attrKey, etxt*attrVal) {
+	public bool nextAttr(estr*attrKey, estr*attrVal) {
 		if((attrEnd - attrShift) < 3/* || attrs.char_at(attrShift+1) != ATTRIBUTE_ASSIGN*/) {
 			return false;
 		}
-		m.getSourceReference(basePos + shift + attrShift, basePos + shift + attrShift + 1, attrKey);
-		m.getSourceReference(basePos + shift + attrShift + 2, basePos + shift + attrShift + 3, attrVal);
+		m.getSourceReferenceAs(basePos + shift + attrShift, basePos + shift + attrShift + 1, attrKey);
+		m.getSourceReferenceAs(basePos + shift + attrShift + 2, basePos + shift + attrShift + 3, attrVal);
 		attrShift+=3;
 		return true;
 	}
 #if XMLPARSER_DEBUG
-	public void dump(etxt*prefix) {
-		etxt talk = etxt.stack(512);
+	public void dump(estr*prefix) {
+		estr talk = estr.stack(512);
 		prefix.zero_terminate();
 		talk.printf("%s [basePos:%d,shift:%d,pos:%d,clen:%d,klen:%d]\n", prefix.to_string(), basePos, shift, pos, content.length(), kernel.length());
 		shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 8, shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
@@ -85,13 +85,13 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 	int INDICATE_TAG_END;
 	int ATTRIBUTE_ASSIGN;
 	public XMLParser() {
-		etxt start = etxt.from_static("<");
+		estr start = estr.set_static_string("<");
 		ANGLE_BRACE_OPEN = addKeyWord(&start);
-		etxt end = etxt.from_static(">");
+		estr end = estr.set_static_string(">");
 		ANGLE_BRACE_CLOSE = addKeyWord(&end);
-		etxt indicateEnd = etxt.from_static("/");
+		estr indicateEnd = estr.set_static_string("/");
 		INDICATE_TAG_END = addKeyWord(&indicateEnd);
-		etxt attrAssign = etxt.from_static("=");
+		estr attrAssign = estr.set_static_string("=");
 		ATTRIBUTE_ASSIGN = addKeyWord(&attrAssign);
 	}
 	
@@ -103,7 +103,7 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 		it.attrEnd = 0;
 		//it.shift = 0;
 #if XMLPARSER_DEBUG
-		etxt talk = etxt.stack(128);
+		estr talk = estr.stack(128);
 		talk.printf("nextElem() ");
 		it.dump(&talk);
 #endif
@@ -129,7 +129,7 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 				break;
 			}
 		}
-		it.content = etxt.same_same(&it.kernel);
+		it.content = estr.copy_shallow(&it.kernel);
 		if(textEnd != len)it.content.trim_to_length(it.pos+textEnd);
 		it.content.shift(it.pos);
 		it.shift = it.pos;
@@ -152,7 +152,7 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 		core.assert(it.kernel.char_at(it.pos) == ANGLE_BRACE_OPEN);
 		angleBraceStart = it.pos;
 #if XMLPARSER_DEBUG
-		etxt talkative = etxt.stack(100);
+		estr talkative = estr.stack(100);
 #endif
 		for (i = it.pos;i<len; i++) {
 			if(it.kernel.char_at(i) == ANGLE_BRACE_OPEN) {
@@ -162,9 +162,9 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 				}
 				if(i+1 < len) {
 					if(it.nextTag.is_empty()) {
-						etxt currentTag = etxt.EMPTY();
-						it.m.getNonKeyWord(it.basePos + i+1, &currentTag);
-						it.nextTag = etxt.same_same(&currentTag);
+						estr currentTag = estr();
+						it.m.getNonKeyWordAs(it.basePos + i+1, &currentTag);
+						it.nextTag = estr.copy_shallow(&currentTag);
 						//print("start tag:%s:depth:%d\n", currentTag.to_string(), depth);
 #if XMLPARSER_DEBUG
 						talkative.printf("< - ");talkative.concat(&currentTag);it.dump(&talkative);
@@ -182,8 +182,8 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 					depth--;
 				}
 				if(depth == 0) {
-					etxt currentTag = etxt.EMPTY();
-					it.m.getNonKeyWord(it.basePos + i-1, &currentTag);
+					estr currentTag = estr();
+					it.m.getNonKeyWordAs(it.basePos + i-1, &currentTag);
 					if(!currentTag.equals(&it.nextTag)) {
 						core.assert(4==8);
 						throw new XMLParserError.INVALID_TAG("Invalid tag end");
@@ -191,8 +191,8 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 #if XMLPARSER_DEBUG
 					talkative.printf("> - ");talkative.concat(&currentTag);it.dump(&talkative);
 #endif
-					it.content = etxt.EMPTY();
-					it.content = etxt.same_same(&it.kernel);
+					it.content = estr();
+					it.content = estr.copy_shallow(&it.kernel);
 					it.content.trim_to_length(i+1);
 					it.content.shift(angleBraceStart);
 					it.shift = angleBraceStart;
@@ -243,7 +243,7 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 			//print("Could not peel capsule3\n");
 			return -1;
 		}
-		dst.kernel = etxt.same_same(&src.content);
+		dst.kernel = estr.copy_shallow(&src.content);
 		dst.kernel.trim_to_length(nextCapsuleEnd);
 		dst.kernel.shift(nextCapsule+1);
 		core.assert(dst.kernel.char_at(0) != ANGLE_BRACE_CLOSE);
@@ -257,7 +257,7 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 
 	public void traverseDeep(XMLIterator*xit, int depth, XMLTraverser cb) throws XMLParserError.INVALID_TAG {
 #if XMLPARSER_DEBUG
-		etxt talkative = etxt.stack(100);
+		estr talkative = estr.stack(100);
 		talkative.printf("~)/[~~Peeling %s", xit.nextTag.to_string());xit.dump(&talkative);
 #endif
 		XMLIterator pl = XMLIterator(xit.m);
@@ -278,7 +278,7 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 			return;
 		}
 #if XMLPARSER_DEBUG
-		etxt talkative = etxt.stack(100);
+		estr talkative = estr.stack(100);
 		talkative.printf("--> --> -->Going deep");xit.dump(&talkative);
 #endif
 		if(xit.content.is_empty() && xit.nextTag.is_empty()) {
@@ -319,17 +319,17 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 		} while(true);
 	}
 
-	public void traversePreorder(WordMap*m, int depth, XMLTraverser cb, etxt*content = null, int basePos = 0) throws XMLParserError.INVALID_TAG {
+	public void traversePreorder(WordMap*m, int depth, XMLTraverser cb, estr*content = null, int basePos = 0) throws XMLParserError.INVALID_TAG {
 		XMLIterator xit = XMLIterator(m);
 		if(content != null) {
-			xit.kernel = etxt.same_same(content);
+			xit.kernel = estr.copy_shallow(content);
 		} else {
-			xit.kernel = etxt.same_same(&m.kernel);
+			xit.kernel = estr.copy_shallow(&m.kernel);
 		}
 		xit.basePos = basePos;
 		
 #if XMLPARSER_DEBUG
-		etxt talkative = etxt.stack(100);
+		estr talkative = estr.stack(100);
 		talkative.printf("++traversing %s", xit.nextTag.to_string());xit.dump(&talkative);
 #endif
 		do {

@@ -190,7 +190,7 @@ public class onubodh.StringStructureImpl : StringStructure {
 	public int dump(OutputStream os) {
 		int x,y;
 		int i;
-		etxt val = etxt.stack(32);
+		estr val = estr.stack(32);
 		for(y=0,i=0;y<img_height;y+=radius) {
 			for(x=0;x<img_width;x+=radius,i++) {
 				val.printf("%d,", strings[i].getVal());
@@ -235,9 +235,9 @@ public class onubodh.StringStructureImpl : StringStructure {
 
 	}
 	public override void dumpFeatures(OutputStream os) {
-		etxt val = etxt.stack(512);
-		etxt data = etxt.stack(128);
-		etxt intval = etxt.stack(32);
+		estr val = estr.stack(512);
+		estr data = estr.stack(128);
+		estr intval = estr.stack(32);
 		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
 		getIterator(&it, Replica_flags.ALL, 0);
 		while(it.next()) {

@@ -7,32 +7,27 @@ using onubodh;
  * @{
  */
 public class onubodh.XMLTransformCommand : M100Command {
-	etxt prfx;
 	enum Options {
 		INFILE = 1,
 		OUTFILE,
 	}
 	public XMLTransformCommand() {
-		base();
+		estr prefix = estr.set_static_string("xtransform");
+		base(&prefix);
 		addOptionString("-i", M100Command.OptionType.TXT, Options.INFILE, "Input file.");
 		addOptionString("-o", M100Command.OptionType.TXT, Options.OUTFILE, "Output file."); 
 	}
 
-	public override etxt*get_prefix() {
-		prfx = etxt.from_static("xtransform");
-		return &prfx;
-	}
-
 	void traverseCB(XMLIterator*xit) {
 #if XMLPARSER_DEBUG
-		etxt talk = etxt.stack(512);
+		estr talk = estr.stack(512);
 		talk.printf("Node");
 		if(xit.nextIsText) talk.concat_string("text"); else talk.concat(&xit.nextTag);
 		xit.dump(&talk);
 #endif
 		if(xit.nextIsText) {
-			etxt tcontent = etxt.stack(256);
-			xit.m.getSourceReference(xit.basePos + xit.shift, xit.basePos + xit.shift + xit.content.length(), &tcontent);
+			estr tcontent = estr.stack(256);
+			xit.m.getSourceReferenceAs(xit.basePos + xit.shift, xit.basePos + xit.shift + xit.content.length(), &tcontent);
 #if XMLPARSER_DEBUG
 			talk.printf("Text\t\t- content:");
 			talk.concat(&tcontent);
@@ -47,8 +42,8 @@ public class onubodh.XMLTransformCommand : M100Command {
 			talk.concat_char('\t');talk.concat_char('\t');
 			xit.dump(&talk);
 #endif
-			etxt tcontent = etxt.stack(256);
-			xit.m.getSourceReference(xit.basePos + xit.shift, xit.basePos + xit.shift + xit.content.length(), &tcontent);
+			estr tcontent = estr.stack(256);
+			xit.m.getSourceReferenceAs(xit.basePos + xit.shift, xit.basePos + xit.shift + xit.content.length(), &tcontent);
 #if XMLPARSER_DEBUG
 			talk.printf("Content\t\t-content:");
 			talk.concat(&tcontent);
@@ -57,8 +52,8 @@ public class onubodh.XMLTransformCommand : M100Command {
 #endif
 			//xit.m.getSourceReference(xit.basePos + xit.shift, xit.basePos + xit.shift + xit.attrs.length(), &tcontent);
 			//print("Attrs\t\t- pos:%d,clen:%d,attr content:%s\n", xit.pos, xit.attrs.length(), tcontent.to_string());
-			etxt attrKey = etxt.EMPTY();
-			etxt attrVal = etxt.EMPTY();
+			estr attrKey = estr();
+			estr attrVal = estr();
 			while(xit.nextAttr(&attrKey, &attrVal)) {
 #if XMLPARSER_DEBUG
 				talk.printf("key:val = ");
@@ -72,25 +67,25 @@ public class onubodh.XMLTransformCommand : M100Command {
 		}
 	}
 
-	public override int act_on(etxt*cmdstr, OutputStream pad, M100CommandSet cmds) throws M100CommandError.ActionFailed {
-		ArrayList<txt> vals = ArrayList<txt>();
+	public override int act_on(estr*cmdstr, OutputStream pad, M100CommandSet cmds) throws M100CommandError.ActionFailed {
+		ArrayList<str> vals = ArrayList<str>();
 		if(parseOptions(cmdstr, &vals) != 0) {
 			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument");
 		}
-		txt?infile = null;
-		txt?outfile = null;
+		str?infile = null;
+		str?outfile = null;
 		if((infile = vals[Options.INFILE]) == null || (outfile = vals[Options.OUTFILE]) == null) {
 			throw new M100CommandError.ActionFailed.INSUFFICIENT_ARGUMENT("Insufficient argument");
 		}
 #if XMLPARSER_DEBUG
-		etxt talk = etxt.stack(128);
+		estr talk = estr.stack(128);
 #endif
 		FileInputStream?is = null;
 		try {
 			print("Opening file\n");
 			is = new FileInputStream.from_file(infile);
 		} catch(IOStreamError.FileInputStreamError e) {
-			print("Failed to open file:[%s]\n", infile.to_string());
+			print("Failed to open file:[%s]\n", infile.ecast().to_string());
 			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument, Cannot open input file.");
 		}
 #if XMLPARSER_DEBUG
@@ -99,9 +94,9 @@ public class onubodh.XMLTransformCommand : M100Command {
 #endif
 		XMLParser parser = new XMLParser();
 		WordMap map = WordMap();
-		map.kernel = etxt.stack(128);
-		map.source = etxt.stack(128);
-		map.map = etxt.stack(128);
+		map.kernel = estr.stack(128);
+		map.source = estr.stack(128);
+		map.map = estr.stack(128);
 #if XMLPARSER_DEBUG
 		talk.printf("Feeding keywords\n");
 		shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
@@ -119,7 +114,7 @@ public class onubodh.XMLTransformCommand : M100Command {
 				parser.traversePreorder(&map, 100, traverseCB);
 #if false
 				XMLIterator rxit = XMLIterator(&map);
-				rxit.kernel = etxt.same_same(&map.kernel);
+				rxit.kernel = estr.copy_shallow(&map.kernel);
 				parser.traversePreorder2(&rxit, 100, traverseCB);
 #endif
 			} while(true);

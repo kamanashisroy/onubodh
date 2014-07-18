@@ -27,7 +27,7 @@ public class onubodh.ImageMatrixStringNearLinear : ImageMatrixString {
 		return 0;
 	}
 
-	protected bool containsPoints(etxt*givenPoints) {
+	protected bool containsPoints(estr*givenPoints) {
 		int i;
 		for(i = 0; i < givenPoints.length(); i++) {
 			if(!points.contains_char(givenPoints.char_at(i)))
@@ -36,7 +36,7 @@ public class onubodh.ImageMatrixStringNearLinear : ImageMatrixString {
 		return true;
 	}
 
-	public ImageMatrixStringNearLinear?appendSubmatrix(etxt*givenPoints) {
+	public ImageMatrixStringNearLinear?appendSubmatrix(estr*givenPoints) {
 		ImageMatrixStringNearLinear?smat = this;
 		ImageMatrixStringNearLinear?ret = null;
 		do {
@@ -49,14 +49,14 @@ public class onubodh.ImageMatrixStringNearLinear : ImageMatrixString {
 			}
 			ret = (ImageMatrixStringNearLinear)fcreate(img, left, top, shift, requiredGrayVal, fcreate);
 			smat.submatrix = ret;
-			ret.points = etxt.dup_etxt(givenPoints);
+			ret.points = estr.copy_on_demand(givenPoints);
 			ret.drycompile();
 			break;
 		} while(true);
 		return ret;
 	}
 
-	int calcOpposite(etxt*ln) {
+	int calcOpposite(estr*ln) {
 		uchar y1 = ln.char_at(0);
 		uchar y2 = ln.char_at(ln.length()-1);
 		return (y2-y1) >> shift;
@@ -73,7 +73,7 @@ public class onubodh.ImageMatrixStringNearLinear : ImageMatrixString {
 			uchar c = a;
 			bool append_a = true;
 			ZeroTangle tngl = ZeroTangle.forShift(shift);
-			etxt linearPoints = etxt.stack(points.length()+1);
+			estr linearPoints = estr.stack(points.length()+1);
 			for(j=i+1; j < points.length();j++) {
 				uchar b = points.char_at(j);
 				if(tngl.neibor164(a, b) || (a!=c && tngl.neibor164(c, b))) {

@@ -5,11 +5,17 @@ using shotodol;
  * \addtogroup imgdiff
  * @{
  */
-public class onubodh.ImageDiffModule : DynamicModule {
+class onubodh.ImageDiffModule : DynamicModule {
+	ImageDiffModule() {
+		estr md = estr.set_static_string("imgdiff");
+		estr ver = estr.set_static_string("0.0.0");
+		base(&md,&ver);
+	}
+	
 	public override int init() {
-		txt command = new txt.from_static("command");
-		Plugin.register(command, new M100Extension(new ImageDiffCommand(), this));
-		Plugin.register(command, new M100Extension(new ImagePatchCommand(), this));
+		estr command = estr.set_static_string("command");
+		Plugin.register(&command, new M100Extension(new ImageDiffCommand(), this));
+		Plugin.register(&command, new M100Extension(new ImagePatchCommand(), this));
 		return 0;
 	}
 

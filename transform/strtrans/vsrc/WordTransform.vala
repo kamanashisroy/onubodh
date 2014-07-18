@@ -18,25 +18,25 @@ public errordomain onubodh.WordTransformError {
 
 
 public struct onubodh.WordMap {
-	public etxt kernel;
-	public etxt source;
-	public etxt map;
+	public estr kernel;
+	public estr source;
+	public estr map;
 	internal int wordIndex;
-	internal ArrayList<txt>nonTransKeyWords;
+	internal ArrayList<str>nonTransKeyWords;
 	public WordMap() {
-		nonTransKeyWords = ArrayList<txt>();
-		kernel = etxt.EMPTY();
-		source = etxt.EMPTY();
-		map = etxt.EMPTY();
+		nonTransKeyWords = ArrayList<str>();
+		kernel = estr();
+		source = estr();
+		map = estr();
 		wordIndex = 0;
 	}
 
-	public int getNonKeyWord(int windex, etxt*wd) {
-		*wd = etxt.same_same(nonTransKeyWords.get(windex));
+	public int getNonKeyWordAs(int windex, estr*wd) {
+		wd.rebuild_and_copy_shallow(nonTransKeyWords.get(windex));
 		return 0;
 	}
 	
-	public void getSourceReference(int from, int to, etxt*srcref) {
+	public void getSourceReferenceAs(int from, int to, estr*srcref) {
 		int shift = 0;
 		int len = 0;
 		int i = 0;
@@ -46,7 +46,7 @@ public struct onubodh.WordMap {
 		for(i=from; i<to;i++) {
 			len+=map.char_at(i);
 		}
-		*srcref = etxt.same_same(&source);
+		srcref.rebuild_and_copy_shallow(&source);
 		srcref.shift(shift);
 		srcref.trim_to_length(len);
 	}
@@ -66,8 +66,8 @@ public struct onubodh.WordMap {
 
 public class onubodh.WordTransform : Replicable {
 	SearchableFactory<TransKeyWord> keyWords;
-	etxt*keyWordArrayMap[32];
-	etxt delim;
+	estr*keyWordArrayMap[32];
+	estr delim;
 	int keyCount;
 	bool stringLiteralAsWord;
 	enum wordTypes {
@@ -78,7 +78,7 @@ public class onubodh.WordTransform : Replicable {
 		//memclean_raw();
 		keyWords = SearchableFactory<TransKeyWord>.for_type();
 		keyCount = 0;
-		delim = etxt.EMPTY();
+		delim = estr();
 		delim.buffer(32);
 		stringLiteralAsWord = true;
 	}
@@ -87,12 +87,12 @@ public class onubodh.WordTransform : Replicable {
 		delim.destroy();
 	}
 
-	public int addKeyWord(etxt*aKeyWord) throws WordTransformError {
+	public int addKeyWord(estr*aKeyWord) throws WordTransformError {
 		if(keyCount > wordTypes.MAX_KEY_INDEX_VALUE) {
 			throw new WordTransformError.MAXIMUM_KEY_LIMIT_EXCEEDED("Maximum keyword limit exceeded");
 		}
 		TransKeyWord kw = keyWords.alloc_added_size((uint16)(aKeyWord.length()+1));
-		kw.word.factory_build_by_memcopy_from_etxt_unsafe_no_length_check(aKeyWord);
+		kw.word.factory_build_by_memcopy_from_estr_unsafe_no_length_check(aKeyWord);
 		kw.word.zero_terminate();
 		//print("+ Adding key,len : [%s,%d]\n", kw.word.to_string(), kw.word.length());
 		keyWordArrayMap[keyCount] = &kw.word;
@@ -109,11 +109,11 @@ public class onubodh.WordTransform : Replicable {
 		return kw.index;
 	}
 
-	public int setTransKeyWordString(etxt*keys) throws WordTransformError {
-		etxt inp = etxt.stack_from_etxt(keys);
+	public int setTransKeyWordString(estr*keys) throws WordTransformError {
+		estr inp = estr.stack_copy_deep(keys);
 		delim.buffer(128);
 		while(true) {
-			etxt next = etxt.EMPTY();
+			estr next = estr();
 			//print("Looling for token in [%s]\n", inp.to_string());
 			LineAlign.next_token(&inp, &next);
 			if(next.is_empty()) {
@@ -127,12 +127,12 @@ public class onubodh.WordTransform : Replicable {
 		return 0;
 	}
 
-	public int getTransKeyWord(int windex, etxt*kw) {
-		*kw = etxt.same_same(keyWordArrayMap[windex]);
+	public int getTransKeyWordAs(int windex, estr*kw) {
+		kw.rebuild_and_copy_shallow(keyWordArrayMap[windex]);
 		return 0;
 	}
 
-	uchar getCharValue(WordMap*m, etxt*token) {
+	uchar getCharValue(WordMap*m, estr*token) {
 		aroop_hash h = token.getStringHash();
 		//print("hash:%ld\n", h);
 		TransKeyWord?kw = keyWords.search(h, (x) => {/*print("Examining %s\n", ((TransKeyWord)x).word.to_string());*/return ((TransKeyWord)x).word.equals(token)?0:1;});
@@ -140,7 +140,7 @@ public class onubodh.WordTransform : Replicable {
 			//print("+ key : [%s]\n", kw.word.to_string());
 			return kw.index;
 		} else {
-			txt uWord = new txt.memcopy_etxt(token);
+			str uWord = new str.copy_on_demand(token);
 			//print("+ w : [%s]\n", uWord.to_string());
 			m.nonTransKeyWords.set(m.wordIndex, uWord);
 		}
@@ -148,8 +148,8 @@ public class onubodh.WordTransform : Replicable {
 	}
 	
 	public int transform(WordMap*m) {
-		etxt inp = etxt.same_same(&m.source);
-		etxt next = etxt.EMPTY();
+		estr inp = estr.copy_shallow(&m.source);
+		estr next = estr();
 		while(true) {
 			int shift = inp.length();
 			if(stringLiteralAsWord) {

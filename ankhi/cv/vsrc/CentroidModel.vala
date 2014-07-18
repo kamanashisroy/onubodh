@@ -7,10 +7,10 @@ using onubodh;
  * @{
  */
 public class onubodh.CentroidModel : Replicable {
-	etxt fn;
+	estr fn;
 	netpbmg img;
 	public CentroidModel(string filename) {
-		fn = etxt.dup_string(filename);
+		fn = estr.copy_string(filename);
 		img = netpbmg.for_file(filename);
 	}
 	~CentroidModel() {
@@ -51,7 +51,7 @@ public class onubodh.CentroidModel : Replicable {
 			break;
 		}
 		if(!allset) {
-			etxt dlg = etxt.from_static("<Centroid Model>Nothing on right side\n");
+			estr dlg = estr.set_static_string("<Centroid Model>Nothing on right side\n");
 			io.write(&dlg);
 			return -1;
 		}
@@ -68,7 +68,7 @@ public class onubodh.CentroidModel : Replicable {
 			break;
 		}
 		if(!allset) {
-			etxt dlg = etxt.from_static("<Centroid Model>Nothing on left side\n");
+			estr dlg = estr.set_static_string("<Centroid Model>Nothing on left side\n");
 			io.write(&dlg);
 			return -1;
 		}
@@ -85,7 +85,7 @@ public class onubodh.CentroidModel : Replicable {
 			break;
 		}
 		if(!allset) {
-			etxt dlg = etxt.from_static("<Centroid Model>Nothing on top side\n");
+			estr dlg = estr.set_static_string("<Centroid Model>Nothing on top side\n");
 			io.write(&dlg);
 			return -1;
 		}
@@ -102,7 +102,7 @@ public class onubodh.CentroidModel : Replicable {
 			break;
 		}
 		if(!allset) {
-			etxt dlg = etxt.from_static("<Centroid Model>Nothing on bottom side\n");
+			estr dlg = estr.set_static_string("<Centroid Model>Nothing on bottom side\n");
 			io.write(&dlg);
 			return -1;
 		}
@@ -112,7 +112,7 @@ public class onubodh.CentroidModel : Replicable {
 		res.c = right;
 		res.d = bottom;
 		netpbmg result = netpbmg.subimage(&img, &res);
-		etxt subfn = etxt.stack(128);
+		estr subfn = estr.stack(128);
 		subfn.printf("%s_sub.pgm", fn.to_string());
 		subfn.zero_terminate();
 		result.write(subfn.to_string());

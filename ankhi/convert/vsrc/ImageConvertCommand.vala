@@ -11,23 +11,18 @@ using shotodol;
  * @{
  */
 public class onubodh.ImageConvertCommand : M100Command {
-	etxt prfx;
 	enum Options {
 		INFILE = 1,
 		OUTFILE,
 	}
 	public ImageConvertCommand() {
-		base();
+		estr prefix = estr.set_static_string("convert");
+		base(&prefix);
 		addOptionString("-i", M100Command.OptionType.TXT, Options.INFILE, "Input file");
 		addOptionString("-o", M100Command.OptionType.TXT, Options.OUTFILE, "Output file"); 
 	}
 
-	public override etxt*get_prefix() {
-		prfx = etxt.from_static("convert");
-		return &prfx;
-	}
-
-	bool is_jpeg_filename(etxt*fn) {
+	bool is_jpeg_filename(estr*fn) {
 		int len = fn.length();
 		return ((fn.char_at(len-1) == 'g')
 			&& (fn.char_at(len-2) == 'e')
@@ -40,7 +35,7 @@ public class onubodh.ImageConvertCommand : M100Command {
 			&& (fn.char_at(len-4) == '.'));
 	}
 
-	bool is_ppm_filename(etxt*fn) {
+	bool is_ppm_filename(estr*fn) {
 		int len = fn.length();
 		return (fn.char_at(len-1) == 'm')
 			&& (fn.char_at(len-2) == 'p')
@@ -48,7 +43,7 @@ public class onubodh.ImageConvertCommand : M100Command {
 			&& (fn.char_at(len-4) == '.');
 	}
 
-	bool is_pgm_filename(etxt*fn) {
+	bool is_pgm_filename(estr*fn) {
 		int len = fn.length();
 		return (fn.char_at(len-1) == 'm')
 			&& (fn.char_at(len-2) == 'g')
@@ -56,35 +51,35 @@ public class onubodh.ImageConvertCommand : M100Command {
 			&& (fn.char_at(len-4) == '.');
 	}
 
-	public override int act_on(etxt*cmdstr, OutputStream pad, M100CommandSet cmds) throws M100CommandError.ActionFailed {
+	public override int act_on(estr*cmdstr, OutputStream pad, M100CommandSet cmds) throws M100CommandError.ActionFailed {
 		int ecode = 0;
-		ArrayList<txt> vals = ArrayList<txt>();
+		ArrayList<str> vals = ArrayList<str>();
 		if(parseOptions(cmdstr, &vals) != 0) {
 			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument");
 		}
-		txt?infile = null;
-		txt?outfile = null;
+		str?infile = null;
+		str?outfile = null;
 		if((infile = vals[Options.INFILE]) == null || (outfile = vals[Options.OUTFILE]) == null) {
 			throw new M100CommandError.ActionFailed.INSUFFICIENT_ARGUMENT("Insufficient argument");
 		}
 		if(is_jpeg_filename(infile)) {
-			netpbmg oimg = netpbmg.for_file(outfile.to_string());
+			netpbmg oimg = netpbmg.for_file(outfile.ecast().to_string());
 			jpegimg iimg = jpegimg.from_netpbm(&oimg);
-			iimg.read(infile.to_string());
+			iimg.read(infile.ecast().to_string());
 			oimg.write();
 			oimg.close();
 			return 0;
 		} else if(is_jpeg_filename(outfile)) {
-			netpbmg img = netpbmg.for_file(infile.to_string());
+			netpbmg img = netpbmg.for_file(infile.ecast().to_string());
 			if(img.open(&ecode) != 0) {
 				throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument, Cannot open input file.");
 			}
 			jpegimg oimg = jpegimg.from_netpbm(&img);
-			oimg.write(9, outfile.to_string());
+			oimg.write(9, outfile.ecast().to_string());
 			img.close();
 			return 0;
 		} else if(is_pgm_filename(outfile) && is_ppm_filename(infile)) {
-			netpbmg iimg = netpbmg.for_file(infile.to_string());
+			netpbmg iimg = netpbmg.for_file(infile.ecast().to_string());
 			if(iimg.open(&ecode) != 0) {
 				throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument, Cannot open input file.");
 			}
@@ -99,7 +94,7 @@ public class onubodh.ImageConvertCommand : M100Command {
 					oimg.setGrayVal(x, y, gval);
 				}
 			}
-			oimg.write(outfile.to_string());
+			oimg.write(outfile.ecast().to_string());
 			iimg.close();
 			oimg.close();
 			return 0;

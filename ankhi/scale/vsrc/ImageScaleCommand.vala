@@ -6,7 +6,6 @@ using shotodol;
  * @{
  */
 public class onubodh.ImageScaleCommand : M100Command {
-	etxt prfx;
 	enum Options {
 		INFILE = 1,
 		OUTFILE,
@@ -14,16 +13,12 @@ public class onubodh.ImageScaleCommand : M100Command {
 		DOWNSAMPLE,
 	}
 	public ImageScaleCommand() {
-		base();
+		estr prefix = estr.set_static_string("scale");
+		base(&prefix);
 		addOptionString("-i", M100Command.OptionType.TXT, Options.INFILE, "Input file");
 		addOptionString("-o", M100Command.OptionType.TXT, Options.OUTFILE, "Output file"); 
 		addOptionString("-up", M100Command.OptionType.TXT, Options.UPSAMPLE, "Upsample to a multiple, say '-up 2' means sampling it to twice");
 		addOptionString("-down", M100Command.OptionType.TXT, Options.DOWNSAMPLE, "Downsample to a multiple, say '-down 2' means sampling it to half");
-	}
-
-	public override etxt*get_prefix() {
-		prfx = etxt.from_static("scale");
-		return &prfx;
 	}
 
 	public int upsample(netpbmg dst, netpbmg src, int up) {
@@ -57,41 +52,41 @@ public class onubodh.ImageScaleCommand : M100Command {
 		return 0;
 	}
 
-	public override int act_on(etxt*cmdstr, OutputStream pad, M100CommandSet cmds) throws M100CommandError.ActionFailed {
+	public override int act_on(estr*cmdstr, OutputStream pad, M100CommandSet cmds) throws M100CommandError.ActionFailed {
 		int ecode = 0;
-		ArrayList<txt> vals = ArrayList<txt>();
+		ArrayList<str> vals = ArrayList<str>();
 		if(parseOptions(cmdstr, &vals) != 0) {
 			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument");
 		}
-		txt?infile = vals[Options.INFILE];
-		txt?outfile = vals[Options.OUTFILE];
+		str?infile = vals[Options.INFILE];
+		str?outfile = vals[Options.OUTFILE];
 		if(infile == null || outfile == null) {
 			throw new M100CommandError.ActionFailed.INSUFFICIENT_ARGUMENT("Insufficient argument");
 		}
-		netpbmg iimg = netpbmg.for_file(infile.to_string());
+		netpbmg iimg = netpbmg.for_file(infile.ecast().to_string());
 		if(iimg.open(&ecode) != 0) {
 			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument: cannot open input file.");
 		}
-		txt?arg = vals[Options.UPSAMPLE];
+		str?arg = vals[Options.UPSAMPLE];
 		if(arg != null) {
-			int up = arg.to_int();
+			int up = arg.ecast().to_int();
 			if(up == 0) {
 				throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument: upsample ratio cannot be 0.");
 			}
 			netpbmg oimg = netpbmg.alloc_full(iimg.width*up, iimg.height*up, iimg.type);
 			upsample(oimg, iimg, up);
-			oimg.write(outfile.to_string());
+			oimg.write(outfile.ecast().to_string());
 			return 0;
 		}
 		arg = vals[Options.DOWNSAMPLE];
 		if(arg != null) {
-			int down = arg.to_int();
+			int down = arg.ecast().to_int();
 			if(down == 0) {
 				throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument: downsample ratio cannot be 0.");
 			}
 			netpbmg oimg = netpbmg.alloc_full(iimg.width/down, iimg.height/down, iimg.type);
 			downsample(oimg, iimg, down);
-			oimg.write(outfile.to_string());
+			oimg.write(outfile.ecast().to_string());
 			return 0;
 		}
 		return 0;

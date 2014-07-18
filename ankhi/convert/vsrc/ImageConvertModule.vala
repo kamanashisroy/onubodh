@@ -5,13 +5,15 @@ using shotodol;
  * \addtogroup imgconvert 
  * @{
  */
-public class onubodh.ImageConvertModule : DynamicModule {
-	public ImageConvertModule() {
-		name = etxt.from_static("convert");
+class onubodh.ImageConvertModule : DynamicModule {
+	ImageConvertModule() {
+		estr nm = estr.set_static_string("convert");
+		estr ver = estr.set_static_string("0.0.0");
+		base(&nm,&ver);
 	}
 	public override int init() {
-		txt command = new txt.from_static("command");
-		Plugin.register(command, new M100Extension(new ImageConvertCommand(), this));
+		estr command = estr.set_static_string("command");
+		Plugin.register(&command, new M100Extension(new ImageConvertCommand(), this));
 		return 0;
 	}
 
