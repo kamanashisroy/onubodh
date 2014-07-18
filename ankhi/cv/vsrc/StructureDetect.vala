@@ -44,7 +44,7 @@ public class onubodh.StructureDetect : Replicable {
 		return circuit.compile();
 	}
 	
-	public void dumpImage(estr*nm) {
+	public void dumpImage(extring*nm) {
 		print("Dumping ..\n");
 		netpbmg out_image = netpbmg.alloc_like(orig);
 		//out_image.set_filename(nm.to_string());
@@ -53,8 +53,8 @@ public class onubodh.StructureDetect : Replicable {
 		out_image.close();
 	}
 
-	public void dumpFeatures(estr*nm, estr*fnm) {
-		estr featuresfile = estr.stack(512);
+	public void dumpFeatures(extring*nm, extring*fnm) {
+		extring featuresfile = extring.stack(512);
 		if(fnm != null) {
 			featuresfile.concat(fnm);
 		} else {

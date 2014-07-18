@@ -13,7 +13,7 @@ public class onubodh.ImageScaleCommand : M100Command {
 		DOWNSAMPLE,
 	}
 	public ImageScaleCommand() {
-		estr prefix = estr.set_static_string("scale");
+		extring prefix = extring.set_static_string("scale");
 		base(&prefix);
 		addOptionString("-i", M100Command.OptionType.TXT, Options.INFILE, "Input file");
 		addOptionString("-o", M100Command.OptionType.TXT, Options.OUTFILE, "Output file"); 
@@ -52,14 +52,14 @@ public class onubodh.ImageScaleCommand : M100Command {
 		return 0;
 	}
 
-	public override int act_on(estr*cmdstr, OutputStream pad, M100CommandSet cmds) throws M100CommandError.ActionFailed {
+	public override int act_on(extring*cmdstr, OutputStream pad, M100CommandSet cmds) throws M100CommandError.ActionFailed {
 		int ecode = 0;
-		ArrayList<str> vals = ArrayList<str>();
+		ArrayList<xtring> vals = ArrayList<xtring>();
 		if(parseOptions(cmdstr, &vals) != 0) {
 			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument");
 		}
-		str?infile = vals[Options.INFILE];
-		str?outfile = vals[Options.OUTFILE];
+		xtring?infile = vals[Options.INFILE];
+		xtring?outfile = vals[Options.OUTFILE];
 		if(infile == null || outfile == null) {
 			throw new M100CommandError.ActionFailed.INSUFFICIENT_ARGUMENT("Insufficient argument");
 		}
@@ -67,7 +67,7 @@ public class onubodh.ImageScaleCommand : M100Command {
 		if(iimg.open(&ecode) != 0) {
 			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument: cannot open input file.");
 		}
-		str?arg = vals[Options.UPSAMPLE];
+		xtring?arg = vals[Options.UPSAMPLE];
 		if(arg != null) {
 			int up = arg.ecast().to_int();
 			if(up == 0) {

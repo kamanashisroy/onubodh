@@ -12,12 +12,12 @@ using onubodh;
  */
 public class onubodh.EdgeModule : DynamicModule {
 	public EdgeModule() {
-		estr edg = estr.set_static_string("edge");
-		estr ver = estr.set_static_string("0.0.0");
+		extring edg = extring.set_static_string("edge");
+		extring ver = extring.set_static_string("0.0.0");
 		base(&edg,&ver);
 	}
 	public override int init() {
-		estr command = estr.set_static_string("command");
+		extring command = extring.set_static_string("command");
 		Plugin.register(&command, new M100Extension(new FastEdgeCommand(), this));
 		Plugin.register(&command, new M100Extension(new OpencvCannyCommand(), this));
 		return 0;

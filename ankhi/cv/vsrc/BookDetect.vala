@@ -50,7 +50,7 @@ public class onubodh.BookDetect : Replicable {
 	}
 
 
-	public void dumpImage(estr*nm) {
+	public void dumpImage(extring*nm) {
 		print("Dumping ..\n");
 		netpbmg out_image = netpbmg.alloc_like(orig);
 		//out_image.set_filename(nm.to_string());
@@ -59,8 +59,8 @@ public class onubodh.BookDetect : Replicable {
 		out_image.close();
 	}
 
-	public void dumpFeatures(estr*nm) {
-		estr featuresfile = estr.stack(128);
+	public void dumpFeatures(extring*nm) {
+		extring featuresfile = extring.stack(128);
 		featuresfile.concat_string("features_");
 		featuresfile.concat(nm);
 		featuresfile.concat_string(".txt");

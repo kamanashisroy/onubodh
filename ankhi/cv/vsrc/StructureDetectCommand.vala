@@ -31,7 +31,7 @@ public class shotodol.StructureDetectCommand : M100Command {
 		NO_IMAGE_OUTPUT,
 	}
 	public StructureDetectCommand() {
-		estr prefix = estr.set_static_string("structdetect");
+		extring prefix = extring.set_static_string("structdetect");
 		base(&prefix);
 		addOptionString("-i", M100Command.OptionType.TXT, Options.INFILE, "Input file.");
 		addOptionString("-o", M100Command.OptionType.TXT, Options.OUTFILE, "Output file."); 
@@ -42,14 +42,14 @@ public class shotodol.StructureDetectCommand : M100Command {
 		addOptionString("-st", M100Command.OptionType.TXT, Options.STRUCTURE_TYPE, "Specify which structure to use, 0 for line, 1 for block"); 
 	}
 
-	public override int act_on(estr*cmdstr, OutputStream pad, M100CommandSet cmds) throws M100CommandError.ActionFailed {
+	public override int act_on(extring*cmdstr, OutputStream pad, M100CommandSet cmds) throws M100CommandError.ActionFailed {
 		int ecode = 0;
-		ArrayList<str> vals = ArrayList<str>();
+		ArrayList<xtring> vals = ArrayList<xtring>();
 		if(parseOptions(cmdstr, &vals) != 0) {
 			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument");
 		}
-		str?infile = null;
-		str?outfile = null;
+		xtring?infile = null;
+		xtring?outfile = null;
 		if((infile = vals[Options.INFILE]) == null || (outfile = vals[Options.OUTFILE]) == null) {
 			throw new M100CommandError.ActionFailed.INSUFFICIENT_ARGUMENT("Insufficient argument");
 		}
@@ -64,12 +64,12 @@ public class shotodol.StructureDetectCommand : M100Command {
 			featureVals[i] = 0;
 			featureOps[i] = 0;
 		}
-		str?fstring = vals[Options.FEATURES];
+		xtring?fstring = vals[Options.FEATURES];
 		if(fstring != null) {
 			ImageMatrixUtils.parseFeatures(fstring, featureVals, featureOps);
 		}
 		int minGrayVal = 10;
-		str?arg = null;
+		xtring?arg = null;
 		if((arg = vals[Options.MIN_GRAY_VAL]) != null) {
 			minGrayVal = arg.ecast().to_int();
 		}
@@ -90,7 +90,7 @@ public class shotodol.StructureDetectCommand : M100Command {
 		if(output_image) {
 			s.dumpImage(outfile);
 		}
-		str?featuresfile = vals[Options.FEATURE_OUTFILE];
+		xtring?featuresfile = vals[Options.FEATURE_OUTFILE];
 		s.dumpFeatures(outfile, featuresfile);
 		return 0;
 	}

@@ -18,25 +18,25 @@ public errordomain onubodh.WordTransformError {
 
 
 public struct onubodh.WordMap {
-	public estr kernel;
-	public estr source;
-	public estr map;
+	public extring kernel;
+	public extring source;
+	public extring map;
 	internal int wordIndex;
-	internal ArrayList<str>nonTransKeyWords;
+	internal ArrayList<xtring>nonTransKeyWords;
 	public WordMap() {
-		nonTransKeyWords = ArrayList<str>();
-		kernel = estr();
-		source = estr();
-		map = estr();
+		nonTransKeyWords = ArrayList<xtring>();
+		kernel = extring();
+		source = extring();
+		map = extring();
 		wordIndex = 0;
 	}
 
-	public int getNonKeyWordAs(int windex, estr*wd) {
+	public int getNonKeyWordAs(int windex, extring*wd) {
 		wd.rebuild_and_copy_shallow(nonTransKeyWords.get(windex));
 		return 0;
 	}
 	
-	public void getSourceReferenceAs(int from, int to, estr*srcref) {
+	public void getSourceReferenceAs(int from, int to, extring*srcref) {
 		int shift = 0;
 		int len = 0;
 		int i = 0;
@@ -66,8 +66,8 @@ public struct onubodh.WordMap {
 
 public class onubodh.WordTransform : Replicable {
 	SearchableFactory<TransKeyWord> keyWords;
-	estr*keyWordArrayMap[32];
-	estr delim;
+	extring*keyWordArrayMap[32];
+	extring delim;
 	int keyCount;
 	bool stringLiteralAsWord;
 	enum wordTypes {
@@ -78,7 +78,7 @@ public class onubodh.WordTransform : Replicable {
 		//memclean_raw();
 		keyWords = SearchableFactory<TransKeyWord>.for_type();
 		keyCount = 0;
-		delim = estr();
+		delim = extring();
 		delim.buffer(32);
 		stringLiteralAsWord = true;
 	}
@@ -87,12 +87,12 @@ public class onubodh.WordTransform : Replicable {
 		delim.destroy();
 	}
 
-	public int addKeyWord(estr*aKeyWord) throws WordTransformError {
+	public int addKeyWord(extring*aKeyWord) throws WordTransformError {
 		if(keyCount > wordTypes.MAX_KEY_INDEX_VALUE) {
 			throw new WordTransformError.MAXIMUM_KEY_LIMIT_EXCEEDED("Maximum keyword limit exceeded");
 		}
 		TransKeyWord kw = keyWords.alloc_added_size((uint16)(aKeyWord.length()+1));
-		kw.word.factory_build_by_memcopy_from_estr_unsafe_no_length_check(aKeyWord);
+		kw.word.factory_build_and_copy_on_tail_no_length_check(aKeyWord);
 		kw.word.zero_terminate();
 		//print("+ Adding key,len : [%s,%d]\n", kw.word.to_string(), kw.word.length());
 		keyWordArrayMap[keyCount] = &kw.word;
@@ -109,11 +109,11 @@ public class onubodh.WordTransform : Replicable {
 		return kw.index;
 	}
 
-	public int setTransKeyWordString(estr*keys) throws WordTransformError {
-		estr inp = estr.stack_copy_deep(keys);
+	public int setTransKeyWordString(extring*keys) throws WordTransformError {
+		extring inp = extring.stack_copy_deep(keys);
 		delim.buffer(128);
 		while(true) {
-			estr next = estr();
+			extring next = extring();
 			//print("Looling for token in [%s]\n", inp.to_string());
 			LineAlign.next_token(&inp, &next);
 			if(next.is_empty()) {
@@ -127,12 +127,12 @@ public class onubodh.WordTransform : Replicable {
 		return 0;
 	}
 
-	public int getTransKeyWordAs(int windex, estr*kw) {
+	public int getTransKeyWordAs(int windex, extring*kw) {
 		kw.rebuild_and_copy_shallow(keyWordArrayMap[windex]);
 		return 0;
 	}
 
-	uchar getCharValue(WordMap*m, estr*token) {
+	uchar getCharValue(WordMap*m, extring*token) {
 		aroop_hash h = token.getStringHash();
 		//print("hash:%ld\n", h);
 		TransKeyWord?kw = keyWords.search(h, (x) => {/*print("Examining %s\n", ((TransKeyWord)x).word.to_string());*/return ((TransKeyWord)x).word.equals(token)?0:1;});
@@ -140,7 +140,7 @@ public class onubodh.WordTransform : Replicable {
 			//print("+ key : [%s]\n", kw.word.to_string());
 			return kw.index;
 		} else {
-			str uWord = new str.copy_on_demand(token);
+			xtring uWord = new xtring.copy_on_demand(token);
 			//print("+ w : [%s]\n", uWord.to_string());
 			m.nonTransKeyWords.set(m.wordIndex, uWord);
 		}
@@ -148,8 +148,8 @@ public class onubodh.WordTransform : Replicable {
 	}
 	
 	public int transform(WordMap*m) {
-		estr inp = estr.copy_shallow(&m.source);
-		estr next = estr();
+		extring inp = extring.copy_shallow(&m.source);
+		extring next = extring();
 		while(true) {
 			int shift = inp.length();
 			if(stringLiteralAsWord) {

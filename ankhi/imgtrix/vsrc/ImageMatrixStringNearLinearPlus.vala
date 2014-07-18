@@ -15,7 +15,7 @@ public class onubodh.ImageMatrixStringNearLinearPlus : ImageMatrixStringNearLine
 		uchar a = 255;
 		uchar b = 255;
 		int i;
-		estr linearPoints = estr.stack(points.length()+1);
+		extring linearPoints = extring.stack(points.length()+1);
 		int skipped = 0;
 		for(i = 0; i < points.length(); i++) {
 			uchar c = points.char_at(i);
@@ -50,7 +50,7 @@ public class onubodh.ImageMatrixStringNearLinearPlus : ImageMatrixStringNearLine
 		}
 
 		int i;
-		estr linearPoints = estr.stack(size<<3+1);
+		extring linearPoints = extring.stack(size<<3+1);
 		uchar oldval = 0;
 		int bval = (~(size-1));
 		uchar a = points.char_at(0);
@@ -85,7 +85,7 @@ public class onubodh.ImageMatrixStringNearLinearPlus : ImageMatrixStringNearLine
 		}
 		points.destroy();
 		if(linearPoints.length() > 0) {
-			points = estr.copy_on_demand(&linearPoints);
+			points = extring.copy_on_demand(&linearPoints);
 		}
 		return 0;
 	}

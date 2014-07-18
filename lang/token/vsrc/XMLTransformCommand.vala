@@ -12,7 +12,7 @@ public class onubodh.XMLTransformCommand : M100Command {
 		OUTFILE,
 	}
 	public XMLTransformCommand() {
-		estr prefix = estr.set_static_string("xtransform");
+		extring prefix = extring.set_static_string("xtransform");
 		base(&prefix);
 		addOptionString("-i", M100Command.OptionType.TXT, Options.INFILE, "Input file.");
 		addOptionString("-o", M100Command.OptionType.TXT, Options.OUTFILE, "Output file."); 
@@ -20,13 +20,13 @@ public class onubodh.XMLTransformCommand : M100Command {
 
 	void traverseCB(XMLIterator*xit) {
 #if XMLPARSER_DEBUG
-		estr talk = estr.stack(512);
+		extring talk = extring.stack(512);
 		talk.printf("Node");
 		if(xit.nextIsText) talk.concat_string("text"); else talk.concat(&xit.nextTag);
 		xit.dump(&talk);
 #endif
 		if(xit.nextIsText) {
-			estr tcontent = estr.stack(256);
+			extring tcontent = extring.stack(256);
 			xit.m.getSourceReferenceAs(xit.basePos + xit.shift, xit.basePos + xit.shift + xit.content.length(), &tcontent);
 #if XMLPARSER_DEBUG
 			talk.printf("Text\t\t- content:");
@@ -42,7 +42,7 @@ public class onubodh.XMLTransformCommand : M100Command {
 			talk.concat_char('\t');talk.concat_char('\t');
 			xit.dump(&talk);
 #endif
-			estr tcontent = estr.stack(256);
+			extring tcontent = extring.stack(256);
 			xit.m.getSourceReferenceAs(xit.basePos + xit.shift, xit.basePos + xit.shift + xit.content.length(), &tcontent);
 #if XMLPARSER_DEBUG
 			talk.printf("Content\t\t-content:");
@@ -52,8 +52,8 @@ public class onubodh.XMLTransformCommand : M100Command {
 #endif
 			//xit.m.getSourceReference(xit.basePos + xit.shift, xit.basePos + xit.shift + xit.attrs.length(), &tcontent);
 			//print("Attrs\t\t- pos:%d,clen:%d,attr content:%s\n", xit.pos, xit.attrs.length(), tcontent.to_string());
-			estr attrKey = estr();
-			estr attrVal = estr();
+			extring attrKey = extring();
+			extring attrVal = extring();
 			while(xit.nextAttr(&attrKey, &attrVal)) {
 #if XMLPARSER_DEBUG
 				talk.printf("key:val = ");
@@ -67,18 +67,18 @@ public class onubodh.XMLTransformCommand : M100Command {
 		}
 	}
 
-	public override int act_on(estr*cmdstr, OutputStream pad, M100CommandSet cmds) throws M100CommandError.ActionFailed {
-		ArrayList<str> vals = ArrayList<str>();
+	public override int act_on(extring*cmdstr, OutputStream pad, M100CommandSet cmds) throws M100CommandError.ActionFailed {
+		ArrayList<xtring> vals = ArrayList<xtring>();
 		if(parseOptions(cmdstr, &vals) != 0) {
 			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument");
 		}
-		str?infile = null;
-		str?outfile = null;
+		xtring?infile = null;
+		xtring?outfile = null;
 		if((infile = vals[Options.INFILE]) == null || (outfile = vals[Options.OUTFILE]) == null) {
 			throw new M100CommandError.ActionFailed.INSUFFICIENT_ARGUMENT("Insufficient argument");
 		}
 #if XMLPARSER_DEBUG
-		estr talk = estr.stack(128);
+		extring talk = extring.stack(128);
 #endif
 		FileInputStream?is = null;
 		try {
@@ -94,9 +94,9 @@ public class onubodh.XMLTransformCommand : M100Command {
 #endif
 		XMLParser parser = new XMLParser();
 		WordMap map = WordMap();
-		map.kernel = estr.stack(128);
-		map.source = estr.stack(128);
-		map.map = estr.stack(128);
+		map.kernel = extring.stack(128);
+		map.source = extring.stack(128);
+		map.map = extring.stack(128);
 #if XMLPARSER_DEBUG
 		talk.printf("Feeding keywords\n");
 		shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
@@ -114,7 +114,7 @@ public class onubodh.XMLTransformCommand : M100Command {
 				parser.traversePreorder(&map, 100, traverseCB);
 #if false
 				XMLIterator rxit = XMLIterator(&map);
-				rxit.kernel = estr.copy_shallow(&map.kernel);
+				rxit.kernel = extring.copy_shallow(&map.kernel);
 				parser.traversePreorder2(&rxit, 100, traverseCB);
 #endif
 			} while(true);

@@ -17,7 +17,7 @@ public class shotodol.BookDetectCommand : M100Command {
 		MERGE,
 	}
 	public BookDetectCommand() {
-		estr prefix = estr.set_static_string("bookdetect");
+		extring prefix = extring.set_static_string("bookdetect");
 		base(&prefix);
 		addOptionString("-i", M100Command.OptionType.TXT, Options.INFILE, "Input file.");
 		addOptionString("-o", M100Command.OptionType.TXT, Options.OUTFILE, "Output file."); 
@@ -28,14 +28,14 @@ public class shotodol.BookDetectCommand : M100Command {
 		addOptionString("-merge", M100Command.OptionType.NONE, Options.MERGE, "merge the lines"); 
 	}
 
-	public override int act_on(estr*cmdstr, OutputStream pad, M100CommandSet cmds) throws M100CommandError.ActionFailed {
+	public override int act_on(extring*cmdstr, OutputStream pad, M100CommandSet cmds) throws M100CommandError.ActionFailed {
 		int ecode = 0;
-		ArrayList<str> vals = ArrayList<str>();
+		ArrayList<xtring> vals = ArrayList<xtring>();
 		if(parseOptions(cmdstr, &vals) != 0) {
 			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument");
 		}
-		str?infile = null;
-		str?outfile = null;
+		xtring?infile = null;
+		xtring?outfile = null;
 		if((infile = vals[Options.INFILE]) == null || (outfile = vals[Options.OUTFILE]) == null) {
 			throw new M100CommandError.ActionFailed.INSUFFICIENT_ARGUMENT("Insufficient argument");
 		}
@@ -50,12 +50,12 @@ public class shotodol.BookDetectCommand : M100Command {
 			featureVals[i] = 0;
 			featureOps[i] = 0;
 		}
-		str?fstring = vals[Options.FEATURES];
+		xtring?fstring = vals[Options.FEATURES];
 		if(fstring != null) {
 			ImageMatrixUtils.parseFeatures(fstring, featureVals, featureOps);
 		}
 		int minGrayVal = 10;
-		str?arg = null;
+		xtring?arg = null;
 		if((arg = vals[Options.MIN_GRAY_VAL]) != null) {
 			minGrayVal = arg.ecast().to_int();
 		}

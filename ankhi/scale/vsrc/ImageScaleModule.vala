@@ -11,12 +11,12 @@ using shotodol;
  */
 class onubodh.ImageScaleModule : DynamicModule {
 	public ImageScaleModule() {
-		estr modnm = estr.set_static_string("command");
-		estr ver = estr.set_static_string("0.0.0");
+		extring modnm = extring.set_static_string("command");
+		extring ver = extring.set_static_string("0.0.0");
 		base(&modnm, &ver);
 	}
 	public override int init() {
-		estr command = estr.set_static_string("command");
+		extring command = extring.set_static_string("command");
 		Plugin.register(&command, new M100Extension(new ImageScaleCommand(), this));
 		return 0;
 	}

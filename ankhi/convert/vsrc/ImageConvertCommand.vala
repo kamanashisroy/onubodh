@@ -16,13 +16,13 @@ public class onubodh.ImageConvertCommand : M100Command {
 		OUTFILE,
 	}
 	public ImageConvertCommand() {
-		estr prefix = estr.set_static_string("convert");
+		extring prefix = extring.set_static_string("convert");
 		base(&prefix);
 		addOptionString("-i", M100Command.OptionType.TXT, Options.INFILE, "Input file");
 		addOptionString("-o", M100Command.OptionType.TXT, Options.OUTFILE, "Output file"); 
 	}
 
-	bool is_jpeg_filename(estr*fn) {
+	bool is_jpeg_filename(extring*fn) {
 		int len = fn.length();
 		return ((fn.char_at(len-1) == 'g')
 			&& (fn.char_at(len-2) == 'e')
@@ -35,7 +35,7 @@ public class onubodh.ImageConvertCommand : M100Command {
 			&& (fn.char_at(len-4) == '.'));
 	}
 
-	bool is_ppm_filename(estr*fn) {
+	bool is_ppm_filename(extring*fn) {
 		int len = fn.length();
 		return (fn.char_at(len-1) == 'm')
 			&& (fn.char_at(len-2) == 'p')
@@ -43,7 +43,7 @@ public class onubodh.ImageConvertCommand : M100Command {
 			&& (fn.char_at(len-4) == '.');
 	}
 
-	bool is_pgm_filename(estr*fn) {
+	bool is_pgm_filename(extring*fn) {
 		int len = fn.length();
 		return (fn.char_at(len-1) == 'm')
 			&& (fn.char_at(len-2) == 'g')
@@ -51,14 +51,14 @@ public class onubodh.ImageConvertCommand : M100Command {
 			&& (fn.char_at(len-4) == '.');
 	}
 
-	public override int act_on(estr*cmdstr, OutputStream pad, M100CommandSet cmds) throws M100CommandError.ActionFailed {
+	public override int act_on(extring*cmdstr, OutputStream pad, M100CommandSet cmds) throws M100CommandError.ActionFailed {
 		int ecode = 0;
-		ArrayList<str> vals = ArrayList<str>();
+		ArrayList<xtring> vals = ArrayList<xtring>();
 		if(parseOptions(cmdstr, &vals) != 0) {
 			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument");
 		}
-		str?infile = null;
-		str?outfile = null;
+		xtring?infile = null;
+		xtring?outfile = null;
 		if((infile = vals[Options.INFILE]) == null || (outfile = vals[Options.OUTFILE]) == null) {
 			throw new M100CommandError.ActionFailed.INSUFFICIENT_ARGUMENT("Insufficient argument");
 		}

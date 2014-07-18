@@ -7,7 +7,7 @@ using onubodh;
  * @{
  */
 public abstract class onubodh.ImageMatrixString : ImageMatrix {
-	protected estr points;
+	protected extring points;
 	protected aroop_uword8 requiredGrayVal = 0;
 	protected int features[32];
 	public enum feat {
@@ -18,7 +18,7 @@ public abstract class onubodh.ImageMatrixString : ImageMatrix {
 	public void buildString(netpbmg*src, int x, int y, uchar radiusShift, aroop_uword8 minGrayVal, FactoryCreatorForMatrix fcm) {
 		core.assert((1<<(radiusShift+1)) < 255);
 		buildMain(src,x,y,radiusShift, fcm);
-		points = estr();
+		points = extring();
 		requiredGrayVal = minGrayVal;
 		//print("matrix : %d,%d - %d\n", x, y, mat_size);
 		int i = 0;
@@ -29,7 +29,7 @@ public abstract class onubodh.ImageMatrixString : ImageMatrix {
 	
 	public override void copyFrom(ImageMatrix other) {
 		points.destroy();
-		points = estr.copy_shallow(&((ImageMatrixString)other).points);
+		points = extring.copy_shallow(&((ImageMatrixString)other).points);
 		features[feat.LENGTH] = points.length();
 	}
 	
@@ -46,7 +46,7 @@ public abstract class onubodh.ImageMatrixString : ImageMatrix {
 	public override int compile() {
 		int y;
 		uchar cumx = 0;
-		estr myPoints = estr.stack(size*size);
+		extring myPoints = extring.stack(size*size);
 		int highval = 0;
 		int lowval = 0;
 		for(y=0,cumx=0;(y<size) && ((y+top) < img.height) ;y++,cumx+=size) {
@@ -62,7 +62,7 @@ public abstract class onubodh.ImageMatrixString : ImageMatrix {
 				}
 			}
 		}
-		points = estr.copy_on_demand(&myPoints);
+		points = extring.copy_on_demand(&myPoints);
 		myPoints.destroy();
 		int len = points.length();
 		int empty = size*size-len;

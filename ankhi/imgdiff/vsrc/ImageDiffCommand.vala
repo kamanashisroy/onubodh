@@ -17,7 +17,7 @@ public class onubodh.ImageDiffCommand : M100Command {
 		OUTFILE,
 	}
 	public ImageDiffCommand() {
-		estr prefix = estr.set_static_string("imgdiff");
+		extring prefix = extring.set_static_string("imgdiff");
 		base(&prefix);
 		addOptionString("-i1", M100Command.OptionType.TXT, Options.INFILE1, "First input file");
 		addOptionString("-i2", M100Command.OptionType.TXT, Options.INFILE2, "Second input file");
@@ -42,15 +42,15 @@ public class onubodh.ImageDiffCommand : M100Command {
 		return 0;
 	}
 
-	public override int act_on(estr*cmdstr, OutputStream pad, M100CommandSet cmds) throws M100CommandError.ActionFailed {
+	public override int act_on(extring*cmdstr, OutputStream pad, M100CommandSet cmds) throws M100CommandError.ActionFailed {
 		int ecode = 0;
-		ArrayList<str> vals = ArrayList<str>();
+		ArrayList<xtring> vals = ArrayList<xtring>();
 		if(parseOptions(cmdstr, &vals) != 0) {
 			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument");
 		}
-		str?x = null;
-		str?y = null;
-		str?z = null;
+		xtring?x = null;
+		xtring?y = null;
+		xtring?z = null;
 		if((x = vals[Options.INFILE1]) == null || (y = vals[Options.INFILE2]) == null || (z = vals[Options.OUTFILE]) == null) {
 			throw new M100CommandError.ActionFailed.INSUFFICIENT_ARGUMENT("Insufficient argument");
 		}
