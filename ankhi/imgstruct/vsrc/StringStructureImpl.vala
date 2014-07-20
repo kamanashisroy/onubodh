@@ -91,10 +91,10 @@ public class onubodh.StringStructureImpl : StringStructure {
 
 	public override int getCracksInPixels() {
 		int crk = 0;
-		Iterator<container<ImageMatrixString>> it = Iterator<container<ImageMatrixString>>.EMPTY();
+		Iterator<AroopPointer<ImageMatrixString>> it = Iterator<AroopPointer<ImageMatrixString>>.EMPTY();
 		getIterator(&it, Replica_flags.ALL, 0);
 		while(it.next()) {
-			container<ImageMatrixString> can = it.get();
+			AroopPointer<ImageMatrixString> can = it.get();
 			ImageMatrixString mat = can.get();
 			crk += mat.getFeature(ImageMatrixStringNearLinear.feat.CRACKS);
 		}
@@ -105,11 +105,11 @@ public class onubodh.StringStructureImpl : StringStructure {
 	
 	public override bool overlaps(StringStructure other) {
 		bool olaps = false;
-		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
+		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>.EMPTY();
 		getIterator(&it, Replica_flags.ALL, 0);
 		//print("String length:%d(matrices)\n", strings.count_unsafe());
 		while(it.next()) {
-			container<ImageMatrix> can = it.get();
+			AroopPointer<ImageMatrix> can = it.get();
 			ImageMatrix x = can.get();
 			if(other.getMatrixAt(x.higherOrderXY) != null) {
 				olaps = true;
@@ -123,11 +123,11 @@ public class onubodh.StringStructureImpl : StringStructure {
 	
 	public override bool neibor(StringStructure other) {
 		bool nbr = false;
-		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
+		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>.EMPTY();
 		getIterator(&it, Replica_flags.ALL, 0);
 		//print("String length:%d(matrices)\n", strings.count_unsafe());
 		while(it.next()) {
-			container<ImageMatrix> can = it.get();
+			AroopPointer<ImageMatrix> can = it.get();
 			ImageMatrix x = can.get();
 			int xy = x.higherOrderXY;
 			//print("checking neibor around %d, %d\n", x.higherOrderX, x.higherOrderY);
@@ -162,10 +162,10 @@ public class onubodh.StringStructureImpl : StringStructure {
 	}
 	
 	public override void merge(StringStructure other) {
-		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
+		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>.EMPTY();
 		other.getIterator(&it, Replica_flags.ALL, 0);
 		while(it.next()) {
-			container<ImageMatrix> can = it.get();
+			AroopPointer<ImageMatrix> can = it.get();
 			ImageMatrix x = can.get();
 			//print("Merging ......\n");
 			if(getMatrixAt(x.higherOrderXY) == null) {
@@ -177,10 +177,10 @@ public class onubodh.StringStructureImpl : StringStructure {
 	
 #if false
 	public int mark(int val) {
-		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
+		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>.EMPTY();
 		strings.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
 		while(it.next()) {
-			container<ImageMatrix> can = it.get();
+			AroopPointer<ImageMatrix> can = it.get();
 			if(can.get().getVal() == val) {
 				can.mark(1);
 			}
@@ -206,12 +206,12 @@ public class onubodh.StringStructureImpl : StringStructure {
 #endif
 	public override int thin() {
 		// for all the matrices..
-		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
+		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>.EMPTY();
 		getIterator(&it, Replica_flags.ALL, 0);
 		ImageMatrix? a = null;
 		ImageMatrix? b = null;
 		while(it.next()) {
-			container<ImageMatrix> can = it.get();
+			AroopPointer<ImageMatrix> can = it.get();
 			ImageMatrix c = can.get();
 			if(a == null) {
 				a = c;
@@ -238,10 +238,10 @@ public class onubodh.StringStructureImpl : StringStructure {
 		extring val = extring.stack(512);
 		extring data = extring.stack(128);
 		extring intval = extring.stack(32);
-		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
+		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>.EMPTY();
 		getIterator(&it, Replica_flags.ALL, 0);
 		while(it.next()) {
-			container<ImageMatrix> can = it.get();
+			AroopPointer<ImageMatrix> can = it.get();
 			ImageMatrix mat = can.get();
 			int higher_order_x = mat.higherOrderX;
 			int higher_order_y = mat.higherOrderY;

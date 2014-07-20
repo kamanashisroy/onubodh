@@ -26,10 +26,10 @@ public abstract class onubodh.StringStructure : Replicable {
 	public int getLengthInPixels() {
 		int len = 0;
 		int y = -1;
-		Iterator<container<ImageMatrixString>> it = Iterator<container<ImageMatrixString>>.EMPTY();
+		Iterator<AroopPointer<ImageMatrixString>> it = Iterator<AroopPointer<ImageMatrixString>>.EMPTY();
 		strings.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
 		while(it.next()) {
-			container<ImageMatrixString> can = it.get();
+			AroopPointer<ImageMatrixString> can = it.get();
 			ImageMatrixString mat = can.get();
 			if(y == mat.higherOrderY) {
 				continue;
@@ -44,10 +44,10 @@ public abstract class onubodh.StringStructure : Replicable {
 	public virtual int getCracksInPixels() {
 		int crk = 0;
 		/*
-		Iterator<container<ImageMatrixString>> it = Iterator<container<ImageMatrixString>>.EMPTY();
+		Iterator<AroopPointer<ImageMatrixString>> it = Iterator<AroopPointer<ImageMatrixString>>.EMPTY();
 		strings.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
 		while(it.next()) {
-			container<ImageMatrixString> can = it.get();
+			AroopPointer<ImageMatrixString> can = it.get();
 			ImageMatrixString mat = can.get();
 			crk += mat.getCracks();
 		}
@@ -74,7 +74,7 @@ public abstract class onubodh.StringStructure : Replicable {
 		return strings.get(xy);
 	}
 	
-	public void getIterator(Iterator<container<ImageMatrix>>*it, int if_set, int if_not_set) {
+	public void getIterator(Iterator<AroopPointer<ImageMatrix>>*it, int if_set, int if_not_set) {
 		strings.iterator_hacked(it, if_set, if_not_set, 0);
 	}
 	
@@ -85,11 +85,11 @@ public abstract class onubodh.StringStructure : Replicable {
 	}
 	
 	public virtual int heal() {
-		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
+		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>.EMPTY();
 		strings.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
 		//print("String length:%d(matrices)\n", strings.count_unsafe());
 		while(it.next()) {
-			container<ImageMatrix> can = it.get();
+			AroopPointer<ImageMatrix> can = it.get();
 			can.get().heal();
 		}
 		it.destroy();
@@ -97,10 +97,10 @@ public abstract class onubodh.StringStructure : Replicable {
 	}
 
 	public virtual int thin() {
-		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
+		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>.EMPTY();
 		strings.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
 		while(it.next()) {
-			container<ImageMatrix> can = it.get();
+			AroopPointer<ImageMatrix> can = it.get();
 			can.get().thin();
 		}
 		it.destroy();
@@ -116,22 +116,22 @@ public abstract class onubodh.StringStructure : Replicable {
 	public abstract void dumpFeatures(OutputStream os);
 	
 	public virtual void fill() {
-		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
+		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>.EMPTY();
 		strings.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
 		//print("String length:%d(matrices)\n", strings.count_unsafe());
 		while(it.next()) {
-			container<ImageMatrix> can = it.get();
+			AroopPointer<ImageMatrix> can = it.get();
 			can.get().fill();
 		}
 		it.destroy();
 	}
 
 	public virtual void dumpImage(netpbmg*oimg, aroop_uword8 grayVal) {
-		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
+		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>.EMPTY();
 		strings.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
 		//print("String length:%d(matrices)\n", strings.count_unsafe());
 		while(it.next()) {
-			container<ImageMatrix> can = it.get();
+			AroopPointer<ImageMatrix> can = it.get();
 			ImageMatrix mat = can.get();
 			mat.dumpImage(oimg, grayVal);
 		}

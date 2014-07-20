@@ -9,8 +9,8 @@ using shotodol;
  * \addtogroup imgscale
  * @{
  */
-class onubodh.ImageScaleModule : DynamicModule {
-	public ImageScaleModule() {
+public class onubodh.ImageScaleModule : DynamicModule {
+	ImageScaleModule() {
 		extring modnm = extring.set_static_string("command");
 		extring ver = extring.set_static_string("0.0.0");
 		base(&modnm, &ver);

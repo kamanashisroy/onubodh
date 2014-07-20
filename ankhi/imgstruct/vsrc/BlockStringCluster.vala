@@ -58,11 +58,11 @@ public class onubodh.BlockStringCluster : BlockString {
 		print("Total matrices interesting matrices:%d\n", getLength());
 
 		// for all the matrices..
-		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
+		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>.EMPTY();
 		getIterator(&it, Replica_flags.ALL, 0);
 		int mshift = getShift();
 		while(it.next()) {
-			container<ImageMatrix> can = it.get();
+			AroopPointer<ImageMatrix> can = it.get();
 			ImageMatrix a = can.get();
 			if(a.testFlag(ImageMatrix.MatrixFlags.UNUSED1)) {
 				continue;

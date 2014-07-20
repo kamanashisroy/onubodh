@@ -22,11 +22,11 @@ public class onubodh.LineString : StringStructureImpl {
 	}
 	public override int heal() {
 		// for all the matrices..
-		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
+		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>.EMPTY();
 		getIterator(&it, Replica_flags.ALL, 0);
 		int shift = getShift();
 		while(it.next()) {
-			container<ImageMatrix> can = it.get();
+			AroopPointer<ImageMatrix> can = it.get();
 			ImageMatrix a = can.get();
 			
 			// try to build a line of matrices starting from a ..

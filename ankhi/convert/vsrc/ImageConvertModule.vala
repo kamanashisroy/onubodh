@@ -5,7 +5,7 @@ using shotodol;
  * \addtogroup imgconvert 
  * @{
  */
-class onubodh.ImageConvertModule : DynamicModule {
+public class onubodh.ImageConvertModule : DynamicModule {
 	ImageConvertModule() {
 		extring nm = extring.set_static_string("convert");
 		extring ver = extring.set_static_string("0.0.0");

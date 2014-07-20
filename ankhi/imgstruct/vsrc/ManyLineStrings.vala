@@ -20,10 +20,10 @@ public class onubodh.ManyLineStrings : LineString {
 	}
 	
 	void unmarkAll(int flag) {
-		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
+		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>.EMPTY();
 		getIterator(&it, Replica_flags.ALL, 0);
 		while(it.next()) {
-			container<ImageMatrix> can = it.get();
+			AroopPointer<ImageMatrix> can = it.get();
 			can.unmark(flag);
 		}
 		it.destroy();
@@ -40,11 +40,11 @@ public class onubodh.ManyLineStrings : LineString {
 		unmarkAll(usedMark);
 
 		// for all the matrices..
-		Iterator<container<ImageMatrix>> it = Iterator<container<ImageMatrix>>.EMPTY();
+		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>.EMPTY();
 		getIterator(&it, Replica_flags.ALL, usedMark);
 		int mshift = getShift();
 		while(it.next()) {
-			container<ImageMatrix> can = it.get();
+			AroopPointer<ImageMatrix> can = it.get();
 			can.mark(usedMark);
 			ImageMatrix a = can.get();
 			ImageMatrix c = a;
@@ -58,10 +58,10 @@ public class onubodh.ManyLineStrings : LineString {
 			bool appendA = true;
 			
 			ZeroTangle tngl = ZeroTangle(columns);
-			Iterator<container<ImageMatrix>> itFollow = Iterator<container<ImageMatrix>>.EMPTY();
+			Iterator<AroopPointer<ImageMatrix>> itFollow = Iterator<AroopPointer<ImageMatrix>>.EMPTY();
 			getIterator(&itFollow, Replica_flags.ALL, usedMark);
 			while(itFollow.next()) {
-				container<ImageMatrix> can2 = itFollow.get();
+				AroopPointer<ImageMatrix> can2 = itFollow.get();
 				ImageMatrix b = can2.get();
 				int axy = a.higherOrderXY;
 				int bxy = b.higherOrderXY;

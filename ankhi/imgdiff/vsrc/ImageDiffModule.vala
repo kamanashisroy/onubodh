@@ -5,7 +5,7 @@ using shotodol;
  * \addtogroup imgdiff
  * @{
  */
-class onubodh.ImageDiffModule : DynamicModule {
+public class onubodh.ImageDiffModule : DynamicModule {
 	ImageDiffModule() {
 		extring md = extring.set_static_string("imgdiff");
 		extring ver = extring.set_static_string("0.0.0");

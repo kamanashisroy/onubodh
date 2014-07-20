@@ -9,7 +9,7 @@ using onubodh;
  * \addtogroup token
  * @{
  */
-class onubodh.TokenModule : DynamicModule {
+public class onubodh.TokenModule : DynamicModule {
 	TokenModule() {
 		extring nm = extring.set_static_string("string token");
 		extring ver = extring.set_static_string("0.0.0");
