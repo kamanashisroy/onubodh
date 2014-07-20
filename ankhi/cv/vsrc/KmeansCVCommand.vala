@@ -33,13 +33,13 @@ public class shotodol.KmeansCVCommand : M100Command {
 		int kval = 30;
 		xtring?arg = null;
 		if((arg = vals[Options.K_VAL]) != null) {
-			kval = arg.ecast().to_int();
+			kval = arg.fly().to_int();
 		}
 		int ecode = 0;
 		extring dlg = extring.stack(128);
-		dlg.printf("<Computer Vision>kmeans cluster:%s -> %s\n", infile.ecast().to_string(), outfile.ecast().to_string());
+		dlg.printf("<Computer Vision>kmeans cluster:%s -> %s\n", infile.fly().to_string(), outfile.fly().to_string());
 		pad.write(&dlg);
-		if(shotodol_dryman_kmeans.dryman_kmeans.cluster(infile.ecast().to_string(), outfile.ecast().to_string(), kval, &ecode) != 0) {
+		if(shotodol_dryman_kmeans.dryman_kmeans.cluster(infile.fly().to_string(), outfile.fly().to_string(), kval, &ecode) != 0) {
 			dlg.printf("<Computer Vision> Internal error while filtering %d\n", ecode);
 			pad.write(&dlg);
 			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument");

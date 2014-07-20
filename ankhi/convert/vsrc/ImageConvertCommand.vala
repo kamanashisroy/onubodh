@@ -63,23 +63,23 @@ public class onubodh.ImageConvertCommand : M100Command {
 			throw new M100CommandError.ActionFailed.INSUFFICIENT_ARGUMENT("Insufficient argument");
 		}
 		if(is_jpeg_filename(infile)) {
-			netpbmg oimg = netpbmg.for_file(outfile.ecast().to_string());
+			netpbmg oimg = netpbmg.for_file(outfile.fly().to_string());
 			jpegimg iimg = jpegimg.from_netpbm(&oimg);
-			iimg.read(infile.ecast().to_string());
+			iimg.read(infile.fly().to_string());
 			oimg.write();
 			oimg.close();
 			return 0;
 		} else if(is_jpeg_filename(outfile)) {
-			netpbmg img = netpbmg.for_file(infile.ecast().to_string());
+			netpbmg img = netpbmg.for_file(infile.fly().to_string());
 			if(img.open(&ecode) != 0) {
 				throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument, Cannot open input file.");
 			}
 			jpegimg oimg = jpegimg.from_netpbm(&img);
-			oimg.write(9, outfile.ecast().to_string());
+			oimg.write(9, outfile.fly().to_string());
 			img.close();
 			return 0;
 		} else if(is_pgm_filename(outfile) && is_ppm_filename(infile)) {
-			netpbmg iimg = netpbmg.for_file(infile.ecast().to_string());
+			netpbmg iimg = netpbmg.for_file(infile.fly().to_string());
 			if(iimg.open(&ecode) != 0) {
 				throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument, Cannot open input file.");
 			}
@@ -94,7 +94,7 @@ public class onubodh.ImageConvertCommand : M100Command {
 					oimg.setGrayVal(x, y, gval);
 				}
 			}
-			oimg.write(outfile.ecast().to_string());
+			oimg.write(outfile.fly().to_string());
 			iimg.close();
 			oimg.close();
 			return 0;

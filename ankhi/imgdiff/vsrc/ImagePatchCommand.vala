@@ -49,11 +49,11 @@ public class onubodh.ImagePatchCommand : M100Command {
 		if((x = vals[Options.INFILE1]) == null || (y = vals[Options.INFILE2]) == null || (z = vals[Options.OUTFILE]) == null) {
 			throw new M100CommandError.ActionFailed.INSUFFICIENT_ARGUMENT("Insufficient argument");
 		}
-		netpbmg firstimg = netpbmg.for_file(x.ecast().to_string());
+		netpbmg firstimg = netpbmg.for_file(x.fly().to_string());
 		if(firstimg.open(&ecode) != 0) {
 			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument, Cannot open first input.");
 		}
-		netpbmg secondimg = netpbmg.for_file(y.ecast().to_string());
+		netpbmg secondimg = netpbmg.for_file(y.fly().to_string());
 		if(secondimg.open(&ecode) != 0) {
 			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument, Cannot open second input.");
 		}
@@ -63,7 +63,7 @@ public class onubodh.ImagePatchCommand : M100Command {
 		}
 		netpbmg oimg = netpbmg.alloc_like(&firstimg);
 		patch(oimg, firstimg, secondimg);
-		oimg.write(z.ecast().to_string());
+		oimg.write(z.fly().to_string());
 		//pngcoder.encode(outfile.to_string(), &oimg);
 		oimg.close();
 		return 0;

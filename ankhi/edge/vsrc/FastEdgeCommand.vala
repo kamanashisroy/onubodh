@@ -30,9 +30,9 @@ public class shotodol.FastEdgeCommand : M100Command {
 			throw new M100CommandError.ActionFailed.INSUFFICIENT_ARGUMENT("Insufficient argument");
 		}
 		extring dlg = extring.stack(128);
-		dlg.printf("<Edge detect>edge filter:%s -> %s\n", infile.ecast().to_string(), outfile.ecast().to_string());
+		dlg.printf("<Edge detect>edge filter:%s -> %s\n", infile.fly().to_string(), outfile.fly().to_string());
 		pad.write(&dlg);
-		if(shotodol_fastedge.fastedge_filter.filter(infile.ecast().to_string(), outfile.ecast().to_string(), &ecode) != 0) {
+		if(shotodol_fastedge.fastedge_filter.filter(infile.fly().to_string(), outfile.fly().to_string(), &ecode) != 0) {
 			dlg.printf("<Edge detect> Internal error while filtering %d\n", ecode);
 			pad.write(&dlg);
 			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument, It did not work.");

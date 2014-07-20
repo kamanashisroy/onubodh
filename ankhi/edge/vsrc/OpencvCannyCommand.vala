@@ -31,9 +31,9 @@ public class shotodol.OpencvCannyCommand : M100Command {
 			throw new M100CommandError.ActionFailed.INSUFFICIENT_ARGUMENT("Insufficient argument");
 		}
 		extring dlg = extring.stack(128);
-		dlg.printf("<Edge detect>edge filter:%s -> %s\n", infile.ecast().to_string(), outfile.ecast().to_string());
+		dlg.printf("<Edge detect>edge filter:%s -> %s\n", infile.fly().to_string(), outfile.fly().to_string());
 		pad.write(&dlg);
-		netpbmg iimg = netpbmg.for_file(infile.ecast().to_string());
+		netpbmg iimg = netpbmg.for_file(infile.fly().to_string());
 		if(iimg.open(&ecode) != 0) {
 			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument, Cannot open input file.");
 		}
@@ -45,7 +45,7 @@ public class shotodol.OpencvCannyCommand : M100Command {
 #else
 		core.assert("Opencv is not working" == null);
 #endif
-		oimg.write(outfile.ecast().to_string());
+		oimg.write(outfile.fly().to_string());
 		return 0;
 	}
 }

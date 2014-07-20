@@ -63,30 +63,30 @@ public class onubodh.ImageScaleCommand : M100Command {
 		if(infile == null || outfile == null) {
 			throw new M100CommandError.ActionFailed.INSUFFICIENT_ARGUMENT("Insufficient argument");
 		}
-		netpbmg iimg = netpbmg.for_file(infile.ecast().to_string());
+		netpbmg iimg = netpbmg.for_file(infile.fly().to_string());
 		if(iimg.open(&ecode) != 0) {
 			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument: cannot open input file.");
 		}
 		xtring?arg = vals[Options.UPSAMPLE];
 		if(arg != null) {
-			int up = arg.ecast().to_int();
+			int up = arg.fly().to_int();
 			if(up == 0) {
 				throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument: upsample ratio cannot be 0.");
 			}
 			netpbmg oimg = netpbmg.alloc_full(iimg.width*up, iimg.height*up, iimg.type);
 			upsample(oimg, iimg, up);
-			oimg.write(outfile.ecast().to_string());
+			oimg.write(outfile.fly().to_string());
 			return 0;
 		}
 		arg = vals[Options.DOWNSAMPLE];
 		if(arg != null) {
-			int down = arg.ecast().to_int();
+			int down = arg.fly().to_int();
 			if(down == 0) {
 				throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument: downsample ratio cannot be 0.");
 			}
 			netpbmg oimg = netpbmg.alloc_full(iimg.width/down, iimg.height/down, iimg.type);
 			downsample(oimg, iimg, down);
-			oimg.write(outfile.ecast().to_string());
+			oimg.write(outfile.fly().to_string());
 			return 0;
 		}
 		return 0;

@@ -38,17 +38,17 @@ public class onubodh.CentroidModelCVCommand : M100Command {
 		if((arg = vals[Options.X_VAL]) == null) {
 			throw new M100CommandError.ActionFailed.INSUFFICIENT_ARGUMENT("Insufficient argument");
 		}
-		int x = arg.ecast().to_int();
+		int x = arg.fly().to_int();
 		if((arg = vals[Options.Y_VAL]) == null) {
 			throw new M100CommandError.ActionFailed.INSUFFICIENT_ARGUMENT("Insufficient argument");
 		}
-		int y = arg.ecast().to_int();
+		int y = arg.fly().to_int();
 		{
 			extring dlg = extring.stack(128);
-			dlg.printf("<Computer Vision> Applying centroid method on:%s, at point (%d,%d)\n", infile.ecast().to_string(), x, y);
+			dlg.printf("<Computer Vision> Applying centroid method on:%s, at point (%d,%d)\n", infile.fly().to_string(), x, y);
 			pad.write(&dlg);
 		}
-		CentroidModel cm = new CentroidModel(infile.ecast().to_string());
+		CentroidModel cm = new CentroidModel(infile.fly().to_string());
 		cm.prepare();
 		if(cm.findEdges(x,y,pad) == 0) {
 			extring dlg = extring.set_static_string("<Computer Vision>Found something interesting\n");

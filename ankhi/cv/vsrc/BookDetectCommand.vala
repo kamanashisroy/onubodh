@@ -39,7 +39,7 @@ public class shotodol.BookDetectCommand : M100Command {
 		if((infile = vals[Options.INFILE]) == null || (outfile = vals[Options.OUTFILE]) == null) {
 			throw new M100CommandError.ActionFailed.INSUFFICIENT_ARGUMENT("Insufficient argument");
 		}
-		netpbmg img = netpbmg.for_file(infile.ecast().to_string());
+		netpbmg img = netpbmg.for_file(infile.fly().to_string());
 		if(img.open(&ecode) != 0) {
 			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument, Cannot open input file.");
 		}
@@ -57,11 +57,11 @@ public class shotodol.BookDetectCommand : M100Command {
 		int minGrayVal = 10;
 		xtring?arg = null;
 		if((arg = vals[Options.MIN_GRAY_VAL]) != null) {
-			minGrayVal = arg.ecast().to_int();
+			minGrayVal = arg.fly().to_int();
 		}
 		int radius_shift = 4;
 		if((arg = vals[Options.RADIUS_SHIFT]) != null) {
-			radius_shift = arg.ecast().to_int();
+			radius_shift = arg.fly().to_int();
 		}
 		BookDetect s = new BookDetect(&img, minGrayVal, radius_shift, featureVals, featureOps);
 		s.compile();

@@ -85,7 +85,7 @@ public class onubodh.XMLTransformCommand : M100Command {
 			print("Opening file\n");
 			is = new FileInputStream.from_file(infile);
 		} catch(IOStreamError.FileInputStreamError e) {
-			print("Failed to open file:[%s]\n", infile.ecast().to_string());
+			print("Failed to open file:[%s]\n", infile.fly().to_string());
 			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument, Cannot open input file.");
 		}
 #if XMLPARSER_DEBUG
