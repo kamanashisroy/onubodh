@@ -48,7 +48,6 @@ configLines["VALA_HOME"] = prompt("Aroop path " .. ahome .. " > ", ahome)
 local shotohome = string.gsub(configLines["PROJECT_HOME"],"onubodh$","shotodol")
 configLines["SHOTODOL_HOME"] = prompt("Shotodol path " .. shotohome .. " > ", shotohome)
 configLines["CFLAGS+"] = ""
-configLines["CFLAGS+"] = configLines["CFLAGS+"] .. " -DDYNALIB_ROOT=\\\"$(PROJECT_HOME)/\\\""
 configLines["VALAFLAGS+"] = ""
 if yes_no_to_bool(prompt_yes_no("enable XML parser debug ?(y/n) > ")) then
 	configLines["VALAFLAGS+"] = " -D XMLPARSER_DEBUG"
