@@ -1,7 +1,9 @@
 
 onLoad:
 	module -load ../../lang/token/dynalib.so
+	rehash
 	xtransform -i input.xml
+	unittest -t XMLTransformTest
 	wa -l 100
 	q
 

@@ -30,8 +30,6 @@ local configOps = {}
 io.write("This is the configure script built for shotodol\n")
 configLines["PLATFORM"] = "linux"
 
--- LUA_INCLUDE=-I/usr/include/lua5.1
--- LUA_LIB=-L/usr/lib/ -llua5.1
 -- print("QT_HOME="..."/home/ayaskanti/opt/qt/Desktop/Qt/474/gcc")
 -- print("ECHO="..."echo -e")
 -- use only echo in mac

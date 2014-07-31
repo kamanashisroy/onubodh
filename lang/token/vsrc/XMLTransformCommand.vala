@@ -73,8 +73,8 @@ public class onubodh.XMLTransformCommand : M100Command {
 			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument");
 		}
 		xtring?infile = null;
-		xtring?outfile = null;
-		if((infile = vals[Options.INFILE]) == null || (outfile = vals[Options.OUTFILE]) == null) {
+		//xtring?outfile = null;
+		if((infile = vals[Options.INFILE]) == null /*&& (outfile = vals[Options.OUTFILE]) == null*/) {
 			throw new M100CommandError.ActionFailed.INSUFFICIENT_ARGUMENT("Insufficient argument");
 		}
 #if XMLPARSER_DEBUG
@@ -82,10 +82,9 @@ public class onubodh.XMLTransformCommand : M100Command {
 #endif
 		FileInputStream?is = null;
 		try {
-			print("Opening file\n");
 			is = new FileInputStream.from_file(infile);
 		} catch(IOStreamError.FileInputStreamError e) {
-			print("Failed to open file:[%s]\n", infile.fly().to_string());
+			shotodol.Watchdog.watchit_string(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.WatchdogSeverity.ERROR, 0, 0, "Failed to open file\n");
 			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument, Cannot open input file.");
 		}
 #if XMLPARSER_DEBUG
@@ -119,6 +118,7 @@ public class onubodh.XMLTransformCommand : M100Command {
 #endif
 			} while(true);
 		} catch(IOStreamError.InputStreamError e) {
+			shotodol.Watchdog.watchit_string(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.WatchdogSeverity.ERROR, 0, 0, "Failed to read file\n");
 			// do nothing
 		}
 		parser = null;

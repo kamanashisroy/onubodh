@@ -19,6 +19,8 @@ public class onubodh.TokenModule : DynamicModule {
 	public override int init() {
 		extring command = extring.set_static_string("command");
 		Plugin.register(&command, new M100Extension(new XMLTransformCommand(), this));
+		extring test = extring.set_static_string("unittest");
+		Plugin.register(&test, new AnyInterfaceExtension(new XMLTransformTest(), this));
 		return 0;
 	}
 
