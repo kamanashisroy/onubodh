@@ -2,3 +2,4 @@
 onLoad:
 	module -load ankhi/cv/dynalib.so
 	module -load ankhi/convert/dynalib.so
+	module -load lang/token/dynalib.so

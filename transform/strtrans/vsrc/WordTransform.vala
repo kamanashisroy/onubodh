@@ -66,20 +66,20 @@ public struct onubodh.WordMap {
 
 public class onubodh.WordTransform : Replicable {
 	SearchableFactory<TransKeyWord> keyWords;
-	extring*keyWordArrayMap[32];
+	extring*keyWordArrayMap[64];
 	extring delim;
 	int keyCount;
 	bool stringLiteralAsWord;
 	enum wordTypes {
 		NON_KEY_WORD = 255,
-		MAX_KEY_INDEX_VALUE = 32,
+		MAX_KEY_INDEX_VALUE = 64,
 	}
 	public WordTransform() {
 		//memclean_raw();
 		keyWords = SearchableFactory<TransKeyWord>.for_type();
 		keyCount = 0;
 		delim = extring();
-		delim.buffer(32);
+		delim.buffer(wordTypes.MAX_KEY_INDEX_VALUE);
 		stringLiteralAsWord = true;
 	}
 	~WordTransform() {

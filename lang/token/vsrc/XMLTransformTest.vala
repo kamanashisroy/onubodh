@@ -105,6 +105,10 @@ internal class onubodh.XMLTransformTest : UnitTest {
 	public override int test() throws UnitTestError {
 		extring teststr = extring.set_static_string("<a href=\"la la\">La la</a><b href=hola label=hola></b>");
 		testXtringHelper(&teststr);
+		teststr.rebuild_and_set_static_string("<a href=\"la la\"><b href=hola label=hola></b></a>");
+		testXtringHelper(&teststr);
+		teststr.rebuild_and_set_static_string("<a href=\"la la\">La la<b href=hola label=hola><a href=\"la la\">La la</a><b href=hola label=hola></b></b><b href=hola label=hola></b></a>");
+		testXtringHelper(&teststr);
 		// check value
 		extring dlg = extring.stack(128);
 		dlg.concat_string("XMLTransform Test");
