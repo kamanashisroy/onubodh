@@ -30,12 +30,12 @@ public abstract class onubodh.StringStructure : Replicable {
 		strings.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
 		while(it.next()) {
 			AroopPointer<ImageMatrixString> can = it.get();
-			ImageMatrixString mat = can.get();
+			ImageMatrixString mat = can.getUnowned();
 			if(y == mat.higherOrderY) {
 				continue;
 			}
 			y = mat.higherOrderY;
-			len += can.get().getFeature(ImageMatrixString.feat.LENGTH);
+			len += can.getUnowned().getFeature(ImageMatrixString.feat.LENGTH);
 		}
 		it.destroy();
 		return len;
@@ -48,7 +48,7 @@ public abstract class onubodh.StringStructure : Replicable {
 		strings.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
 		while(it.next()) {
 			AroopPointer<ImageMatrixString> can = it.get();
-			ImageMatrixString mat = can.get();
+			ImageMatrixString mat = can.getUnowned();
 			crk += mat.getCracks();
 		}
 		it.destroy();
@@ -90,7 +90,7 @@ public abstract class onubodh.StringStructure : Replicable {
 		//print("String length:%d(matrices)\n", strings.count_unsafe());
 		while(it.next()) {
 			AroopPointer<ImageMatrix> can = it.get();
-			can.get().heal();
+			can.getUnowned().heal();
 		}
 		it.destroy();
 		return 0;
@@ -101,7 +101,7 @@ public abstract class onubodh.StringStructure : Replicable {
 		strings.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
 		while(it.next()) {
 			AroopPointer<ImageMatrix> can = it.get();
-			can.get().thin();
+			can.getUnowned().thin();
 		}
 		it.destroy();
 		return 0;
@@ -121,7 +121,7 @@ public abstract class onubodh.StringStructure : Replicable {
 		//print("String length:%d(matrices)\n", strings.count_unsafe());
 		while(it.next()) {
 			AroopPointer<ImageMatrix> can = it.get();
-			can.get().fill();
+			can.getUnowned().fill();
 		}
 		it.destroy();
 	}
@@ -132,7 +132,7 @@ public abstract class onubodh.StringStructure : Replicable {
 		//print("String length:%d(matrices)\n", strings.count_unsafe());
 		while(it.next()) {
 			AroopPointer<ImageMatrix> can = it.get();
-			ImageMatrix mat = can.get();
+			ImageMatrix mat = can.getUnowned();
 			mat.dumpImage(oimg, grayVal);
 		}
 		it.destroy();

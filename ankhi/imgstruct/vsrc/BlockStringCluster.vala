@@ -63,7 +63,7 @@ public class onubodh.BlockStringCluster : BlockString {
 		int mshift = getShift();
 		while(it.next()) {
 			AroopPointer<ImageMatrix> can = it.get();
-			ImageMatrix a = can.get();
+			ImageMatrix a = can.getUnowned();
 			if(a.testFlag(ImageMatrix.MatrixFlags.UNUSED1)) {
 				continue;
 			}

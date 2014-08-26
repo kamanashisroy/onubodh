@@ -27,7 +27,7 @@ public class onubodh.LineString : StringStructureImpl {
 		int shift = getShift();
 		while(it.next()) {
 			AroopPointer<ImageMatrix> can = it.get();
-			ImageMatrix a = can.get();
+			ImageMatrix a = can.getUnowned();
 			
 			// try to build a line of matrices starting from a ..
 			int col = a.higherOrderX;

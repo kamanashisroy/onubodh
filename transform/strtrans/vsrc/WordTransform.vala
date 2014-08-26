@@ -79,7 +79,7 @@ public class onubodh.WordTransform : Replicable {
 		keyWords = SearchableFactory<TransKeyWord>.for_type();
 		keyCount = 0;
 		delim = extring();
-		delim.buffer(wordTypes.MAX_KEY_INDEX_VALUE);
+		delim.rebuild_in_heap(wordTypes.MAX_KEY_INDEX_VALUE);
 		stringLiteralAsWord = true;
 	}
 	~WordTransform() {
@@ -111,7 +111,7 @@ public class onubodh.WordTransform : Replicable {
 
 	public int setTransKeyWordString(extring*keys) throws WordTransformError {
 		extring inp = extring.stack_copy_deep(keys);
-		delim.buffer(128);
+		delim.rebuild_in_heap(128);
 		while(true) {
 			extring next = extring();
 			//print("Looling for token in [%s]\n", inp.to_string());

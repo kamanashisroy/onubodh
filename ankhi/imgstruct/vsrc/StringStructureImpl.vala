@@ -95,7 +95,7 @@ public class onubodh.StringStructureImpl : StringStructure {
 		getIterator(&it, Replica_flags.ALL, 0);
 		while(it.next()) {
 			AroopPointer<ImageMatrixString> can = it.get();
-			ImageMatrixString mat = can.get();
+			ImageMatrixString mat = can.getUnowned();
 			crk += mat.getFeature(ImageMatrixStringNearLinear.feat.CRACKS);
 		}
 		it.destroy();
@@ -110,7 +110,7 @@ public class onubodh.StringStructureImpl : StringStructure {
 		//print("String length:%d(matrices)\n", strings.count_unsafe());
 		while(it.next()) {
 			AroopPointer<ImageMatrix> can = it.get();
-			ImageMatrix x = can.get();
+			ImageMatrix x = can.getUnowned();
 			if(other.getMatrixAt(x.higherOrderXY) != null) {
 				olaps = true;
 				//print("Overlaps ......\n");
@@ -128,7 +128,7 @@ public class onubodh.StringStructureImpl : StringStructure {
 		//print("String length:%d(matrices)\n", strings.count_unsafe());
 		while(it.next()) {
 			AroopPointer<ImageMatrix> can = it.get();
-			ImageMatrix x = can.get();
+			ImageMatrix x = can.getUnowned();
 			int xy = x.higherOrderXY;
 			//print("checking neibor around %d, %d\n", x.higherOrderX, x.higherOrderY);
 			core.assert(x == getMatrixAt(xy));
@@ -166,7 +166,7 @@ public class onubodh.StringStructureImpl : StringStructure {
 		other.getIterator(&it, Replica_flags.ALL, 0);
 		while(it.next()) {
 			AroopPointer<ImageMatrix> can = it.get();
-			ImageMatrix x = can.get();
+			ImageMatrix x = can.getUnowned();
 			//print("Merging ......\n");
 			if(getMatrixAt(x.higherOrderXY) == null) {
 				appendMatrix(x);
@@ -181,7 +181,7 @@ public class onubodh.StringStructureImpl : StringStructure {
 		strings.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
 		while(it.next()) {
 			AroopPointer<ImageMatrix> can = it.get();
-			if(can.get().getVal() == val) {
+			if(can.getUnowned().getVal() == val) {
 				can.mark(1);
 			}
 		}
@@ -212,7 +212,7 @@ public class onubodh.StringStructureImpl : StringStructure {
 		ImageMatrix? b = null;
 		while(it.next()) {
 			AroopPointer<ImageMatrix> can = it.get();
-			ImageMatrix c = can.get();
+			ImageMatrix c = can.getUnowned();
 			if(a == null) {
 				a = c;
 				continue;
@@ -242,7 +242,7 @@ public class onubodh.StringStructureImpl : StringStructure {
 		getIterator(&it, Replica_flags.ALL, 0);
 		while(it.next()) {
 			AroopPointer<ImageMatrix> can = it.get();
-			ImageMatrix mat = can.get();
+			ImageMatrix mat = can.getUnowned();
 			int higher_order_x = mat.higherOrderX;
 			int higher_order_y = mat.higherOrderY;
 			int i;
