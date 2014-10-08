@@ -1,7 +1,6 @@
 libs/fastedge
 libs/opencv
 libs/netpbm
-libs/rawimg
 libs/dryman_kmeans
 libs/jpeg
 transform/strtrans
