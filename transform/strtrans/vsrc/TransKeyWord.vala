@@ -6,7 +6,7 @@ using onubodh;
  * \addtogroup strtrans
  * @{
  */
-public class onubodh.TransKeyWord : Searchable {
+internal class onubodh.TransKeyWord : Searchable {
 	public uchar index;
 	public extring word;
 	public void rehash() {
