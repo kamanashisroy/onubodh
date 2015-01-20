@@ -1,0 +1,5 @@
+vapi/*.vapi
+include/*.h
+*.c
+static_objects.a
+dynalib.so

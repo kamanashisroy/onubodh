@@ -5,6 +5,7 @@ libs/dryman_kmeans
 libs/jpeg
 transform/strtrans
 libs/xmlparser
+libs/markdownparser
 ankhi/scale
 ankhi/imgdiff
 ankhi/convert
