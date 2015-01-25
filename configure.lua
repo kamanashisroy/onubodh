@@ -50,6 +50,9 @@ configLines["VALAFLAGS+"] = ""
 if yes_no_to_bool(prompt_yes_no("enable XML parser debug ?(y/n) > ")) then
 	configLines["VALAFLAGS+"] = " -D XMLPARSER_DEBUG"
 end
+if yes_no_to_bool(prompt_yes_no("enable Markdown parser debug ?(y/n) > ")) then
+	configLines["VALAFLAGS+"] = " -D MARKDOWNPARSER_DEBUG"
+end
 
 local conf = assert(io.open("build/.config.mk", "w"))
 -- import shotodol symbols

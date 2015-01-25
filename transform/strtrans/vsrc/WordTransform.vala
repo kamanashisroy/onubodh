@@ -68,18 +68,20 @@ public class onubodh.WordTransform : Replicable {
 	SearchableFactory<TransKeyWord> keyWords;
 	extring*keyWordArrayMap[64];
 	extring delim;
+	extring*wordSpacing;
 	int keyCount;
 	bool stringLiteralAsWord;
 	enum wordTypes {
 		NON_KEY_WORD = 255,
 		MAX_KEY_INDEX_VALUE = 64,
 	}
-	public WordTransform() {
+	public WordTransform(extring*givenWordSpacing = null) {
 		//memclean_raw();
 		keyWords = SearchableFactory<TransKeyWord>.for_type();
 		keyCount = 0;
 		delim = extring();
 		delim.rebuild_in_heap(wordTypes.MAX_KEY_INDEX_VALUE);
+		wordSpacing = givenWordSpacing;
 		stringLiteralAsWord = true;
 	}
 	~WordTransform() {
@@ -153,9 +155,9 @@ public class onubodh.WordTransform : Replicable {
 		while(true) {
 			int shift = inp.length();
 			if(stringLiteralAsWord) {
-				LineAlign.next_token_delimitered_sliteral(&inp, &next, &delim);
+				LineAlign.next_token_delimitered_sliteral(&inp, &next, &delim, wordSpacing);
 			} else {
-				LineAlign.next_token_delimitered(&inp, &next, &delim);
+				LineAlign.next_token_delimitered(&inp, &next, &delim, wordSpacing);
 			}
 			shift = shift - inp.length() ;
 			if(next.is_empty()) {

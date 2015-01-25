@@ -17,6 +17,7 @@ public enum onubodh.MarkObject {
 	DOUBLE_STARRED_OBJECT,
 	DOUBLE_UNDERSCORED_OBJECT,
 	LIST_OBJECT,
+	HEADER_OBJECT,
 	LINEBREAK_OBJECT,
 }
 
@@ -71,9 +72,26 @@ public struct onubodh.MarkdownIterator {
 #endif
 #if MARKDOWNPARSER_DEBUG
 	public void dump(extring*prefix) {
+		extring objtypestr = extring();
+		if(objectType == MarkObject.SQUARED_OBJECT) {
+			objtypestr.rebuild_and_set_static_string("[Squared object]");
+		} else if(objectType == MarkObject.BRACED_OBJECT) {
+			objtypestr.rebuild_and_set_static_string("(Braced object)");
+		} else if(objectType == MarkObject.UNDERSCORED_OBJECT) {
+			objtypestr.rebuild_and_set_static_string("_Underscored object_");
+		} else if(objectType == MarkObject.STARRED_OBJECT) {
+			objtypestr.rebuild_and_set_static_string("*Starred object*");
+		} else if(objectType == MarkObject.LIST_OBJECT) {
+			objtypestr.rebuild_and_set_static_string("-List object-");
+		} else if(objectType == MarkObject.HEADER_OBJECT) {
+			objtypestr.rebuild_and_set_static_string("-Header-");
+		} else {
+			objtypestr.rebuild_and_set_static_string("..Plain object..");
+		}
+
 		extring talk = extring.stack(512);
 		prefix.zero_terminate();
-		talk.printf("%s [basePos:%d,shift:%d,pos:%d,clen:%d,klen:%d]\n", prefix.to_string(), basePos, shift, pos, content.length(), kernel.length());
+		talk.printf("%s %s [basePos:%d,shift:%d,pos:%d,clen:%d,klen:%d]\n", prefix.to_string(), objtypestr.to_string(), basePos, shift, pos, content.length(), kernel.length());
 		shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 8, shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
 	}
 #endif
@@ -91,10 +109,15 @@ public class onubodh.MarkdownParser : onubodh.WordTransform {
 	int PARENTHESIS_OPEN;
 	int PARENTHESIS_CLOSE;
 	int DASH;
+	int EQUAL;
 	int UNDERSCORE;
 	int ASTERSIK;
-	int NEWLINE;
+	int CRLF;
+	int CARRIAGE_RETURN;
+	extring wordSpacing;
 	public MarkdownParser() {
+		wordSpacing = extring.set_static_string(" ");
+		base(&wordSpacing);
 		extring entry = extring.set_static_string("[");
 		SQUARE_BRACE_OPEN = addKeyWord(&entry);
 		entry.rebuild_and_set_static_string("]");
@@ -105,21 +128,24 @@ public class onubodh.MarkdownParser : onubodh.WordTransform {
 		PARENTHESIS_CLOSE = addKeyWord(&entry);
 		entry.rebuild_and_set_static_string("-");
 		DASH = addKeyWord(&entry);
+		entry.rebuild_and_set_static_string("=");
+		EQUAL = addKeyWord(&entry);
 		entry.rebuild_and_set_static_string("_");
 		UNDERSCORE = addKeyWord(&entry);
 		entry.rebuild_and_set_static_string("*");
 		ASTERSIK = addKeyWord(&entry);
 		entry.rebuild_and_set_static_string("\n");
-		NEWLINE = addKeyWord(&entry);
+		CRLF = addKeyWord(&entry);
 	}
 	
 	public int next(MarkdownIterator*it) throws MarkdownParserError.INVALID_TAG {
 		core.assert(it != null);
 		it.content.destroy();
 		//it.shift = 0;
+		print("next [basePos:%d,shift:%d,pos:%d,clen:%d,klen:%d]\n", it.basePos, it.shift, it.pos, it.content.length(), it.kernel.length());
 #if MARKDOWNPARSER_DEBUG
 		extring talk = extring.stack(128);
-		talk.printf("nextElem() ");
+		talk.printf("next() ");
 		it.dump(&talk);
 #endif
 		if(it.kernel.is_empty() || (it.pos >= it.kernel.length())) {
@@ -132,27 +158,101 @@ public class onubodh.MarkdownParser : onubodh.WordTransform {
 		int i;
 		int len = it.kernel.length();
 		int textEnd = len;
+		int key = DASH;
 		int oldKey = DASH;
+		int skiplen = 0;
+#if MARKDOWNPARSER_DEBUG
+		extring talk = extring.stack(512);
+#endif
 		// TODO we should use sandbox.indexof(char) function.
 		for (i = it.pos;i<len; i++) {
-			int key = it.kernel.char_at(it.pos);
+			oldKey = key;
+			key = it.kernel.char_at(i);
 			if(key == SQUARE_BRACE_OPEN
 			 || key == PARENTHESIS_OPEN
 			 || key == UNDERSCORE
 			 || key == ASTERSIK) {
 				textEnd = i;
 				break;
-			} else if(key == DASH && oldKey == NEWLINE) {
-				textEnd = i;
+			} else if(key == DASH && (oldKey == CRLF)) { // Parsing header --------------------
+				int headlineStart = i;
+				int ch = 0;
+				for (i++;i<len; i++) {
+					if((ch = it.kernel.char_at(i)) != DASH) {
+						break;
+					}
+				}
+				int headlineEnd = i;
+				if((headlineEnd - headlineStart) == 1 && ch != CRLF) {
+					textEnd = headlineStart;
+					break;
+				}
+				if((headlineEnd - headlineStart) == 1) 
+					continue;
+				if(ch != CRLF) { // skip the line
+					i = headlineStart;
+					continue;
+				}
+				textEnd = headlineStart;
+				textEnd = textEnd < it.pos ? it.pos : textEnd;
+				it.objectType = MarkObject.HEADER_OBJECT;
+				skiplen = headlineEnd - textEnd;
+				break;
+			} else if(key == EQUAL && (oldKey == CRLF)) { // parsing header ======================
+				int headlineStart = i;
+				int ch = 0;
+#if MARKDOWNPARSER_DEBUG
+				talk.printf("header\n");
+				it.dump(&talk);
+#endif
+				for (i++;i<len; i++) {
+					if((ch = it.kernel.char_at(i)) != EQUAL) {
+						break;
+					}
+				}
+				int headlineEnd = i;
+				if((headlineEnd - headlineStart == 1) || (ch != CRLF)) {
+					i = headlineStart;
+#if MARKDOWNPARSER_DEBUG
+					talk.printf("no, not header\n");
+					it.dump(&talk);
+#endif
+					continue;
+				}
+#if MARKDOWNPARSER_DEBUG
+				talk.printf("yes, it is header\n");
+				it.dump(&talk);
+#endif
+				textEnd = headlineStart;
+				textEnd = textEnd < it.pos ? it.pos : textEnd;
+				it.objectType = MarkObject.HEADER_OBJECT;
+				skiplen = headlineEnd - textEnd;
 				break;
 			}
-			oldKey = key;
+		}
+		if(textEnd > it.pos) { // trim
+			int delim = it.kernel.char_at(textEnd-1);
+			if((delim == CRLF)) {
+				textEnd--;
+				skiplen++;
+				if(textEnd > it.pos) {
+					delim = it.kernel.char_at(textEnd-1);
+					if((delim == CRLF) && textEnd > it.pos) {
+						textEnd--;
+						skiplen++;
+					}
+				}
+			}
 		}
 		it.content = extring.copy_shallow(&it.kernel);
-		if(textEnd != len)it.content.trim_to_length(it.pos+textEnd);
+		if(textEnd != len)it.content.trim_to_length(textEnd);
 		it.content.shift(it.pos);
 		it.shift = it.pos;
-		it.pos+=textEnd;
+		it.pos = textEnd+skiplen;
+#if MARKDOWNPARSER_DEBUG
+		talk.printf("text: %d,%d ", textEnd, skiplen);
+		it.dump(&talk);
+#endif
 		return 0;
 	}
 
@@ -160,7 +260,6 @@ public class onubodh.MarkdownParser : onubodh.WordTransform {
 		int i;
 		int len = it.kernel.length();
 		int angleBraceStart = -1;
-		int depth = 0;
 		angleBraceStart = it.pos;
 #if MARKDOWNPARSER_DEBUG
 		extring talkative = extring.stack(100);
@@ -180,22 +279,39 @@ public class onubodh.MarkdownParser : onubodh.WordTransform {
 			it.objectType = MarkObject.STARRED_OBJECT;
 		} else if(key == DASH) {
 			it.objectType = MarkObject.LIST_OBJECT;
-			delimiter = NEWLINE;
+			delimiter = CRLF;
 		} else {
 			it.objectType = MarkObject.PLAIN_OBJECT;
 			return nextPlainMarkObject(it);
 		}
-		for (i = it.pos;i<len; i++) {
-			if(it.kernel.char_at(i) != delimiter && it.kernel.char_at(i) == key) {
+#if MARKDOWNPARSER_DEBUG
+		it.dump(&talkative);
+#endif
+		int depth = 1;
+		int doubledelimit = 0;
+		for (i = it.pos+1;i<len; i++) {
+			int current = it.kernel.char_at(i);
+			if(current == key && (i-1) == it.pos) {
 				depth++;
-			} else if(it.kernel.char_at(i) == delimiter) {
+				doubledelimit = 1;
+				if(it.objectType == MarkObject.UNDERSCORED_OBJECT)
+					it.objectType = MarkObject.DOUBLE_UNDERSCORED_OBJECT;
+				else if(it.objectType == MarkObject.STARRED_OBJECT)
+					it.objectType = MarkObject.DOUBLE_STARRED_OBJECT;
+			} if(current != delimiter && current == key) {
+				depth++;
+			} else if(current == delimiter) {
+#if MARKDOWNPARSER_DEBUG
+				talkative.printf("closed:%c, by %c\n", key, delimiter);it.dump(&talkative);
+#endif
 				depth--;
 				if(depth == 0) {
 					it.content = extring();
 					it.content = extring.copy_shallow(&it.kernel);
-					it.content.trim_to_length(i+1);
-					it.content.shift(it.pos);
-					it.shift = it.pos;
+					it.content.trim_to_length(i-doubledelimit);
+					it.content.shift(it.pos+1+doubledelimit);
+					it.shift = it.pos+1+doubledelimit;
+					
 					it.pos = i+1;
 					return 0;
 				}
@@ -222,7 +338,7 @@ public class onubodh.MarkdownParser : onubodh.WordTransform {
 	public void traverseDeep(MarkdownIterator*xit, int depth, MarkdownTraverser cb) throws MarkdownParserError.INVALID_TAG {
 #if MARKDOWNPARSER_DEBUG
 		extring talkative = extring.stack(100);
-		talkative.printf("~)/[~~Peeling %s", xit.nextTag.to_string());xit.dump(&talkative);
+		talkative.printf("~)/[~~Peeling ");xit.dump(&talkative);
 #endif
 		MarkdownIterator pl = MarkdownIterator(xit.m);
 		if(peelCapsule(&pl, xit) == 0) {
@@ -230,7 +346,7 @@ public class onubodh.MarkdownParser : onubodh.WordTransform {
 			xit.inner = null;
 			//xit.pos--;
 #if MARKDOWNPARSER_DEBUG
-			talkative.printf("--Next after %s", xit.nextTag.to_string());xit.dump(&talkative);
+			talkative.printf("--Next ");xit.dump(&talkative);
 #endif
 		}
 	}
@@ -246,16 +362,11 @@ public class onubodh.MarkdownParser : onubodh.WordTransform {
 		
 #if MARKDOWNPARSER_DEBUG
 		extring talkative = extring.stack(100);
-		talkative.printf("++traversing %s", xit.nextTag.to_string());xit.dump(&talkative);
+		talkative.printf("++traversing %s", xit.content.to_string());xit.dump(&talkative);
 #endif
 		do {
 #if MARKDOWNPARSER_DEBUG
-			talkative.printf("~~next after:");
-			if(xit.nextIsText) {
-				talkative.concat(&xit.content);
-			} else {
-				talkative.concat(&xit.nextTag);
-			
+			talkative.printf("~~next");
 			xit.dump(&talkative);
 #endif
 			if(next(&xit) == -1)
@@ -265,10 +376,9 @@ public class onubodh.MarkdownParser : onubodh.WordTransform {
 			//}
 			cb(&xit);
 
-			if(xit.objectType != MarkObject.PLAIN_OBJECT && (depth-1) != 0) {
+			if((xit.objectType != MarkObject.PLAIN_OBJECT && xit.objectType != MarkObject.HEADER_OBJECT) && (depth-1) != 0) {
 #if MARKDOWNPARSER_DEBUG
-				talkative.printf("getting inside tag :");
-				talkative.concat(&xit.nextTag);
+				talkative.printf("getting inside");
 				xit.dump(&talkative);
 #endif
 				//core.assert(xit.kernel.char_at(xit.pos) == ANGLE_BRACE_OPEN);
@@ -277,7 +387,7 @@ public class onubodh.MarkdownParser : onubodh.WordTransform {
 				if(peelCapsule(&pl, &xit) == 0) {
 					//core.assert(pl.kernel.char_at(pl.pos) == ANGLE_BRACE_OPEN);
 #if MARKDOWNPARSER_DEBUG
-					talkative.printf("~)/[~~Peeling %s", xit.nextTag.to_string());xit.dump(&talkative);
+					talkative.printf("~)/[~~Peeling ");xit.dump(&talkative);
 #endif
 					if(!pl.kernel.is_empty())traversePreorder(m, depth-1, cb, &pl.kernel, pl.basePos);
 					xit.inner = null;
@@ -306,7 +416,7 @@ public class onubodh.MarkdownParser : onubodh.WordTransform {
 			if(next(xit) == -1)
 				return;
 		} else {
-			if(xit.objectType != MarkObject.PLAIN_OBJECT) {
+			if(xit.objectType != MarkObject.PLAIN_OBJECT && xit.objectType != MarkObject.HEADER_OBJECT) {
 				traverseDeep(xit, depth, cb);
 				return;
 			}
