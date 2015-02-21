@@ -13,8 +13,8 @@ public abstract class onubodh.ImageMatrixString : ImageMatrix {
 	public enum feat {
 		LENGTH = 0,
 		CONTRAST = 16,
-		MAX_FEATURES=32,
 	}
+	public static const int MAX_FEATURES=32;
 	public void buildString(netpbmg*src, int x, int y, uchar radiusShift, aroop_uword8 minGrayVal, FactoryCreatorForMatrix fcm) {
 		core.assert((1<<(radiusShift+1)) < 255);
 		buildMain(src,x,y,radiusShift, fcm);
@@ -22,7 +22,7 @@ public abstract class onubodh.ImageMatrixString : ImageMatrix {
 		requiredGrayVal = minGrayVal;
 		//print("matrix : %d,%d - %d\n", x, y, mat_size);
 		int i = 0;
-		for(i = 0; i < feat.MAX_FEATURES; i++) {
+		for(i = 0; i < MAX_FEATURES; i++) {
 			features[i] = 0;
 		}
 	}

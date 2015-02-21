@@ -13,7 +13,7 @@ public class onubodh.ImageConvertModule : DynamicModule {
 	}
 	public override int init() {
 		extring command = extring.set_static_string("command");
-		Plugin.register(&command, new M100Extension(new ImageConvertCommand(), this));
+		PluginManager.register(&command, new M100Extension(new ImageConvertCommand(), this));
 		return 0;
 	}
 

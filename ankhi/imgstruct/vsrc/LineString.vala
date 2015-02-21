@@ -22,7 +22,7 @@ public class onubodh.LineString : StringStructureImpl {
 	}
 	public override int heal() {
 		// for all the matrices..
-		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>.EMPTY();
+		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>();
 		getIterator(&it, Replica_flags.ALL, 0);
 		int shift = getShift();
 		while(it.next()) {

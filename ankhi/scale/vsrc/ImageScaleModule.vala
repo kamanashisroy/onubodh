@@ -17,7 +17,7 @@ public class onubodh.ImageScaleModule : DynamicModule {
 	}
 	public override int init() {
 		extring command = extring.set_static_string("command");
-		Plugin.register(&command, new M100Extension(new ImageScaleCommand(), this));
+		PluginManager.register(&command, new M100Extension(new ImageScaleCommand(), this));
 		return 0;
 	}
 

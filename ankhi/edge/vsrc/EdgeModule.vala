@@ -18,8 +18,8 @@ public class onubodh.EdgeModule : DynamicModule {
 	}
 	public override int init() {
 		extring command = extring.set_static_string("command");
-		Plugin.register(&command, new M100Extension(new FastEdgeCommand(), this));
-		Plugin.register(&command, new M100Extension(new OpencvCannyCommand(), this));
+		PluginManager.register(&command, new M100Extension(new FastEdgeCommand(), this));
+		PluginManager.register(&command, new M100Extension(new OpencvCannyCommand(), this));
 		return 0;
 	}
 

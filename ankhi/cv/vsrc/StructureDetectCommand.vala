@@ -57,10 +57,10 @@ public class shotodol.StructureDetectCommand : M100Command {
 		if(img.open(&ecode) != 0) {
 			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument, Cannot open input file.");
 		}
-		int featureVals[ImageMatrixString.feat.MAX_FEATURES];
-		int featureOps[ImageMatrixString.feat.MAX_FEATURES];
+		int featureVals[ImageMatrixString.MAX_FEATURES];
+		int featureOps[ImageMatrixString.MAX_FEATURES];
 		int i = 0;
-		for(i = 0; i < ImageMatrixString.feat.MAX_FEATURES; i++) {
+		for(i = 0; i < ImageMatrixString.MAX_FEATURES; i++) {
 			featureVals[i] = 0;
 			featureOps[i] = 0;
 		}

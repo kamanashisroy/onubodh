@@ -15,12 +15,12 @@ public class onubodh.StringStructureImpl : StringStructure {
 	protected int rows;
 	protected int radius; // 4 or 8, it is actually the size of the matrix
 	protected aroop_uword8 shift; // 2 if 4 and 3 if 8 so on ..
-	int reqVals[ImageMatrixString.feat.MAX_FEATURES];
-	int reqOps[ImageMatrixString.feat.MAX_FEATURES];
+	int reqVals[ImageMatrixString.MAX_FEATURES];
+	int reqOps[ImageMatrixString.MAX_FEATURES];
 	public StringStructureImpl(netpbmg*src, int yourShift, aroop_uword8 minGrayVal, int[]featureVals, int[]featureOps) {
 		buildStringStructureImpl(src, yourShift);
 		int i = 0;
-		for(i = 0; i < ImageMatrixString.feat.MAX_FEATURES; i++) {
+		for(i = 0; i < ImageMatrixString.MAX_FEATURES; i++) {
 			reqVals[i] = featureVals[i];
 			reqOps[i] = featureOps[i];
 		}
@@ -40,7 +40,7 @@ public class onubodh.StringStructureImpl : StringStructure {
 
 	public override bool pruneMatrix(ImageMatrix mat) {
 		int i = 0;
-		for(i = 0; i < ImageMatrixString.feat.MAX_FEATURES; i++) {
+		for(i = 0; i < ImageMatrixString.MAX_FEATURES; i++) {
 			int ft = mat.getFeature(i);
 			switch(reqOps[i]) {
 			case ImageMatrixUtils.feature_ops.GT:
@@ -91,7 +91,7 @@ public class onubodh.StringStructureImpl : StringStructure {
 
 	public override int getCracksInPixels() {
 		int crk = 0;
-		Iterator<AroopPointer<ImageMatrixString>> it = Iterator<AroopPointer<ImageMatrixString>>.EMPTY();
+		Iterator<AroopPointer<ImageMatrixString>> it = Iterator<AroopPointer<ImageMatrixString>>();
 		getIterator(&it, Replica_flags.ALL, 0);
 		while(it.next()) {
 			AroopPointer<ImageMatrixString> can = it.get();
@@ -105,7 +105,7 @@ public class onubodh.StringStructureImpl : StringStructure {
 	
 	public override bool overlaps(StringStructure other) {
 		bool olaps = false;
-		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>.EMPTY();
+		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>();
 		getIterator(&it, Replica_flags.ALL, 0);
 		//print("String length:%d(matrices)\n", strings.count_unsafe());
 		while(it.next()) {
@@ -123,7 +123,7 @@ public class onubodh.StringStructureImpl : StringStructure {
 	
 	public override bool neibor(StringStructure other) {
 		bool nbr = false;
-		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>.EMPTY();
+		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>();
 		getIterator(&it, Replica_flags.ALL, 0);
 		//print("String length:%d(matrices)\n", strings.count_unsafe());
 		while(it.next()) {
@@ -162,7 +162,7 @@ public class onubodh.StringStructureImpl : StringStructure {
 	}
 	
 	public override void merge(StringStructure other) {
-		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>.EMPTY();
+		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>();
 		other.getIterator(&it, Replica_flags.ALL, 0);
 		while(it.next()) {
 			AroopPointer<ImageMatrix> can = it.get();
@@ -177,7 +177,7 @@ public class onubodh.StringStructureImpl : StringStructure {
 	
 #if false
 	public int mark(int val) {
-		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>.EMPTY();
+		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>();
 		strings.iterator_hacked(&it, Replica_flags.ALL, 0, 0);
 		while(it.next()) {
 			AroopPointer<ImageMatrix> can = it.get();
@@ -206,7 +206,7 @@ public class onubodh.StringStructureImpl : StringStructure {
 #endif
 	public override int thin() {
 		// for all the matrices..
-		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>.EMPTY();
+		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>();
 		getIterator(&it, Replica_flags.ALL, 0);
 		ImageMatrix? a = null;
 		ImageMatrix? b = null;
@@ -238,7 +238,7 @@ public class onubodh.StringStructureImpl : StringStructure {
 		extring val = extring.stack(512);
 		extring data = extring.stack(128);
 		extring intval = extring.stack(32);
-		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>.EMPTY();
+		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>();
 		getIterator(&it, Replica_flags.ALL, 0);
 		while(it.next()) {
 			AroopPointer<ImageMatrix> can = it.get();
@@ -247,7 +247,7 @@ public class onubodh.StringStructureImpl : StringStructure {
 			int higher_order_y = mat.higherOrderY;
 			int i;
 			data.trim_to_length(0);
-			for(i=0; i < ImageMatrixString.feat.MAX_FEATURES; i++) {
+			for(i=0; i < ImageMatrixString.MAX_FEATURES; i++) {
 				intval.printf("%d,", mat.getFeature(i));
 				data.concat(&intval);
 			}

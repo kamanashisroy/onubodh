@@ -14,11 +14,11 @@ public class onubodh.CVModule : DynamicModule {
 	}
 	public override int init() {
 		extring command = extring.set_static_string("command");
-		Plugin.register(&command, new M100Extension(new KmeansCVCommand(), this));
-		Plugin.register(&command, new M100Extension(new CentroidModelCVCommand(), this));
-		Plugin.register(&command, new M100Extension(new BookDetectCommand(), this));
-		Plugin.register(&command, new M100Extension(new StructureDetectCommand(), this));
-		Plugin.register(&command, new M100Extension(new BarcodeROIDetectCommand(), this));
+		PluginManager.register(&command, new M100Extension(new KmeansCVCommand(), this));
+		PluginManager.register(&command, new M100Extension(new CentroidModelCVCommand(), this));
+		PluginManager.register(&command, new M100Extension(new BookDetectCommand(), this));
+		PluginManager.register(&command, new M100Extension(new StructureDetectCommand(), this));
+		PluginManager.register(&command, new M100Extension(new BarcodeROIDetectCommand(), this));
 		return 0;
 	}
 

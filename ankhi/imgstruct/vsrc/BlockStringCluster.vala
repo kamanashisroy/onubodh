@@ -58,7 +58,7 @@ public class onubodh.BlockStringCluster : BlockString {
 		print("Total matrices interesting matrices:%d\n", getLength());
 
 		// for all the matrices..
-		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>.EMPTY();
+		Iterator<AroopPointer<ImageMatrix>> it = Iterator<AroopPointer<ImageMatrix>>();
 		getIterator(&it, Replica_flags.ALL, 0);
 		int mshift = getShift();
 		while(it.next()) {
@@ -83,7 +83,7 @@ public class onubodh.BlockStringCluster : BlockString {
 	}
 
 	public override void dumpImage(netpbmg*oimg, aroop_uword8 gval) {
-		Iterator<StringStructureImpl> it = Iterator<StringStructureImpl>(&blocks);
+		Iterator<StringStructureImpl> it = Iterator<StringStructureImpl>.forFactory(&blocks);
 		bool high = true;
 		int totalBlocks = 0;
 		while(it.next()) {

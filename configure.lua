@@ -41,8 +41,8 @@ if haslfs then
 end
 configLines["PROJECT_HOME"] = prompt("Project path " .. phome .. " > " , phome)
 configLines["ONUBODH_HOME"] = configLines["PROJECT_HOME"]
-local ahome = string.gsub(configLines["PROJECT_HOME"],"onubodh$","aroop")
-configLines["VALA_HOME"] = prompt("Aroop path " .. ahome .. " > ", ahome)
+-- local ahome = string.gsub(configLines["PROJECT_HOME"],"onubodh$","aroop")
+-- configLines["VALA_HOME"] = prompt("Aroop path " .. ahome .. " > ", ahome)
 local shotohome = string.gsub(configLines["PROJECT_HOME"],"onubodh$","shotodol")
 configLines["SHOTODOL_HOME"] = prompt("Shotodol path " .. shotohome .. " > ", shotohome)
 configLines["CFLAGS+"] = ""
