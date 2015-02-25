@@ -246,7 +246,7 @@ public class onubodh.StringStructureImpl : StringStructure {
 			int higher_order_x = mat.higherOrderX;
 			int higher_order_y = mat.higherOrderY;
 			int i;
-			data.trim_to_length(0);
+			data.truncate();
 			for(i=0; i < ImageMatrixString.MAX_FEATURES; i++) {
 				intval.printf("%d,", mat.getFeature(i));
 				data.concat(&intval);

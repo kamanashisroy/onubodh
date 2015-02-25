@@ -130,7 +130,7 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 			}
 		}
 		it.content = extring.copy_shallow(&it.kernel);
-		if(textEnd != len)it.content.trim_to_length(it.pos+textEnd);
+		if(textEnd != len)it.content.truncate(it.pos+textEnd);
 		it.content.shift(it.pos);
 		it.shift = it.pos;
 		it.pos+=textEnd;
@@ -193,7 +193,7 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 #endif
 					it.content = extring();
 					it.content = extring.copy_shallow(&it.kernel);
-					it.content.trim_to_length(i+1);
+					it.content.truncate(i+1);
 					it.content.shift(angleBraceStart);
 					it.shift = angleBraceStart;
 					it.pos = i+1;
@@ -244,7 +244,7 @@ public class onubodh.XMLParser : onubodh.WordTransform {
 			return -1;
 		}
 		dst.kernel = extring.copy_shallow(&src.content);
-		dst.kernel.trim_to_length(nextCapsuleEnd);
+		dst.kernel.truncate(nextCapsuleEnd);
 		dst.kernel.shift(nextCapsule+1);
 		core.assert(dst.kernel.char_at(0) != ANGLE_BRACE_CLOSE);
 		dst.basePos = src.basePos + src.shift + nextCapsule + 1;

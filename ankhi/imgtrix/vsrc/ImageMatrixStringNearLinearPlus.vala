@@ -35,7 +35,7 @@ public class onubodh.ImageMatrixStringNearLinearPlus : ImageMatrixStringNearLine
 			b = c;
 		}
 		if(skipped > 0) {
-			points.trim_to_length(0);
+			points.truncate();
 			points.concat(&linearPoints);
 			if(a != 255)points.concat_char(a);
 			if(b != 255)points.concat_char(b);

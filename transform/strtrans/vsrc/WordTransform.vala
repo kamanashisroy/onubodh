@@ -48,7 +48,7 @@ public struct onubodh.WordMap {
 		}
 		srcref.rebuild_and_copy_shallow(&source);
 		srcref.shift(shift);
-		srcref.trim_to_length(len);
+		srcref.truncate(len);
 	}
 
 	public void addChar(uchar c, int shift) {

@@ -245,7 +245,7 @@ public class onubodh.MarkdownParser : onubodh.WordTransform {
 			}
 		}
 		it.content = extring.copy_shallow(&it.kernel);
-		if(textEnd != len)it.content.trim_to_length(textEnd);
+		if(textEnd != len)it.content.truncate(textEnd);
 		it.content.shift(it.pos);
 		it.shift = it.pos;
 		it.pos = textEnd+skiplen;
@@ -308,7 +308,7 @@ public class onubodh.MarkdownParser : onubodh.WordTransform {
 				if(depth == 0) {
 					it.content = extring();
 					it.content = extring.copy_shallow(&it.kernel);
-					it.content.trim_to_length(i-doubledelimit);
+					it.content.truncate(i-doubledelimit);
 					it.content.shift(it.pos+1+doubledelimit);
 					it.shift = it.pos+1+doubledelimit;
 					
