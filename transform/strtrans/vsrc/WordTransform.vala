@@ -157,7 +157,7 @@ public class onubodh.WordTransform : Replicable {
 			if(stringLiteralAsWord) {
 				LineAlign.next_token_delimitered_sliteral(&inp, &next, &delim, wordSpacing);
 			} else {
-				LineAlign.next_token_delimitered(&inp, &next, &delim, wordSpacing);
+				LineAlign.next_token_delimitered_unused(&inp, &next, &delim, wordSpacing);
 			}
 			shift = shift - inp.length() ;
 			if(next.is_empty()) {
