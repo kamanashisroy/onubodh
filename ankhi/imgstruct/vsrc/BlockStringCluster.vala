@@ -12,10 +12,10 @@ using onubodh;
  * @{
  */
 public class onubodh.BlockStringCluster : BlockString {
-	Factory<StringStructureImpl>blocks;
+	OPPFactory<StringStructureImpl>blocks;
 	public BlockStringCluster(netpbmg*src, int radius_shift, aroop_uword8 minGrayVal, int[] featureVals, int[] featureOps) {
 		base(src, radius_shift, minGrayVal, featureVals, featureOps);
-		blocks = Factory<StringStructureImpl>.for_type(8,factory_flags.SWEEP_ON_UNREF | factory_flags.EXTENDED | factory_flags.SEARCHABLE | factory_flags.MEMORY_CLEAN);
+		blocks = OPPFactory<StringStructureImpl>.for_type(8,factory_flags.SWEEP_ON_UNREF | factory_flags.EXTENDED | factory_flags.SEARCHABLE | factory_flags.MEMORY_CLEAN);
 	}
 	~BlockStringCluster() {
 		blocks.destroy();

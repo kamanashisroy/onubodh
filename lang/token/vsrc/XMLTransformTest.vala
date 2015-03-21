@@ -40,7 +40,7 @@ internal class onubodh.XMLTransformTest : UnitTest {
 			xit.dump(&talk);
 #endif
 			if(!xit.nextTag.equals_static_string("a") && !xit.nextTag.equals_static_string("b")) {
-				Watchdog.watchit_string(core.sourceFileName(), core.sourceLineNo(),1,Watchdog.WatchdogSeverity.ERROR,0,0,"Searched for tag a/b, but not found\n");
+				Watchdog.watchit_string(core.sourceFileName(), core.sourceLineNo(),1,Watchdog.Severity.ERROR,0,0,"Searched for tag a/b, but not found\n");
 				success = false;
 			}
 			extring tcontent = extring.stack(256);
@@ -65,11 +65,11 @@ internal class onubodh.XMLTransformTest : UnitTest {
 				xit.dump(&talk);
 #endif
 				if(xit.nextTag.equals_static_string("a") && !attrVal.equals_static_string("\"la la\"")) {
-					Watchdog.watchit_string(core.sourceFileName(), core.sourceLineNo(),1,Watchdog.WatchdogSeverity.ERROR,0,0,"_a_ tag must have '\"la la\"' attribute value\n");
+					Watchdog.watchit_string(core.sourceFileName(), core.sourceLineNo(),1,Watchdog.Severity.ERROR,0,0,"_a_ tag must have '\"la la\"' attribute value\n");
 					success = false;
 				}
 				if(xit.nextTag.equals_static_string("b") && !attrVal.equals_static_string("hola")) {
-					Watchdog.watchit_string(core.sourceFileName(), core.sourceLineNo(),1,Watchdog.WatchdogSeverity.ERROR,0,0,"_b_ tag must have 'hola' attribute value\n");
+					Watchdog.watchit_string(core.sourceFileName(), core.sourceLineNo(),1,Watchdog.Severity.ERROR,0,0,"_b_ tag must have 'hola' attribute value\n");
 					success = false;
 				}
 			}
@@ -86,12 +86,12 @@ internal class onubodh.XMLTransformTest : UnitTest {
 #if XMLPARSER_DEBUG
 		extring talk = extring.stack(512);
 		talk.printf("Feeding keywords\n");
-		shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
+		shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.Severity.DEBUG, 0, 0, &talk);
 #endif
 		parser.transform(&map);
 #if XMLPARSER_DEBUG
 		talk.printf("Extract length:%d\n", map.kernel.length());
-		shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
+		shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.Severity.DEBUG, 0, 0, &talk);
 #endif
 		parser.traversePreorder(&map, 100, traverseCB);
 #if false
@@ -119,7 +119,7 @@ internal class onubodh.XMLTransformTest : UnitTest {
 			dlg.concat_string("Fail");
 		}
 		dlg.concat_char('\n');
-		Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(),1,success?Watchdog.WatchdogSeverity.LOG:Watchdog.WatchdogSeverity.ERROR,0,0,&dlg);
+		Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(),1,success?Watchdog.Severity.LOG:Watchdog.Severity.ERROR,0,0,&dlg);
 		return 0;
 	}
 }

@@ -84,12 +84,12 @@ public class onubodh.XMLTransformCommand : M100Command {
 		try {
 			is = new FileInputStream.from_file(infile);
 		} catch(IOStreamError.FileInputStreamError e) {
-			shotodol.Watchdog.watchit_string(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.WatchdogSeverity.ERROR, 0, 0, "Failed to open file\n");
+			shotodol.Watchdog.watchit_string(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.Severity.ERROR, 0, 0, "Failed to open file\n");
 			throw new M100CommandError.ActionFailed.INVALID_ARGUMENT("Invalid argument, Cannot open input file.");
 		}
 #if XMLPARSER_DEBUG
 		talk.printf("Build transform\n");
-		shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
+		shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.Severity.DEBUG, 0, 0, &talk);
 #endif
 		XMLParser parser = new XMLParser();
 		WordMap map = WordMap();
@@ -98,7 +98,7 @@ public class onubodh.XMLTransformCommand : M100Command {
 		map.map = extring.stack(128);
 #if XMLPARSER_DEBUG
 		talk.printf("Feeding keywords\n");
-		shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
+		shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.Severity.DEBUG, 0, 0, &talk);
 #endif
 		try {
 			do {
@@ -108,7 +108,7 @@ public class onubodh.XMLTransformCommand : M100Command {
 				parser.transform(&map);
 #if XMLPARSER_DEBUG
 				talk.printf("Extract length:%d\n", map.kernel.length());
-				shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
+				shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.Severity.DEBUG, 0, 0, &talk);
 #endif
 				parser.traversePreorder(&map, 100, traverseCB);
 #if false
@@ -118,7 +118,7 @@ public class onubodh.XMLTransformCommand : M100Command {
 #endif
 			} while(true);
 		} catch(IOStreamError.InputStreamError e) {
-			shotodol.Watchdog.watchit_string(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.WatchdogSeverity.ERROR, 0, 0, "Failed to read file\n");
+			shotodol.Watchdog.watchit_string(core.sourceFileName(), core.sourceLineNo(), 2, shotodol.Watchdog.Severity.ERROR, 0, 0, "Failed to read file\n");
 			// do nothing
 		}
 		parser = null;

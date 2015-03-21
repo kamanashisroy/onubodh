@@ -92,7 +92,7 @@ public struct onubodh.MarkdownIterator {
 		extring talk = extring.stack(512);
 		prefix.zero_terminate();
 		talk.printf("%s %s [basePos:%d,shift:%d,pos:%d,clen:%d,klen:%d]\n", prefix.to_string(), objtypestr.to_string(), basePos, shift, pos, content.length(), kernel.length());
-		shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 8, shotodol.Watchdog.WatchdogSeverity.DEBUG, 0, 0, &talk);
+		shotodol.Watchdog.watchit(core.sourceFileName(), core.sourceLineNo(), 8, shotodol.Watchdog.Severity.DEBUG, 0, 0, &talk);
 	}
 #endif
 }

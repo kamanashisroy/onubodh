@@ -7,12 +7,12 @@ using onubodh;
  * @{
  */
 public class onubodh.ManyLineStrings : LineString {
-	Factory<StringStructureImpl>lines;
+	OPPFactory<StringStructureImpl>lines;
 	public ManyLineStrings(netpbmg*src
 		, aroop_uword8 minGrayVal
 		, int radius_shift, int[] featureVals, int[] featureOps) {
 		base(src, minGrayVal, radius_shift, featureVals, featureOps);
-		lines = Factory<StringStructureImpl>.for_type(16, 0, factory_flags.HAS_LOCK | factory_flags.SWEEP_ON_UNREF | factory_flags.MEMORY_CLEAN);
+		lines = OPPFactory<StringStructureImpl>.for_type(16, 0, factory_flags.HAS_LOCK | factory_flags.SWEEP_ON_UNREF | factory_flags.MEMORY_CLEAN);
 	}
 	
 	~ManyLineStrings() {

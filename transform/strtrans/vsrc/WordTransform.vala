@@ -65,7 +65,7 @@ public struct onubodh.WordMap {
 }
 
 public class onubodh.WordTransform : Replicable {
-	SearchableFactory<TransKeyWord> keyWords;
+	SearchableOPPFactory<TransKeyWord> keyWords;
 	extring*keyWordArrayMap[64];
 	extring delim;
 	extring*wordSpacing;
@@ -77,7 +77,7 @@ public class onubodh.WordTransform : Replicable {
 	}
 	public WordTransform(extring*givenWordSpacing = null) {
 		//memclean_raw();
-		keyWords = SearchableFactory<TransKeyWord>.for_type();
+		keyWords = SearchableOPPFactory<TransKeyWord>.for_type();
 		keyCount = 0;
 		delim = extring();
 		delim.rebuild_in_heap(wordTypes.MAX_KEY_INDEX_VALUE);
